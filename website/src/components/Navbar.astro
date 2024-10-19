@@ -1,0 +1,116 @@
+<div class="navbar bg-darkGrey">
+    <div class="navbar-start">
+        <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="#fff"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 6h16M4 12h8m-8 6h16"></path>
+                </svg>
+            </div>
+            <ul
+                tabindex="0"
+                class="menu menu-sm dropdown-content rounded-box z-[1] mt-3 w-52 p-2 shadow bg-darkGrey"
+            >
+                <li>
+                    <a>Home</a>
+                </li>
+                <li>
+                    <a>Verein</a>
+                    <ul class="p-2">
+                        <li><a>Ansprechpartner</a></li>
+                        <li><a>Vereinsgeschichte</a></li>
+                        <li><a>Sportgaststätte</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a>Abteilungen</a>
+                    <ul class="p-2">
+                        <li><a>Fußball</a></li>
+                        <li><a>Gesundheitssport</a></li>
+                        <li><a>Tischtennis</a></li>
+                        <li><a>Indiaca</a></li>
+                        <li><a>Tennis</a></li>
+                    </ul>
+                </li>
+                <li><a>Mitglied werden</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1">
+            <li><a class="red-hover">Home</a></li>
+
+            <li class="dropdown dropdown-hover">
+                <div class="main-menu">Verein</div>
+                <ul
+                    tabindex="0"
+                    class="dropdown-content menu rounded-box z-[1] p-2 shadow bg-darkGrey"
+                >
+                    <li><a>Ansprechpartner</a></li>
+                    <li><a>Vereinsgeschichte</a></li>
+                    <li><a>Sportgaststätte</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown dropdown-hover">
+                <div class="main-menu">Abteilungen</div>
+                <ul
+                    tabindex="0"
+                    class="dropdown-content menu rounded-box z-[1] p-2 shadow bg-darkGrey"
+                >
+                    <li><a>Fußball</a></li>
+                    <li><a>Gesundheitssport</a></li>
+                    <li><a>Tischtennis</a></li>
+                    <li><a>Indiaca</a></li>
+                    <li><a>Tennis</a></li>
+                </ul>
+            </li>
+
+            <li><a>Mitglied werden</a></li>
+        </ul>
+    </div>
+    <div class="navbar-end"></div>
+</div>
+
+<style>
+    a,
+    div {
+        color: white;
+    }
+    .main-menu {
+        color: white;
+    }
+
+    .red-hover:hover {
+        color: #e02b20;
+    }
+
+    .dropdown > div::after {
+        display: block;
+        margin-top: -0.5rem;
+        height: 0.5rem;
+        width: 0.5rem;
+        transform: rotate(45deg);
+        transition-property: transform, margin-top;
+        transition-duration: 0.3s;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        content: "";
+        transform-origin: 75% 75%;
+        box-shadow: 2px 2px;
+        pointer-events: none;
+    }
+
+    .dropdown:hover > div::after {
+        transform: rotate(225deg);
+        margin-top: 0;
+    }
+</style>

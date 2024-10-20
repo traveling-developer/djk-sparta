@@ -2,11 +2,12 @@
 export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
-		extend: {},
-		colors: {
-			'darkGrey': '#242424',
-			'red': '#e02b20'
-		}
+		extend: {
+			colors: {
+				'spartaGray': '#242424',
+				'spartaRed': '#e02b20'
+			}
+		},
 	},
 	daisyui: {
 		themes: [

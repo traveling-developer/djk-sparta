@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { soccerTeams } from "../lib/soccer";
+---
+
+<Layout title="Fußball">
+    <main>
+        <h1>Fußball</h1>
+        <ul>
+            {soccerTeams.map((team) => <li>{team.name}</li>)}
+        </ul>
+    </main>
+</Layout>

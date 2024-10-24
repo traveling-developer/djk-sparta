@@ -1,0 +1,31 @@
+---
+import NewsCard from "./NewsCard.astro";
+---
+
+<div class="divider divider-error text-spartaRed text-6xl mt-10 mb-10">
+    News
+</div>
+
+<div class="flex flex-wrap justify-center gap-6 mb-20">
+    <div class="card bg-spartaGray text-white w-72 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title">
+                Zwei Teams der DJK Sparta Noris Jugend erreichen die BOL
+                Aufstiegsrunde
+            </h2>
+            <p>
+                Die B1-Junioren und die C1-Junioren der DJK Sparta Noris
+                Jugend,...
+            </p>
+            <div class="card-actions justify-center mt-3">
+                <button class="btn btn-sm">weiterlesen</button>
+            </div>
+        </div>
+    </div>
+    <NewsCard link="/tennis" body="body" title="Title" />
+    <NewsCard link="/tennis" body="body" title="Title" />
+    <NewsCard link="/tennis" body="body" title="Title" />
+    <NewsCard link="/tennis" body="body" title="Title" />
+    <NewsCard link="/tennis" body="body" title="Title" />
+    <NewsCard link="/tennis" body="body" title="Title" />
+</div>

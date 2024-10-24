@@ -1,0 +1,23 @@
+---
+interface Props {
+    title: string;
+    body: string;
+    link: string;
+}
+
+const { link, title, body } = Astro.props;
+---
+
+<div class="card bg-spartaGray text-white w-72 shadow-xl">
+    <div class="card-body">
+        <h2 class="card-title">
+            {title}
+        </h2>
+        <p>
+            {body}
+        </p>
+        <div class="card-actions justify-center mt-3">
+            <a href={link} class="btn btn-sm">weiterlesen</a>
+        </div>
+    </div>
+</div>

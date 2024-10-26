@@ -131,6 +131,18 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
+export type News = {
+  _id: string;
+  _type: "news";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  content?: string;
+  category?: "general" | "soccer" | "health-sport" | "indiaca" | "tennis" | "table-tennis";
+  releaseDate?: string;
+};
+
 export type SoccerTeam = {
   _id: string;
   _type: "soccerTeam";
@@ -144,7 +156,7 @@ export type SoccerTeam = {
   trainingTimes?: string;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData | SoccerTeam;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData | News | SoccerTeam;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../website/src/lib/soccer.ts
 // Variable: SOCCER_TEAMS

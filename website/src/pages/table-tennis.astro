@@ -1,32 +1,23 @@
 ---
+import { getImage } from "astro:assets";
+import racketImage from "../assets/racket.webp";
+
+import Header from "../components/Header.astro";
 import Team from "../components/Team.astro";
 import Layout from "../layouts/Layout.astro";
+
 import { getTeams } from "../lib/table-tennis";
+
+const optimizedBackground = await getImage({
+    src: racketImage,
+});
 
 var teams = await getTeams();
 ---
 
 <Layout title="Tischtennis">
     <main>
-        <div
-            class="relative w-full sm:h-64 h-36 bg-cover bg-center flex items-center justify-center"
-            style="background-image: url('/racket.webp');"
-        >
-            <div class="absolute inset-0 bg-black opacity-40"></div>
-            <img
-                src="/spartaner.webp"
-                class="relative md:w-32 w-20 mr-5 lg:mx-auto hidden sm:block"
-            />
-            <h1
-                class="relative text-white md:text-7xl sm:text-6xl text-4xl font-bold"
-            >
-                Tischtennis
-            </h1>
-            <img
-                src="/lettering.webp"
-                class="relative w-44 mx-auto hidden lg:block"
-            />
-        </div>
+        <Header title="Tischtennis" imageSrc={optimizedBackground.src} />
 
         <div class="flex flex-wrap justify-center gap-6 mb-5 mt-5">
             {

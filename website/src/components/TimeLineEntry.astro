@@ -1,0 +1,34 @@
+---
+import TimeLineMiddle from "../components/TimeLineMiddle.astro";
+
+export enum TimeLineOrientation {
+    left,
+    rigth,
+}
+
+interface Props {
+    year: string;
+    title: string;
+    body: string;
+    orientation: TimeLineOrientation;
+}
+
+const { year, title, body, orientation } = Astro.props;
+---
+
+<TimeLineMiddle />
+<div
+    class:list={[
+        "!mb-5",
+        {
+            "timeline-start md:text-end":
+                orientation === TimeLineOrientation.left,
+        },
+        { "timeline-end": orientation === TimeLineOrientation.rigth },
+    ]}
+>
+    <time class="italic">{year}</time>
+    <div class="text-lg text-spartaRed font-bold">{title}</div>
+    {body}
+</div>
+<hr />

@@ -1,9 +1,97 @@
 ---
+import TimeLineEntry, {
+    TimeLineOrientation,
+} from "../components/TimeLineEntry.astro";
 import Layout from "../layouts/Layout.astro";
+
+import { getImage, Picture } from "astro:assets";
+import historyImage from "../assets/history.webp";
+import letteringImage from "../assets/lettering.webp";
+
+const optimizedBackground = await getImage({
+    src: historyImage,
+    format: "webp",
+});
 ---
 
-<Layout title="Geschichte">
+<Layout title="Vereinsgeschichte">
     <main>
-        <h1>Geschichte</h1>
+        <div
+            class="relative w-full sm:h-64 h-36 bg-cover bg-center flex items-center justify-center responsive-background"
+            style={`background-image: url(${optimizedBackground.src});`}
+        >
+            <div class="absolute inset-0 bg-black opacity-40"></div>
+            <img
+                src="/spartaner.webp"
+                class="relative md:w-32 w-20 mr-5 lg:mx-auto hidden sm:block"
+            />
+            <h1
+                class="relative text-white md:text-7xl sm:text-6xl text-4xl font-bold"
+            >
+                Vereinsgeschichte
+            </h1>
+            <Picture
+                src={letteringImage}
+                alt="A description of my image."
+                pictureAttributes={{
+                    class: "relative w-44 mx-auto hidden lg:block",
+                }}
+                widths={[200, 400, 800]}
+            />
+        </div>
+        <div class="m-5">
+            <ul
+                class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical"
+            >
+                <li>
+                    <TimeLineEntry
+                        orientation={TimeLineOrientation.left}
+                        year="1918"
+                        title="Gründung"
+                        body={`The Apple Macintosh—later rebranded as the Macintosh 128K—is
+                        the original Apple Macintosh personal computer. It played
+                        a pivotal role in establishing desktop publishing as a general
+                        office function. The motherboard, a 9 in (23 cm) CRT monitor,
+                        and a floppy drive were housed in a beige case with integrated
+                        carrying handle; it came with a keyboard and single-button
+                        mouse.`}
+                    />
+                </li>
+                <li>
+                    <TimeLineEntry
+                        orientation={TimeLineOrientation.rigth}
+                        year="1920"
+                        title="Anschluss an die DJK"
+                        body={`iMac is a family of all-in-one Mac desktop computers designed
+                        and built by Apple Inc. It has been the primary part of Apple's
+                        consumer desktop offerings since its debut in August 1998,
+                        and has evolved through seven distinct forms.`}
+                    />
+                </li>
+                <li>
+                    <TimeLineEntry
+                        orientation={TimeLineOrientation.left}
+                        year="1954"
+                        title="Fusion"
+                        body={`The iPod is a discontinued series of portable media players
+                        and multi-purpose mobile devices designed and marketed by
+                        Apple Inc. The first version was released on October 23,
+                        2001, about 8+1⁄2 months after the Macintosh version of iTunes
+                        was released. Apple sold an estimated 450 million iPod products
+                        as of 2022. Apple discontinued the iPod product line on May
+                        10, 2022. At over 20 years, the iPod brand is the oldest
+                        to be discontinued by Apple.`}
+                    />
+                </li>
+                <li>
+                    <TimeLineEntry
+                        orientation={TimeLineOrientation.rigth}
+                        year="1927"
+                        title="abcde"
+                        body={`Some history.`}
+                    />
+                </li>
+            </ul>
+        </div>
     </main>
 </Layout>

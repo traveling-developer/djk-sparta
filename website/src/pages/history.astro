@@ -5,25 +5,32 @@ import TimeLineEntry, {
 import Layout from "../layouts/Layout.astro";
 
 import { getImage, Picture } from "astro:assets";
+
 import historyImage from "../assets/history.webp";
 import letteringImage from "../assets/lettering.webp";
+import spartanerImage from "../assets/spartaner.webp";
 
 const optimizedBackground = await getImage({
     src: historyImage,
-    format: "webp",
 });
 ---
 
 <Layout title="Vereinsgeschichte">
     <main>
         <div
-            class="relative w-full sm:h-64 h-36 bg-cover bg-center flex items-center justify-center responsive-background"
+            class="relative w-full sm:h-64 h-36 bg-cover bg-center flex items-center justify-center"
             style={`background-image: url(${optimizedBackground.src});`}
         >
             <div class="absolute inset-0 bg-black opacity-40"></div>
-            <img
-                src="/spartaner.webp"
-                class="relative md:w-32 w-20 mr-5 lg:mx-auto hidden sm:block"
+            <Picture
+                src={spartanerImage}
+                formats={["webp"]}
+                alt="TODO"
+                pictureAttributes={{
+                    class: "relative md:w-32 w-20 mr-5 lg:mx-auto hidden sm:block",
+                }}
+                widths={[200]}
+                sizes={`200px`}
             />
             <h1
                 class="relative text-white md:text-7xl sm:text-6xl text-4xl font-bold"
@@ -32,11 +39,13 @@ const optimizedBackground = await getImage({
             </h1>
             <Picture
                 src={letteringImage}
-                alt="A description of my image."
+                formats={["webp"]}
+                alt="TODO"
                 pictureAttributes={{
                     class: "relative w-44 mx-auto hidden lg:block",
                 }}
-                widths={[200, 400, 800]}
+                widths={[200]}
+                sizes={`200px`}
             />
         </div>
         <div class="m-5">

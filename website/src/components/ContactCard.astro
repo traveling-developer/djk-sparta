@@ -1,0 +1,46 @@
+---
+import Mail from "./icons/Mail.astro";
+import MobilePhone from "./icons/MobilePhone.astro";
+import Phone from "./icons/Phone.astro";
+
+interface Props {
+    title?: string;
+    phone?: string;
+    mail?: string;
+    mobile?: string;
+}
+
+const { title, phone, mail, mobile } = Astro.props;
+---
+
+<div
+    class="w-72 sm:w-[28rem] card bg-gradient-to-b from-[#8b0000] via-spartaRed to-[#ff6666] text-white shadow-md shadow-gray-400"
+>
+    <div class="card-body">
+        <h2 class="card-title text-2xl">
+            {title}
+        </h2>
+        {
+            phone && (
+                <div class="flex space-x-2">
+                    <Phone />
+                    <a href={"tel:" + phone}>{phone}</a>
+                </div>
+            )
+        }
+        {
+            mobile && (
+                <div class="flex space-x-2">
+                    <MobilePhone />
+                    <a href={"tel:" + mobile}>{mobile}</a>
+                </div>
+            )
+        }
+        <div class="flex space-x-2">
+            <Mail />
+            <a href={"mailto:" + mail}>
+                {mail?.replace("@", "(at)")}
+            </a>
+        </div>
+    </div>
+</div>

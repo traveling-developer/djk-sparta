@@ -1,14 +1,20 @@
 ---
+import { getImage } from "astro:assets";
+import racketImage from "../assets/typewriter.webp";
+
 import NewsCard from "./NewsCard.astro";
 import { latestNews } from "../lib/news";
 import { createSlug } from "../lib/convenience";
+import SectionHeader from "./SectionHeader.astro";
+
+const optimizedBackground = await getImage({
+    src: racketImage,
+});
 ---
 
-<div class="divider divider-error text-spartaRed text-6xl mt-10 mb-10">
-    News
-</div>
+<SectionHeader title="News" imageSrc={optimizedBackground.src} />
 
-<div class="flex flex-wrap justify-center gap-6 mb-20">
+<div class="flex flex-wrap justify-center gap-6 mb-20 mt-5">
     {
         latestNews.map((news) => (
             <NewsCard

@@ -1,0 +1,19 @@
+---
+interface Props {
+    title: string;
+    imageSrc: string;
+}
+
+const { title, imageSrc } = Astro.props;
+---
+
+<div
+    class="relative w-full sm:h-40 h-28 bg-cover bg-center flex items-center justify-center shadow-gray-500 shadow-md"
+    style={`background-image: url(${imageSrc});`}
+>
+    <div class="absolute inset-0 bg-black opacity-40"></div>
+
+    <h1 class="relative text-white md:text-6xl sm:text-5xl text-3xl font-bold">
+        {title}
+    </h1>
+</div>

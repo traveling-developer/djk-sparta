@@ -1,5 +1,5 @@
 ---
-import { Picture } from "astro:assets";
+import { getImage, Picture } from "astro:assets";
 
 import spartanerImage from "../assets/spartaner.webp";
 import letteringImage from "../assets/lettering.webp";
@@ -8,15 +8,34 @@ import { logoLettering, spartaner } from "../lib/alternative-texts";
 
 interface Props {
     title: string;
-    imageSrc: string;
+    imageMetadata: ImageMetadata;
 }
 
-const { title, imageSrc } = Astro.props;
+const { title, imageMetadata } = Astro.props;
+
+const smallBackground = await getImage({
+    src: imageMetadata,
+    width: 640,
+});
+
+const mediumBackground = await getImage({
+    src: imageMetadata,
+    width: 1536,
+});
+
+const largeBackground = await getImage({
+    src: imageMetadata,
+    width: 2560,
+});
+
+const originalBackground = await getImage({
+    src: imageMetadata,
+});
 ---
 
 <div
-    class="relative w-full sm:h-64 h-36 bg-cover bg-center flex items-center justify-center"
-    style={`background-image: url(${imageSrc});`}
+    class="responsive-bg relative w-full sm:h-64 h-36 bg-cover bg-center flex items-center justify-center"
+    style={`--bg-small: url(${smallBackground.src}); --bg-medium: url(${mediumBackground.src}); --bg-large: url(${largeBackground.src}); --bg-original: url(${originalBackground.src});`}
 >
     <div class="absolute inset-0 bg-black opacity-40"></div>
     <Picture
@@ -43,3 +62,27 @@ const { title, imageSrc } = Astro.props;
         sizes={`200px`}
     />
 </div>
+
+<style>
+    .responsive-bg {
+        background-image: var(--bg-small);
+    }
+
+    @media (min-width: 640px) {
+        .responsive-bg {
+            background-image: var(--bg-medium);
+        }
+    }
+
+    @media (min-width: 1536px) {
+        .responsive-bg {
+            background-image: var(--bg-large);
+        }
+    }
+
+    @media (min-width: 2560px) {
+        .responsive-bg {
+            background-image: var(--bg-original);
+        }
+    }
+</style>

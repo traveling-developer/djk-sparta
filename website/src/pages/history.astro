@@ -4,52 +4,13 @@ import TimeLineEntry, {
 } from "../components/TimeLineEntry.astro";
 import Layout from "../layouts/Layout.astro";
 
-import { getImage, Picture } from "astro:assets";
-
 import historyImage from "../assets/history.webp";
-import letteringImage from "../assets/lettering.webp";
-import spartanerImage from "../assets/spartaner.webp";
-
-import { logoLettering, spartaner } from "../lib/alternative-texts";
-
-const optimizedBackground = await getImage({
-    src: historyImage,
-});
+import Header from "../components/Header.astro";
 ---
 
 <Layout title="Vereinsgeschichte">
     <main>
-        <div
-            class="relative w-full sm:h-64 h-36 bg-cover bg-center flex items-center justify-center"
-            style={`background-image: url(${optimizedBackground.src});`}
-        >
-            <div class="absolute inset-0 bg-black opacity-40"></div>
-            <Picture
-                src={spartanerImage}
-                formats={["webp"]}
-                alt={spartaner}
-                pictureAttributes={{
-                    class: "relative md:w-32 w-20 mr-5 lg:mx-auto hidden sm:block",
-                }}
-                widths={[200]}
-                sizes={`200px`}
-            />
-            <h1
-                class="relative text-white md:text-7xl sm:text-6xl text-4xl font-bold"
-            >
-                Vereinsgeschichte
-            </h1>
-            <Picture
-                src={letteringImage}
-                formats={["webp"]}
-                alt={logoLettering}
-                pictureAttributes={{
-                    class: "relative w-44 mx-auto hidden lg:block",
-                }}
-                widths={[200]}
-                sizes={`200px`}
-            />
-        </div>
+        <Header title="Tischtennis" imageMetadata={historyImage} />
         <div class="m-5">
             <ul
                 class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical"

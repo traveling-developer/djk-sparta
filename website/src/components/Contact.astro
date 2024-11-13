@@ -1,16 +1,11 @@
 ---
-import { getImage } from "astro:assets";
 import contactImage from "../assets/contact.webp";
 
 import SectionHeader from "./SectionHeader.astro";
 import ContactCard from "./ContactCard.astro";
-
-const optimizedBackground = await getImage({
-    src: contactImage,
-});
 ---
 
-<SectionHeader title="Kontakt" imageSrc={optimizedBackground.src} />
+<SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
 <div class="flex flex-wrap justify-center gap-6 mb-20 mt-5">
     <ContactCard

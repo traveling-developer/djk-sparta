@@ -4,6 +4,8 @@ import { Picture } from "astro:assets";
 import spartanerImage from "../assets/spartaner.webp";
 import letteringImage from "../assets/lettering.webp";
 
+import { logoLettering, spartaner } from "../lib/alternative-texts";
+
 interface Props {
     title: string;
     imageSrc: string;
@@ -20,7 +22,7 @@ const { title, imageSrc } = Astro.props;
     <Picture
         src={spartanerImage}
         formats={["webp"]}
-        alt="TODO"
+        alt={spartaner}
         pictureAttributes={{
             class: "relative md:w-32 w-20 mr-5 lg:mx-auto hidden sm:block",
         }}
@@ -33,7 +35,7 @@ const { title, imageSrc } = Astro.props;
     <Picture
         src={letteringImage}
         formats={["webp"]}
-        alt="TODO"
+        alt={logoLettering}
         pictureAttributes={{
             class: "relative w-44 mx-auto hidden lg:block",
         }}

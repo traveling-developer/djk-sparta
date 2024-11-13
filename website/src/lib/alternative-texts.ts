@@ -1,0 +1,2 @@
+export const spartaner: string = "Logo of the DJK Sparta Noris Nürnberg: A stylized Spartan warrior wearing an ancient helmet with a red plume and cape, arms crossed, on a gray shield background. Below is the text 'Spartaner' in a black bar. At the bottom of the shield, there is a symbol resembling a ball.";
+export const logoLettering: string = "Logo with text: 'WIR SIND SPARTA' in bold white capital letters on a black background, with a red swoosh line underneath 'SPARTA'.";

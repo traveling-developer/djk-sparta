@@ -10,6 +10,8 @@ import historyImage from "../assets/history.webp";
 import letteringImage from "../assets/lettering.webp";
 import spartanerImage from "../assets/spartaner.webp";
 
+import { logoLettering, spartaner } from "../lib/alternative-texts";
+
 const optimizedBackground = await getImage({
     src: historyImage,
 });
@@ -25,7 +27,7 @@ const optimizedBackground = await getImage({
             <Picture
                 src={spartanerImage}
                 formats={["webp"]}
-                alt="TODO"
+                alt={spartaner}
                 pictureAttributes={{
                     class: "relative md:w-32 w-20 mr-5 lg:mx-auto hidden sm:block",
                 }}
@@ -40,7 +42,7 @@ const optimizedBackground = await getImage({
             <Picture
                 src={letteringImage}
                 formats={["webp"]}
-                alt="TODO"
+                alt={logoLettering}
                 pictureAttributes={{
                     class: "relative w-44 mx-auto hidden lg:block",
                 }}

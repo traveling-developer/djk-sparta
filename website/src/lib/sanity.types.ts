@@ -172,6 +172,19 @@ export type LATEST_NEWSResult = Array<{
   category?: "general" | "health-sport" | "indiaca" | "soccer" | "table-tennis" | "tennis";
   releaseDate?: string;
 }>;
+// Variable: LATEST_TABLE_TENNIS_NEWS
+// Query: *[_type == "news" && category == "table-tennis"] | order(publishedDate desc) [0...6]
+export type LATEST_TABLE_TENNIS_NEWSResult = Array<{
+  _id: string;
+  _type: "news";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  content?: string;
+  category?: "general" | "health-sport" | "indiaca" | "soccer" | "table-tennis" | "tennis";
+  releaseDate?: string;
+}>;
 // Variable: NEWS
 // Query: *[_type == "news"] | order(publishedDate desc)
 export type NEWSResult = Array<{
@@ -207,6 +220,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"news\"] | order(publishedDate desc) [0...6]": LATEST_NEWSResult;
+    "*[_type == \"news\" && category == \"table-tennis\"] | order(publishedDate desc) [0...6]": LATEST_TABLE_TENNIS_NEWSResult;
     "*[_type == \"news\"] | order(publishedDate desc)": NEWSResult;
     "*[_type == \"soccerTeam\"]": SOCCER_TEAMSResult;
   }

@@ -43,4 +43,3 @@ export async function getTeams(): Promise<Team[]> {
         return [];
     }
 }
-

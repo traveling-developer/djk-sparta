@@ -2,17 +2,20 @@
 import racketImage from "../assets/racket.webp";
 import contactImage from "../assets/contact.webp";
 import typeWriterImage from "../assets/typewriter.webp";
+import teamImage from "../assets/team.webp";
 
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
-import Team from "../components/Team.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import ContactCard from "../components/ContactCard.astro";
 import NewsCard from "../components/NewsCard.astro";
+import Team from "../components/tableTennis/Team.astro";
+import TrainingTimes from "../components/tableTennis/TrainingTimes.astro";
+import Events from "../components/tableTennis/Events.astro";
 
 import { createSlug } from "../lib/convenience";
 import { latestTableTennisNews } from "../lib/news";
-import { getTeams } from "../lib/table-tennis";
+import { getTeams } from "../lib/tableTennis/teams";
 
 var teams = await getTeams();
 ---
@@ -22,17 +25,26 @@ var teams = await getTeams();
         <Header title="Tischtennis" imageMetadata={racketImage} />
 
         <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-            {
-                teams.map((team) => (
-                    <Team
-                        name={team.name}
-                        league={team.league}
-                        rank={team.rank}
-                        points={team.points}
-                        link={team.link}
-                    />
-                ))
-            }
+            <Events />
+            <TrainingTimes />
+        </div>
+
+        <div>
+            <SectionHeader title="Mannschaften" imageMetadata={teamImage} />
+
+            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+                {
+                    teams.map((team) => (
+                        <Team
+                            name={team.name}
+                            league={team.league}
+                            rank={team.rank}
+                            points={team.points}
+                            link={team.link}
+                        />
+                    ))
+                }
+            </div>
         </div>
         <div>
             <SectionHeader title="News" imageMetadata={typeWriterImage} />

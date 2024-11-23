@@ -1,0 +1,23 @@
+---
+import { getMatches } from "../../lib/tableTennis/matches";
+
+let matches = await getMatches();
+---
+
+<div
+    class="w-72 sm:w-[28rem] card bg-spartaGray text-white shadow-md shadow-gray-400"
+>
+    <div class="card-body">
+        <h2 class="card-title">Termine</h2>
+        <p>
+            {
+                matches.slice(0, 4).map((match) => (
+                    <p>
+                        {match.date} - {match.time} <br />
+                        {match.homeTeam} - {match.guestTeam}
+                    </p>
+                ))
+            }
+        </p>
+    </div>
+</div>

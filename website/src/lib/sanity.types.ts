@@ -160,7 +160,7 @@ export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../website/src/lib/news.ts
 // Variable: LATEST_NEWS
-// Query: *[_type == "news"] | order(publishedDate desc) [0...6]
+// Query: *[_type == "news"] | order(releaseDate desc) [0...6]
 export type LATEST_NEWSResult = Array<{
   _id: string;
   _type: "news";
@@ -173,7 +173,7 @@ export type LATEST_NEWSResult = Array<{
   releaseDate?: string;
 }>;
 // Variable: LATEST_TABLE_TENNIS_NEWS
-// Query: *[_type == "news" && category == "table-tennis"] | order(publishedDate desc) [0...6]
+// Query: *[_type == "news" && category == "table-tennis"] | order(releaseDate desc) [0...6]
 export type LATEST_TABLE_TENNIS_NEWSResult = Array<{
   _id: string;
   _type: "news";
@@ -186,7 +186,7 @@ export type LATEST_TABLE_TENNIS_NEWSResult = Array<{
   releaseDate?: string;
 }>;
 // Variable: NEWS
-// Query: *[_type == "news"] | order(publishedDate desc)
+// Query: *[_type == "news"] | order(releaseDate desc)
 export type NEWSResult = Array<{
   _id: string;
   _type: "news";
@@ -219,9 +219,9 @@ export type SOCCER_TEAMSResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"news\"] | order(publishedDate desc) [0...6]": LATEST_NEWSResult;
-    "*[_type == \"news\" && category == \"table-tennis\"] | order(publishedDate desc) [0...6]": LATEST_TABLE_TENNIS_NEWSResult;
-    "*[_type == \"news\"] | order(publishedDate desc)": NEWSResult;
+    "*[_type == \"news\"] | order(releaseDate desc) [0...6]": LATEST_NEWSResult;
+    "*[_type == \"news\" && category == \"table-tennis\"] | order(releaseDate desc) [0...6]": LATEST_TABLE_TENNIS_NEWSResult;
+    "*[_type == \"news\"] | order(releaseDate desc)": NEWSResult;
     "*[_type == \"soccerTeam\"]": SOCCER_TEAMSResult;
   }
 }

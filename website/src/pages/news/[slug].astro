@@ -17,9 +17,15 @@ const article = Astro.props;
 
 <Layout title={article.title!}>
     <main>
-        <h1>{article.title}</h1>
-        <div>
-            {article.content}
+        <div class="text-center my-5 flex items-center flex-col">
+            <div class="mb-5 text-2xl font-semibold">
+                {article.title}
+            </div>
+            <div
+                class="text-justify mx-5 sm:mx-10 lg:mx-15 xl:w-4/5 2xl:w-9/12 whitespace-pre-line"
+            >
+                {article.content}
+            </div>
         </div>
     </main>
 </Layout>

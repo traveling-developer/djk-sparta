@@ -36,11 +36,13 @@ const { title, phone, mail, mobile } = Astro.props;
                 </div>
             )
         }
-        <div class="flex space-x-2">
-            <Mail />
-            <a href={"mailto:" + mail}>
-                {mail?.replace("@", "(at)")}
-            </a>
-        </div>
+        {
+            mail && (
+                <div class="flex space-x-2">
+                    <Mail />
+                    <a href={"mailto:" + mail}>{mail?.replace("@", "(at)")}</a>
+                </div>
+            )
+        }
     </div>
 </div>

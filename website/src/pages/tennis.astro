@@ -1,9 +1,28 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+import tennisImage from "../assets/tennis.webp";
+import contactImage from "../assets/contact.webp";
+import Header from "../components/Header.astro";
+import ContactCard from "../components/ContactCard.astro";
+import SectionHeader from "../components/SectionHeader.astro";
 ---
 
 <Layout title="Tennis">
     <main>
-        <h1>Tennis</h1>
+        <Header title="Tennis" imageMetadata={tennisImage} />
+        <div>Some more info here</div>
+        <div>
+            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+
+            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+                <ContactCard
+                    title="Alexander Kolodziej"
+                    mobile="0176 402 064 56"
+                />
+                <ContactCard title="Villi Brand" mobile="0172 864 953 1" />
+                <ContactCard title="Egor Meisler" mobile="0176 769 703 5" />
+            </div>
+        </div>
     </main>
 </Layout>

@@ -1,13 +1,64 @@
 ---
+import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
+import ContactCard from "../components/ContactCard.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+
 import { soccerTeams } from "../lib/soccer";
+
+import soccerImage from "../assets/soccer.webp";
+import contactImage from "../assets/contact.webp";
 ---
 
 <Layout title="Fußball">
     <main>
-        <h1>Fußball</h1>
+        <Header title="Fußball" imageMetadata={soccerImage} />
+        <!-- <h1>Fußball</h1>
         <ul>
             {soccerTeams.map((team) => <li>{team.name}</li>)}
-        </ul>
+        </ul> -->
+        <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+            <div
+                class="w-72 sm:w-[38rem] card bg-spartaGray text-white shadow-md shadow-gray-400"
+            >
+                <div class="card-body">
+                    <h2 class="card-title">Trainingszeiten</h2>
+                    <p>AH <br /> Donnerstag 19:00 - 20:30 Uhr</p>
+                    <p>
+                        1. Mannschaft <br /> Dienstag & Donnerstag 18:45 - 20:45
+                        Uhr
+                    </p>
+                    <p>PM Bonifaz <br /> Mittwoch 18:30 - 20:30 Uhr</p>
+                    <p>
+                        Bambini / G-Jugend <br /> Montag 17:30 - 18:30 Uhr
+                    </p>
+                    <p>F-Jugend <br /> Montag & Mittwoch 17:00 - 18:30 Uhr</p>
+                    <p>
+                        E1-Jugend <br /> Dienstag 17:30 - 18:30 Uhr & Freitag 16:00
+                        - 17:30 Uhr
+                    </p>
+                    <p>
+                        E2-Jugend <br /> Dienstag 17:30 - 19:00 Uhr & Donnerstag
+                        17:00 - 18:30 Uhr
+                    </p>
+                    <p>
+                        D-Jugend <br /> Dienstag & Donnerstag 17:30 - 19:00 Uhr
+                    </p>
+                    <p>
+                        C-Jugend <br />Dienstag & Donnerstag 17:30 - 19:00 Uhr
+                    </p>
+                    <p>B-Jugend <br /> Montag & Mittwoch 17:30 - 19:00 Uhr</p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+
+            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+                <ContactCard title="TBD (1. Abteilungsleiter)" mail="..." />
+                <ContactCard title="TBD (2. Abteilungsleiter)" mail="..." />
+            </div>
+        </div>
     </main>
 </Layout>

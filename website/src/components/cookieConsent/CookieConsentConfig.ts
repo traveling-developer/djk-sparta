@@ -1,7 +1,9 @@
 import type { CookieConsentConfig } from 'vanilla-cookieconsent';
 
 export const config: CookieConsentConfig = {
-
+    cookie: {
+        expiresAfterDays: 14,
+    },
     guiOptions: {
         consentModal: {
             layout: "box",

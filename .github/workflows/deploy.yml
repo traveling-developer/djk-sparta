@@ -4,12 +4,14 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'website/**'
+      - "website/**"
   repository_dispatch:
     types: [sanity-studio-update]
   schedule:
-    - cron: '55 23 * * 0'
-    - cron: '55 23 * * 3'
+    - cron: "55 23 * * 0"
+    - cron: "55 23 * * 6"
+    - cron: "55 23 * * 5"
+    - cron: "55 23 * * 3"
 
   workflow_dispatch:
 

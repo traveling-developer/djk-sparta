@@ -1,0 +1,31 @@
+---
+interface Props {
+    name: string;
+    league: string;
+    rank: string;
+    goalDifference: string;
+    link: string;
+}
+
+const { name, league, link, rank, goalDifference } = Astro.props;
+---
+
+<div>
+    <div
+        class="card sm:w-80 w-[306px] text-white bg-gradient-to-b from-[#8b0000] via-spartaRed to-[#ff6666] shadow-md shadow-gray-400"
+    >
+        <div class="card-body p-4">
+            <h2 class="card-title justify-center">{name}</h2>
+            <p>
+                {league}<br />
+                Tabellenrang {rank}<br />
+                Torverhältnis {goalDifference}
+            </p>
+            <div class="card-actions justify-center">
+                <a href={link} target="_blank" class="btn btn-outline mt-4"
+                    >BFV</a
+                >
+            </div>
+        </div>
+    </div>
+</div>

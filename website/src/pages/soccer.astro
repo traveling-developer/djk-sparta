@@ -3,20 +3,20 @@ import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
 import ContactCard from "../components/ContactCard.astro";
 import SectionHeader from "../components/SectionHeader.astro";
-
-import { soccerTeams } from "../lib/soccer";
+import TeamCard from "../components/soccer/TeamCard.astro";
 
 import soccerImage from "../assets/soccer.webp";
 import contactImage from "../assets/contact.webp";
+import teamImage from "../assets/team.webp";
+
+import { getTeams } from "../lib/soccer/teams";
+var teams = await getTeams();
 ---
 
 <Layout title="Fußball">
     <main>
         <Header title="Fußball" imageMetadata={soccerImage} />
-        <!-- <h1>Fußball</h1>
-        <ul>
-            {soccerTeams.map((team) => <li>{team.name}</li>)}
-        </ul> -->
+
         <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
             <div
                 class="w-72 sm:w-[38rem] card bg-spartaGray text-white shadow-md shadow-gray-400"
@@ -49,6 +49,24 @@ import contactImage from "../assets/contact.webp";
                     </p>
                     <p>B-Jugend <br /> Montag & Mittwoch 17:30 - 19:00 Uhr</p>
                 </div>
+            </div>
+        </div>
+
+        <div>
+            <SectionHeader title="Mannschaften" imageMetadata={teamImage} />
+
+            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+                {
+                    teams.map((team) => (
+                        <TeamCard
+                            name={team.name}
+                            league={team.league}
+                            rank={team.rank}
+                            goalDifference={team.goalDifference}
+                            link={team.link}
+                        />
+                    ))
+                }
             </div>
         </div>
 

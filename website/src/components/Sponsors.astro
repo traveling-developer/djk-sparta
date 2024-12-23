@@ -1,0 +1,32 @@
+---
+import sponsorImage from "../assets/sponsors.webp";
+import taxAndFriendsImage from "../assets/sponsors/TaxandFriends.svg";
+import SectionHeader from "./SectionHeader.astro";
+import SponsorCard from "./SponsorCard.astro";
+
+export enum SponsorsCategory {
+    all,
+    tableTennis,
+    soccer,
+}
+
+const { category = SponsorsCategory.all } = Astro.props;
+---
+
+<div>
+    <SectionHeader title="Partner" imageMetadata={sponsorImage} />
+
+    <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+        {
+            (category == SponsorsCategory.tableTennis ||
+                category == SponsorsCategory.all) && (
+                <SponsorCard
+                    name="Steuerkanzlei Tax&Friends"
+                    link="https://steuerkanzlei-taxandfriends.de"
+                    image={taxAndFriendsImage.src}
+                    imageAlt="Logo von Tax and Friends in bunten Farben."
+                />
+            )
+        }
+    </div>
+</div>

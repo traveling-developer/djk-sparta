@@ -9,8 +9,10 @@ interface Props {
 const { name, link, image, imageAlt } = Astro.props;
 ---
 
-<div class="w-72 sm:w-[28rem] card text-black shadow-md shadow-gray-400">
-    <figure>
+<div
+    class="w-72 sm:w-[28rem] card text-black shadow-md shadow-gray-400 bg-neutral-100"
+>
+    <figure class="mt-2">
         <img src={image} alt={imageAlt} class="max-h-40" />
     </figure>
     <div class="card-body">

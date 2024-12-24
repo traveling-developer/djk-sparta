@@ -10,6 +10,13 @@ export enum SponsorsCategory {
     soccer,
 }
 
+function isTableTennis(): boolean {
+    return (
+        category == SponsorsCategory.tableTennis ||
+        category == SponsorsCategory.all
+    );
+}
+
 const { category = SponsorsCategory.all } = Astro.props;
 ---
 
@@ -18,13 +25,18 @@ const { category = SponsorsCategory.all } = Astro.props;
 
     <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
         {
-            (category == SponsorsCategory.tableTennis ||
-                category == SponsorsCategory.all) && (
+            isTableTennis() && (
                 <SponsorCard
                     name="Steuerkanzlei Tax&Friends"
                     link="https://steuerkanzlei-taxandfriends.de"
                     image={taxAndFriendsImage.src}
                     imageAlt="Logo von Tax and Friends in bunten Farben."
+                />
+                <SponsorCard
+                    name="Dr. Neubauer"
+                    link="https://www.drneubauer.com"
+                    image="https://cdn.pixabay.com/photo/2019/03/10/14/04/table-tennis-4046277_1280.jpg"
+                    imageAlt="tbd"
                 />
             )
         }

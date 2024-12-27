@@ -16,6 +16,7 @@ import Events from "../components/tableTennis/Events.astro";
 import { createSlug } from "../lib/convenience";
 import { latestTableTennisNews } from "../lib/news";
 import { getTeams } from "../lib/tableTennis/teams";
+import GoogleMaps from "../components/GoogleMaps.astro";
 
 var teams = await getTeams();
 ---
@@ -82,5 +83,15 @@ var teams = await getTeams();
                 />
             </div>
         </div>
+
+        <GoogleMaps
+            latitude={49.43233666177542}
+            longitude={11.088991326381146}
+            zoom={15}
+            title="DJK Sparta Noris TT"
+            hasInfoWindow={true}
+            displayInfoWindowOnClick={false}
+            infoWindowContent='<h1 class="text-xl">DJK Sparta Tischtennis</h1><p>Eingang über den Pausenhof der Sperberschule.<br/>Zugang über die Langobardenstraße.</p>'
+        />
     </main>
 </Layout>

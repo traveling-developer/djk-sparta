@@ -76,6 +76,7 @@ jobs:
         env:
           SANITY_STUDIO_PROJECT_ID: ${{ secrets.SANITY_STUDIO_PROJECT_ID }}
           SANITY_STUDIO_DATASET: ${{ secrets.SANITY_STUDIO_DATASET }}
+          GOOGLE_MAPS_API: ${{ secrets.GOOGLE_MAPS_API }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

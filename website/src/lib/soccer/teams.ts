@@ -11,7 +11,7 @@ interface Team {
 
 const url = 'https://www.bfv.de/vereine/djk-sparta-noris-nuernberg/00ES8GNKEO00001DVV0AG08LVUPGND5I';
 
-export async function getTeams(): Promise<Team[]> {
+export async function getTeams(juniors: boolean): Promise<Team[]> {
     try {
         const { data } = await axios.get(url);
 
@@ -24,6 +24,17 @@ export async function getTeams(): Promise<Team[]> {
             const name = $(element).find('.bfv-composition-entry__category').text().trim();
             const linkToDetailsPage = $(element).find('a').attr('href') || '';
             const infosFromSubPage = await getInfosFromSubPage(linkToDetailsPage);
+
+            if (juniors == true) {
+                if (!name.includes('Junioren')) {
+                    continue;
+                }
+            }
+            else {
+                if (name.includes('Junioren')) {
+                    continue;
+                }
+            }
 
             teams.push({ name, league: infosFromSubPage.league!, rank: infosFromSubPage.rank!, goalDifference: infosFromSubPage.goalDifference!, link: infosFromSubPage.leagueLink! });
         }

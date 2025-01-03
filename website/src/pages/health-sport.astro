@@ -1,9 +1,27 @@
 ---
+import healthSportImage from "../assets/healthSport.webp";
+import contactImage from "../assets/contact.webp";
+
+import ContactCard from "../components/ContactCard.astro";
+import Header from "../components/Header.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import SmallHero from "../components/SmallHero.astro";
+
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Gesundheitssport">
     <main>
-        <h1>Gesundheitssport</h1>
+        <Header title="Gesundheitssport" imageMetadata={healthSportImage} />
+        <SmallHero
+            text="Die Gesundheitssport-Abteilung der DJK Sparta Noris Nürnberg bietet ein vielfältiges Programm für mehr Wohlbefinden und Fitness. Ob sanftes Training, Entspannungskurse oder gezielte Gesundheitsübungen – hier findest du die perfekte Balance zwischen Bewegung und Gesundheit!"
+        />
+        <div>
+            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+
+            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+                <ContactCard title="..." mobile="..." />
+            </div>
+        </div>
     </main>
 </Layout>

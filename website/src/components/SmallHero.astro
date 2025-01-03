@@ -1,0 +1,47 @@
+---
+import { Picture } from "astro:assets";
+import { spartaner, logoLettering } from "../lib/alternative-texts";
+
+import spartanerImage from "../assets/spartaner.webp";
+import letteringImage from "../assets/lettering.webp";
+
+interface Props {
+    text: string;
+}
+
+const { text } = Astro.props;
+---
+
+<div class="hero mb-2">
+    <div class="hero-content flex-col lg:flex-row-reverse">
+        <div
+            class="bg-spartaGray container max-w-xs rounded-lg shadow-lg shadow-black"
+        >
+            <div class="mx-auto w-20 bg-spartaGray mt-4 mb-4">
+                <Picture
+                    src={spartanerImage}
+                    formats={["webp"]}
+                    alt={spartaner}
+                    widths={[100]}
+                    sizes={`100px`}
+                />
+            </div>
+
+            <div class="w-32 mx-auto mb-4 bg-spartaGray">
+                <Picture
+                    src={letteringImage}
+                    formats={["webp"]}
+                    alt={logoLettering}
+                    widths={[200]}
+                    sizes={`200px`}
+                />
+            </div>
+        </div>
+
+        <div>
+            <h1 class="text-xl py-5">
+                {text}
+            </h1>
+        </div>
+    </div>
+</div>

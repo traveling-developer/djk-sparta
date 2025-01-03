@@ -10,6 +10,7 @@ import contactImage from "../assets/contact.webp";
 import teamImage from "../assets/team.webp";
 
 import { getTeams } from "../lib/soccer/teams";
+import SoccerHeadOfDepartment from "../components/contact/SoccerHeadOfDepartment.astro";
 var teams = await getTeams(false);
 ---
 
@@ -55,7 +56,7 @@ var teams = await getTeams(false);
             <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
             <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                <ContactCard title="TBD (1. Abteilungsleiter)" mail="..." />
+                <SoccerHeadOfDepartment />
                 <ContactCard title="TBD (2. Abteilungsleiter)" mail="..." />
             </div>
         </div>

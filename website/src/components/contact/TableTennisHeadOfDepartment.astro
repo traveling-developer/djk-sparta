@@ -1,0 +1,18 @@
+---
+import ContactCard from "../ContactCard.astro";
+
+interface Props {
+    isOnContactsPage?: boolean;
+}
+
+const { isOnContactsPage = false } = Astro.props;
+---
+
+<ContactCard
+    title={isOnContactsPage
+        ? "Jürgen Fietz (Tischtennis)"
+        : "Jürgen Fietz (1. Abteilungsleiter)"}
+    mail="juergen_fietz@web.de"
+    phone="0911 542 611"
+    mobile="0170 337 303 5"
+/>

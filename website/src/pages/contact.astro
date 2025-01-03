@@ -1,9 +1,42 @@
 ---
+import contactImage from "../assets/contact.webp";
+
+import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
+import GoogleMaps from "../components/GoogleMaps.astro";
+import Treasurer from "../components/contact/Treasurer.astro";
+import SecondBoardMember from "../components/contact/SecondBoardMember.astro";
+import FirstBoardMember from "../components/contact/FirstBoardMember.astro";
+import TableTennisHeadOfDepartment from "../components/contact/TableTennisHeadOfDepartment.astro";
+import SoccerHeadOfDepartment from "../components/contact/SoccerHeadOfDepartment.astro";
+import HealthSportHeadOfDepartment from "../components/contact/HealthSportHeadOfDepartment.astro";
+import IndiacaHeadOfDepartment from "../components/contact/IndiacaHeadOfDepartment.astro";
+import TennisHeadOfDepartment from "../components/contact/TennisHeadOfDepartment.astro";
 ---
 
 <Layout title="Kontakt">
     <main>
-        <h1>Kontakt</h1>
+        <Header title="Kontakt" imageMetadata={contactImage} />
+
+        <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+            <FirstBoardMember />
+            <SecondBoardMember />
+            <Treasurer />
+            <SoccerHeadOfDepartment isOnContactsPage={true} />
+            <HealthSportHeadOfDepartment isOnContactsPage={true} />
+            <IndiacaHeadOfDepartment isOnContactsPage={true} />
+            <TennisHeadOfDepartment isOnContactsPage={true} />
+            <TableTennisHeadOfDepartment isOnContactsPage={true} />
+        </div>
+
+        <GoogleMaps
+            latitude={49.416459843204485}
+            longitude={11.068967769662304}
+            zoom={15}
+            title="DJK Sparta Noris Nürnberg e.V."
+            hasInfoWindow={true}
+            displayInfoWindowOnClick={false}
+            infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
+        />
     </main>
 </Layout>

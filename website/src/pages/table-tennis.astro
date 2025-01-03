@@ -12,11 +12,12 @@ import NewsCard from "../components/NewsCard.astro";
 import Team from "../components/tableTennis/Team.astro";
 import TrainingTimes from "../components/tableTennis/TrainingTimes.astro";
 import Events from "../components/tableTennis/Events.astro";
+import GoogleMaps from "../components/GoogleMaps.astro";
+import TableTennisHeadOfDepartment from "../components/contact/TableTennisHeadOfDepartment.astro";
 
 import { createSlug } from "../lib/convenience";
 import { latestTableTennisNews } from "../lib/news";
 import { getTeams } from "../lib/tableTennis/teams";
-import GoogleMaps from "../components/GoogleMaps.astro";
 
 var teams = await getTeams();
 ---
@@ -71,12 +72,7 @@ var teams = await getTeams();
             <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
             <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                <ContactCard
-                    title="Jürgen Fietz (1. Abteilungsleiter)"
-                    mail="juergen_fietz@web.de"
-                    phone="0911 542 611"
-                    mobile="0170 337 303 5"
-                />
+                <TableTennisHeadOfDepartment />
                 <ContactCard
                     title="Armin Ufert (2. Abteilungsleiter)"
                     mail="armin.ufert@gmx.de"

@@ -1,0 +1,14 @@
+---
+import ContactCard from "../ContactCard.astro";
+
+interface Props {
+    isOnContactsPage?: boolean;
+}
+
+const { isOnContactsPage = false } = Astro.props;
+---
+
+<ContactCard
+    title={isOnContactsPage ? "... (Fußball)" : "... (1. Abteilungsleiter)"}
+    mail="..."
+/>

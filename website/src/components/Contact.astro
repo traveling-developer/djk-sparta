@@ -2,24 +2,15 @@
 import contactImage from "../assets/contact.webp";
 
 import SectionHeader from "./SectionHeader.astro";
-import ContactCard from "./ContactCard.astro";
+import FirstBoardMember from "./contact/FirstBoardMember.astro";
+import SecondBoardMember from "./contact/SecondBoardMember.astro";
+import Treasurer from "./contact/Treasurer.astro";
 ---
 
 <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
 <div class="flex flex-wrap justify-center gap-6 mb-20 mt-5">
-    <ContactCard
-        title="Dieter Wolfsberger (1. Vorstand)"
-        mail="dw@djkspartanoris.de"
-        phone="0911 480 59 55"
-    />
-    <ContactCard
-        title="Thomas Uebler (2. Vorstand)"
-        mail="tu@djkspartanoris.de"
-        mobile="0162 254 60 88"
-    />
-    <ContactCard
-        title="Gerhard Hasler (1. Kassier)"
-        mail="gh@djkspartanoris.de"
-    />
+    <FirstBoardMember />
+    <SecondBoardMember />
+    <Treasurer />
 </div>

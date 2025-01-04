@@ -18,6 +18,7 @@ import TableTennisHeadOfDepartment from "../components/contact/TableTennisHeadOf
 import { createSlug } from "../lib/convenience";
 import { latestTableTennisNews } from "../lib/news";
 import { getTeams } from "../lib/tableTennis/teams";
+import Sponsors, { SponsorsCategory } from "../components/Sponsors.astro";
 
 var teams = await getTeams();
 ---
@@ -89,5 +90,8 @@ var teams = await getTeams();
             displayInfoWindowOnClick={false}
             infoWindowContent='<h1 class="text-xl">DJK Sparta Tischtennis</h1><p>Eingang über den Pausenhof der Sperberschule.<br/>Zugang über die Langobardenstraße.</p>'
         />
+        <div>
+            <Sponsors category={SponsorsCategory.tableTennis} />
+        </div>
     </main>
 </Layout>

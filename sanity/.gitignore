@@ -29,3 +29,5 @@
 *.local
 
 schema.json
+
+examples/

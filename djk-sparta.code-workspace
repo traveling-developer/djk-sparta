@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"name": "djk-sparta",
+			"path": "."
+		},
+		{
+			"name": "sanity",
+			"path": "sanity"
+		},
+		{
+			"name": "website",
+			"path": "website"
+		}
+	],
+	"settings": {
+		"editor.formatOnSave": true
+	}
+}

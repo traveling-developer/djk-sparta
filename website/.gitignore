@@ -25,3 +25,8 @@ pnpm-debug.log*
 
 # Dotenv and similar local-only files
 *.local
+
+public/*.jpg
+public/*.png
+public/*.jpeg
+public/*.webp

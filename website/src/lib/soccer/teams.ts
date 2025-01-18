@@ -28,7 +28,10 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
             if (juniors == true) {
                 if (!name.includes('Junioren')) {
                     continue;
+                } else if (infosFromSubPage.rank == '0' && infosFromSubPage.goalDifference == '0:0') {
+                    continue;
                 }
+
             }
             else {
                 if (name.includes('Junioren')) {

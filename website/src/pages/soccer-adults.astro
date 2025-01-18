@@ -11,6 +11,7 @@ import teamImage from "../assets/team.webp";
 
 import { getTeams } from "../lib/soccer/teams";
 import SoccerHeadOfDepartment from "../components/contact/SoccerHeadOfDepartment.astro";
+import Events from "../components/soccer/Events.astro";
 var teams = await getTeams(false);
 ---
 
@@ -19,6 +20,7 @@ var teams = await getTeams(false);
         <Header title="Fußball - Herren" imageMetadata={soccerImage} />
 
         <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+            <Events />
             <div
                 class="w-72 sm:w-[28rem] card bg-spartaGray text-white shadow-md shadow-gray-400"
             >

@@ -12,6 +12,7 @@ import SoccerHeadOfDepartment from "../components/contact/SoccerHeadOfDepartment
 import HealthSportHeadOfDepartment from "../components/contact/HealthSportHeadOfDepartment.astro";
 import IndiacaHeadOfDepartment from "../components/contact/IndiacaHeadOfDepartment.astro";
 import TennisHeadOfDepartment from "../components/contact/TennisHeadOfDepartment.astro";
+import ContactCard from "../components/ContactCard.astro";
 ---
 
 <Layout title="Kontakt">
@@ -23,6 +24,10 @@ import TennisHeadOfDepartment from "../components/contact/TennisHeadOfDepartment
             <SecondBoardMember />
             <Treasurer />
             <SoccerHeadOfDepartment isOnContactsPage={true} />
+            <ContactCard
+                title="Robert Scherret (Fußball - Jugendleiter)"
+                mobile="015207115488"
+            />
             <HealthSportHeadOfDepartment isOnContactsPage={true} />
             <IndiacaHeadOfDepartment isOnContactsPage={true} />
             <TennisHeadOfDepartment isOnContactsPage={true} />

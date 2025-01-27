@@ -21,7 +21,7 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
 
         const entries = $('.bfv-composition-entry');
         for (const element of entries) {
-            const name = $(element).find('.bfv-composition-entry__category').text().trim();
+            let name = $(element).find('.bfv-composition-entry__category').text().trim();
             const linkToDetailsPage = $(element).find('a').attr('href') || '';
             const infosFromSubPage = await getInfosFromSubPage(linkToDetailsPage);
 
@@ -30,8 +30,17 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
                     continue;
                 } else if (infosFromSubPage.rank == '0' && infosFromSubPage.goalDifference == '0:0') {
                     continue;
+                } else {
+                    if (name == 'E-Junioren') {
+                        const newLocal = $(element).find('.bfv-composition-entry__team-name').text().trim();
+                        console.log(newLocal);
+                        if (newLocal.includes('2')) {
+                            name = 'E2-Junioren';
+                        } else {
+                            name = 'E1-Junioren';
+                        }
+                    }
                 }
-
             }
             else {
                 if (name.includes('Junioren')) {

@@ -1,9 +1,65 @@
 ---
+import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
+
+import contactImage from "../assets/contact.webp";
+import foodImage from "../assets/food.webp";
+import ContactCard from "../components/ContactCard.astro";
+import GoogleMaps from "../components/GoogleMaps.astro";
+import SectionHeader from "../components/SectionHeader.astro";
 ---
 
 <Layout title="Sportgaststätte">
     <main>
-        <h1>Sportgaststätte</h1>
+        <Header title="Sportgaststätte" imageMetadata={foodImage} />
+
+        <div class="hero">
+            <div class="hero-content">
+                <div class="mx-10 my-5 text-lg">
+                    Niki und Serkan freuen sich darauf Sie zu begrüßen.
+                    <p>
+                        Griechische und fränkische Gaumenfreuden verbinden hier
+                        Sport und Freizeit miteinander.
+                    </p>
+                    Freuen Sie sich auf gutes Essen und Sportveranstaltungen in Ihrer
+                    Sportgaststätte.
+                    <div class="flex items-center space-x-2">
+                        <p>Zur Facebook-Seite:</p>
+                        <a
+                            href="https://www.facebook.com/spartanoris/"
+                            target="_blank"
+                        >
+                            <img
+                                src="/facebook_black.svg"
+                                alt="Facebook Logo"
+                                class="w-10 h-10"
+                            />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+
+            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+                <ContactCard
+                    title="Niki und Serkan"
+                    phone="0911 / 373 00 598"
+                    mobile="0176 / 66 55 1079"
+                />
+            </div>
+        </div>
+
+        <GoogleMaps
+            latitude={49.416459843204485}
+            longitude={11.068967769662304}
+            zoom={15}
+            title="Sportgaststätte"
+            hasInfoWindow={true}
+            displayInfoWindowOnClick={false}
+            infoWindowContent="Sportgaststätte<br/>Wacholderweg 60<br/>90441 Nürnberg"
+        />
     </main>
 </Layout>

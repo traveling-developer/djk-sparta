@@ -1,0 +1,80 @@
+---
+import contactImage from "../../assets/contact.webp";
+import indiacaImage from "../../assets/indiaca.webp";
+
+import ContactCard from "../../components/ContactCard.astro";
+import GoogleMaps from "../../components/GoogleMaps.astro";
+import Header from "../../components/Header.astro";
+import Menu from "../../components/indiaca/Menu.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Indiaca">
+    <main>
+        <Header title="Indiaca" imageMetadata={indiacaImage} />
+
+        <Menu />
+
+        <div class="hero">
+            <div class="hero-content">
+                <div class="mx-10 my-5 text-lg">
+                    <p>
+                        Indiaca ist ein Rückschlagspiel ähnlich dem Volleyball
+                        und bietet somit ideale Bedingungen für Powerplay am
+                        Ball. Es ist ein absolut begeisternder Mannschaftssport
+                        für Jung und Alt!<br />
+                        Vom Studenten über den Midager bis hin zu sportlichen Menschen
+                        jedes Alters.
+                    </p>
+                    <br />
+                    <p>
+                        Insbesondere Interessenten, die einmal etwas Neues, eine
+                        eher weniger bekannte Teamsportart suchen, möchten wir
+                        zum Reinschnuppern in den actionreichen und schnell
+                        erlernbaren Indiacasport einladen.
+                    </p>
+                    <br />
+                    <p class="font-semibold">
+                        Gerne begrüßen wir Interessenten/innen am Hallentraining
+                        - wöchentlich montags ab 20.00h - bei uns.
+                    </p>
+                    <br />
+                    <p>
+                        Wetterbedingt und nach Absprache bieten wir nun ab
+                        üblicherweise ab dem monat April zusätzlich auch ein
+                        Training outdoor auf unserem Sportgelände an:
+                        Trainingstag ist Mittwoch.
+                    </p>
+                    <br />
+                    <p>
+                        Wer also Lust auf eine neue Sportart hat, ist in unserem
+                        Verein, dem einzigen in Nürnberg mit dem Sportangebot
+                        Indiaca goldrichtig und herzlich willkommen...
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+
+            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
+                <ContactCard
+                    title="Herbert Langfritz (Ansprechpartner)"
+                    mail="indiaca@djkspartanoris.org"
+                />
+            </div>
+        </div>
+
+        <GoogleMaps
+            latitude={49.416459843204485}
+            longitude={11.068967769662304}
+            zoom={15}
+            title="DJK Sparta Noris Nürnberg e.V."
+            hasInfoWindow={true}
+            displayInfoWindowOnClick={false}
+            infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
+        />
+    </main>
+</Layout>

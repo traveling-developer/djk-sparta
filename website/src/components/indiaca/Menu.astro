@@ -1,0 +1,39 @@
+---
+const path = Astro.url.pathname;
+const baseClass =
+    "btn shadow-md shadow-gray-400 text-white border-none hover:bg-spartaRed";
+---
+
+<div class="flex flex-wrap justify-center gap-6 mt-5">
+    <a
+        href="/indiaca"
+        class=`${baseClass} ${path === "/indiaca" ? "bg-spartaRed" : "bg-spartaGray"}`
+    >
+        Indiaca Home
+    </a>
+    <a
+        href="/indiaca/team"
+        class=`${baseClass} ${path === "/indiaca/team" ? "bg-spartaRed" : "bg-spartaGray"}`
+    >
+        Unser Team
+    </a>
+    <a
+        href="/indiaca/training"
+        class=`${baseClass} ${path === "/indiaca/training" ? "bg-spartaRed" : "bg-spartaGray"}`
+    >
+        Training & Spielbetrieb
+    </a>
+    <a
+        href="/indiaca/info"
+        class=`${baseClass} ${path === "/indiaca/info" ? "bg-spartaRed" : "bg-spartaGray"}`
+    >
+        Infos & Termine
+    </a>
+    <a
+        href="https://indiaca-nuernberg.jimdoweb.com/mediathek/"
+        target="_blank"
+        class=`${baseClass} ${"bg-spartaGray"}`
+    >
+        Mediathek
+    </a>
+</div>

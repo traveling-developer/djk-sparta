@@ -1,0 +1,15 @@
+---
+import indiacaImage from "../../assets/indiaca.webp";
+
+import Header from "../../components/Header.astro";
+import Menu from "../../components/indiaca/Menu.astro";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Indiaca">
+    <main>
+        <Header title="Indiaca" imageMetadata={indiacaImage} />
+
+        <Menu />
+    </main>
+</Layout>

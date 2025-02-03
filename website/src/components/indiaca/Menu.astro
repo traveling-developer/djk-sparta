@@ -1,31 +1,36 @@
 ---
-const path = Astro.url.pathname;
 const baseClass =
     "btn shadow-md shadow-gray-400 text-white border-none hover:bg-spartaRed";
+
+interface Props {
+    path: string;
+}
+
+const { path } = Astro.props;
 ---
 
 <div class="flex flex-wrap justify-center gap-6 mt-5">
     <a
         href="/indiaca"
-        class=`${baseClass} ${path === "/indiaca" ? "bg-spartaRed" : "bg-spartaGray"}`
+        class=`${baseClass} ${path === "indiaca" ? "bg-spartaRed" : "bg-spartaGray"}`
     >
         Indiaca Home
     </a>
     <a
         href="/indiaca/team"
-        class=`${baseClass} ${path === "/indiaca/team" ? "bg-spartaRed" : "bg-spartaGray"}`
+        class=`${baseClass} ${path === "team" ? "bg-spartaRed" : "bg-spartaGray"}`
     >
         Unser Team
     </a>
     <a
         href="/indiaca/training"
-        class=`${baseClass} ${path === "/indiaca/training" ? "bg-spartaRed" : "bg-spartaGray"}`
+        class=`${baseClass} ${path === "training" ? "bg-spartaRed" : "bg-spartaGray"}`
     >
         Training & Spielbetrieb
     </a>
     <a
         href="/indiaca/info"
-        class=`${baseClass} ${path === "/indiaca/info" ? "bg-spartaRed" : "bg-spartaGray"}`
+        class=`${baseClass} ${path === "info" ? "bg-spartaRed" : "bg-spartaGray"}`
     >
         Infos & Termine
     </a>

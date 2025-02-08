@@ -8,12 +8,19 @@ export enum SponsorsCategory {
     all,
     tableTennis,
     soccer,
+    indiaca
 }
 
 function isTableTennis(): boolean {
     return (
         category == SponsorsCategory.tableTennis ||
         category == SponsorsCategory.all
+    );
+}
+
+function isIndiaca(): boolean {
+    return (
+        category == SponsorsCategory.indiaca
     );
 }
 
@@ -37,6 +44,22 @@ const { category = SponsorsCategory.all } = Astro.props;
                     link="https://www.drneubauer.com"
                     image="https://cdn.pixabay.com/photo/2019/03/10/14/04/table-tennis-4046277_1280.jpg"
                     imageAlt="tbd"
+                />
+            )
+        }
+        {
+            isIndiaca() && (
+            <SponsorCard
+                    name="MR Datentechnik"
+                    link="https://mr-daten.de/"
+                    image={}
+                    imageAlt="TBD"
+                />
+                <SponsorCard
+                    name="Ballsportdirekt.de"
+                    link="https://www.ballsportdirekt.de/"
+                    image={}
+                    imageAlt="TBD"
                 />
             )
         }

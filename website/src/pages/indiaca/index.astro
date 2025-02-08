@@ -7,6 +7,7 @@ import GoogleMaps from "../../components/GoogleMaps.astro";
 import Header from "../../components/Header.astro";
 import Menu from "../../components/indiaca/Menu.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
+import Sponsors, { SponsorsCategory } from "../../components/Sponsors.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
@@ -76,5 +77,9 @@ import Layout from "../../layouts/Layout.astro";
             displayInfoWindowOnClick={false}
             infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
         />
+
+        <div>
+            <Sponsors category={SponsorsCategory.indiaca} />
+        </div>
     </main>
 </Layout>

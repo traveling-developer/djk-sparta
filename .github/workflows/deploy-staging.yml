@@ -1,28 +1,8 @@
-name: Prod deployment Astro site to pages
+name: Dev deployment
 
 on:
   push:
-    branches: ["main"]
-    paths:
-      - "website/**"
-  repository_dispatch:
-    types: [sanity-studio-update]
-  schedule:
-    - cron: "55 23 * * 0"
-    - cron: "55 23 * * 6"
-    - cron: "55 23 * * 5"
-    - cron: "55 23 * * 3"
-
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+    branches: ["dev"]
 
 env:
   BUILD_PATH: "website"
@@ -77,20 +57,10 @@ jobs:
           GOOGLE_MAPS_API: ${{ secrets.GOOGLE_MAPS_API }}
           SITE_URL: ${{ secrets.SITE_URL }}
       - shell: bash
-        run: rm website/public/DEV_CNAME
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        run: mv -f website/public/DEV_CNAME website/public/CNAME
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
         with:
-          path: ${{ env.BUILD_PATH }}/dist
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    name: Deploy
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy ${{ github.workspace }}/website/dist --project-name=djk-sparta --branch=main

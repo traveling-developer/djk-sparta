@@ -1,9 +1,22 @@
 ---
+import healthSportImage from "../assets/healthSport.webp";
 import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import SmallHero from "../components/SmallHero.astro";
 ---
 
 <Layout title="Mitglied werden">
     <main>
-        <h1>Mitglied werden</h1>
+        <Header title="Werde Mitglied" imageMetadata={healthSportImage} />
+        <SmallHero
+            text="Sport, Gemeinschaft und Leidenschaft - das sind wir! Wir bieten ein vielfältiges Angebot für alle Altersklassen und Interessen. Egal, ob du dich fit halten, in einer Mannschaft spielen oder einfach Spaß an der Bewegung hast - bei uns bist du genau richtig. Lade dir hier den Aufnahmeantrag herunter, fülle ihn aus und werde Teil unserer Vereinsfamilie! Wir freuen uns auf dich!"
+        />
+        <div class="my-10 flex justify-center">
+            <a
+                class="btn btn-lg bg-spartaRed text-white hover:bg-spartaGray"
+                href="/Aufnahmeschein.pdf"
+                download>Aufnahmeantrag herunterladen</a
+            >
+        </div>
     </main>
 </Layout>

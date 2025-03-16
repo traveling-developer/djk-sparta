@@ -22,7 +22,11 @@ export const config: CookieConsentConfig = {
         necessary: {
             readOnly: true
         },
-        functionality: {}
+        functionality: {
+            services: {
+                "Google Maps": {},
+            }
+        }
     },
     language: {
         default: "de",

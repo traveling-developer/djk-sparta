@@ -38,10 +38,17 @@ const apiKey = import.meta.env.GOOGLE_MAPS_API;
     >
         <div
             id="fallback"
-            class="h-full flex items-center justify-center text-center px-5"
+            class="h-full flex flex-col items-center justify-center text-center px-5"
         >
             Google Maps konnte nicht geladen werden. Bitte akzeptiere die
             Cookies, um Google Maps anzuzeigen.
+
+            <button
+                class="btn bg-spartaRed text-white hover:bg-spartaGray mt-5"
+                type="button"
+                data-cc="show-preferencesModal"
+                >Cookie-Einstellungen öffnen</button
+            >
         </div>
     </div>
 

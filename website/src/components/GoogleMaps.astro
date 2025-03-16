@@ -36,13 +36,20 @@ const apiKey = import.meta.env.GOOGLE_MAPS_API;
         id="map"
         class="h-96 mb-10 mt-5 mx-5 2xl:mx-52 xl:mx-32 lg:mx-12 drop-shadow-xl border-solid border-4"
     >
+        <div
+            id="fallback"
+            class="h-full flex items-center justify-center text-center px-5"
+        >
+            Google Maps konnte nicht geladen werden. Bitte akzeptiere die
+            Cookies, um Google Maps anzuzeigen.
+        </div>
     </div>
 
     <script
         is:inline
+        type="text/plain"
         data-category="functionality"
         data-service="Google Maps"
-        type="text/plain"
         define:vars={{
             latitude,
             longitude,
@@ -102,6 +109,9 @@ const apiKey = import.meta.env.GOOGLE_MAPS_API;
         let map;
 
         async function initMap() {
+            const fallbackElement = document.getElementById("fallback");
+            fallbackElement.remove();
+
             const position = {
                 lat: latitude,
                 lng: longitude,

@@ -30,7 +30,7 @@ export async function getTeams(): Promise<Team[]> {
             const rank = $(element).find('td').eq(3).text().trim();
             const points = $(element).find('td').eq(4).text().trim();
 
-            if (league.includes('Pokal')) {
+            if (league.includes('Pokal') || league.includes('Relegation')) {
                 return;
             }
 

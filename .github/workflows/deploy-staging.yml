@@ -14,6 +14,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - shell: bash
+        run: |
+          mv -f website/public/DEV_CNAME website/public/CNAME
+          mv -f website/public/DEV_robots.txt website/public/robots.txt
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -56,10 +60,6 @@ jobs:
           SANITY_STUDIO_DATASET: ${{ secrets.SANITY_STUDIO_DATASET }}
           GOOGLE_MAPS_API: ${{ secrets.GOOGLE_MAPS_API }}
           SITE_URL: ${{ secrets.SITE_URL }}
-      - shell: bash
-        run: |
-          mv -f website/public/DEV_CNAME website/public/CNAME
-          mv -f website/public/DEV_robots.txt website/public/robots.txt
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:

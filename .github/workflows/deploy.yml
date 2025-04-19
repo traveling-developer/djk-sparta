@@ -77,7 +77,9 @@ jobs:
           GOOGLE_MAPS_API: ${{ secrets.GOOGLE_MAPS_API }}
           SITE_URL: ${{ secrets.SITE_URL }}
       - shell: bash
-        run: rm website/public/DEV_CNAME
+        run: |
+          rm website/public/DEV_CNAME
+          rm website/public/DEV_robots.txt
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

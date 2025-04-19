@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://djkspartanoris.de/sitemap-index.xml

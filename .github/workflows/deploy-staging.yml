@@ -57,7 +57,9 @@ jobs:
           GOOGLE_MAPS_API: ${{ secrets.GOOGLE_MAPS_API }}
           SITE_URL: ${{ secrets.SITE_URL }}
       - shell: bash
-        run: mv -f website/public/DEV_CNAME website/public/CNAME
+        run: |
+          mv -f website/public/DEV_CNAME website/public/CNAME
+          mv -f website/public/DEV_robots.txt website/public/robots.txt
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:

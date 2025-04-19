@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { type AxiosRequestConfig } from 'axios';
 import * as cheerio from 'cheerio';
 
 interface Team {
@@ -10,10 +10,18 @@ interface Team {
 }
 
 const url = 'https://www.bfv.de/vereine/djk-sparta-noris-nuernberg/00ES8GNKEO00001DVV0AG08LVUPGND5I';
+const config: AxiosRequestConfig = {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
+        'AppleWebKit/537.36 (KHTML, like Gecko) ' +
+        'Chrome/112.0.0.0 Safari/537.36',
+       'Accept': 'text/html',
+    }};
 
 export async function getTeams(juniors: boolean): Promise<Team[]> {
     try {
-        const { data } = await axios.get(url);
+        const { data } = await axios.get(url,config);
 
         const $ = cheerio.load(data);
 
@@ -33,7 +41,6 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
                 } else {
                     if (name == 'E-Junioren') {
                         const newLocal = $(element).find('.bfv-composition-entry__team-name').text().trim();
-                        console.log(newLocal);
                         if (newLocal.includes('2')) {
                             name = 'E2-Junioren';
                         } else {
@@ -60,7 +67,7 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
 
 async function getInfosFromSubPage(link: string) {
     try {
-        const { data } = await axios.get(link);
+        const { data } = await axios.get(link, config);
         const $ = cheerio.load(data);
 
         let league;

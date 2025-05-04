@@ -23,7 +23,10 @@ import Sponsors, { SponsorsCategory } from "../components/Sponsors.astro";
 var teams = await getTeams();
 ---
 
-<Layout title="Tischtennis">
+<Layout
+    title="Tischtennis"
+    description="Tischtennis in Nürnberg bei DJK Sparta Noris: Training (Di, Mi, Fr). Infos, Termine & Kontakt hier!"
+>
     <main>
         <Header title="Tischtennis" imageMetadata={racketImage} />
 

@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+    themes: light --default;
+}
+
+@theme {
+    --color-spartaGray: oklch(0.2603 0 0);
+    --color-spartaRed: oklch(0.587 0.2164 29.16);
+}

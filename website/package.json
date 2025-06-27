@@ -20,6 +20,9 @@
     "axios": "^1.10.0",
     "cheerio": "^1.1.0",
     "daisyui": "^5.0.43",
-    "groq": "^3.93.0"
+    "groq": "^3.93.0",
+    "prettier": "^3.6.0",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.6.13"
   }
 }

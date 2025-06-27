@@ -148,6 +148,9 @@
   ul a:hover {
     @apply text-spartaRed;
   }
+  .parent:active {
+    @apply bg-spartaGray;
+  }
   .parent:focus {
     @apply bg-spartaGray text-spartaRed!;
   }
@@ -158,7 +161,7 @@
     @apply m-0;
   }
 
-  .dropdown > div::after {
+  .dropdown-hover > div::after {
     display: block;
     margin-top: -0.5rem;
     height: 0.5rem;
@@ -173,7 +176,7 @@
     pointer-events: none;
   }
 
-  .dropdown:hover > div::after {
+  .dropdown-hover:hover > div::after {
     transform: rotate(225deg);
     margin-top: 0;
   }

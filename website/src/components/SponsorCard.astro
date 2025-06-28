@@ -1,31 +1,31 @@
 ---
 interface Props {
-    name: string;
-    link: string;
-    image: string;
-    imageAlt: string;
+  name: string;
+  link: string;
+  image: string;
+  imageAlt: string;
 }
 
 const { name, link, image, imageAlt } = Astro.props;
 ---
 
 <div
-    class="w-72 sm:w-[28rem] card text-black shadow-md shadow-gray-400 bg-neutral-100"
+  class="card w-72 bg-neutral-100 text-black shadow-md shadow-gray-400 sm:w-[28rem]"
 >
-    <figure class="mt-2">
-        <img src={image} alt={imageAlt} class="max-h-40" />
-    </figure>
-    <div class="card-body">
-        <h2 class="card-title text-2xl">
-            {name}
-        </h2>
-        <div class="card-actions justify-end">
-            <a
-                role="button"
-                class="btn bg-spartaRed text-white hover:bg-spartaGray"
-                href={link}
-                target="_blank">Entdecken</a
-            >
-        </div>
+  <figure class="mt-2">
+    <img src={image} alt={imageAlt} class="max-h-40" />
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title text-2xl">
+      {name}
+    </h2>
+    <div class="card-actions justify-end">
+      <a
+        role="button"
+        class="btn bg-spartaRed hover:bg-spartaGray text-white"
+        href={link}
+        target="_blank">Entdecken</a
+      >
     </div>
+  </div>
 </div>

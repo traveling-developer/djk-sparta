@@ -8,7 +8,9 @@
   name: "light";
   default: true;
   --color-neutral: oklch(32.1785% 0.02476 255.701624/1);
+  --radius-box: 1rem;
 }
+
 @theme {
   --color-spartaGray: oklch(0.2603 0 0);
   --color-spartaRed: oklch(0.587 0.2164 29.16);

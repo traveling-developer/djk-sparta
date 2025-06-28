@@ -2,30 +2,30 @@
 import { Picture } from "astro:assets";
 
 interface Props {
-    title: string;
-    link: string;
-    imageMetadata: ImageMetadata;
-    imageAlt: string;
+  title: string;
+  link: string;
+  imageMetadata: ImageMetadata;
+  imageAlt: string;
 }
 
 const { title, link, imageMetadata, imageAlt } = Astro.props;
 ---
 
 <a
-    href={link}
-    class="card bg-neutral-100 text-black w-72 shadow-md shadow-gray-400 max-h-40"
+  href={link}
+  class="card max-h-40 w-72 bg-neutral-100 text-black shadow-md shadow-gray-400"
 >
-    <div class="card-body flex flex-col items-center py-4">
-        <h2 class="card-title">{title}</h2>
-    </div>
-    <figure>
-        <Picture
-            src={imageMetadata}
-            formats={["webp"]}
-            alt={imageAlt}
-            widths={[290]}
-            sizes={`290px`}
-            fallbackFormat="jpeg"
-        />
-    </figure>
+  <div class="card-body flex flex-col items-center py-4">
+    <h2 class="card-title">{title}</h2>
+  </div>
+  <figure>
+    <Picture
+      src={imageMetadata}
+      formats={["webp"]}
+      alt={imageAlt}
+      widths={[290]}
+      sizes={`290px`}
+      fallbackFormat="jpeg"
+    />
+  </figure>
 </a>

@@ -22,7 +22,12 @@ const { name, league, link, rank, points } = Astro.props;
         Punkte {points}
       </p>
       <div class="card-actions justify-center">
-        <a href={link} target="_blank" class="btn btn-outline mt-4">Click-TT</a>
+        <a
+          href={link}
+          target="_blank"
+          class="btn btn-outline hover:border-spartaGray hover:bg-spartaGray mt-4 transition duration-300 ease-in-out hover:-translate-y-1 hover:text-white"
+          >Click-TT</a
+        >
       </div>
     </div>
   </div>

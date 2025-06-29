@@ -96,7 +96,7 @@ async function getInfosFromSubPage(link: string) {
         $(element).find(".bfv-game-info-entry__title").text().trim() === "Liga"
       ) {
         league = $(element).find("a").text().trim();
-        leagueLink = $(element).find("a").attr("href") || "";
+        leagueLink = $(element).find("a").attr("href") || link;
       }
       if (
         $(element).find(".bfv-game-info-entry__title").text().trim() ===

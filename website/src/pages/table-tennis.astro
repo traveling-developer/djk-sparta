@@ -52,26 +52,21 @@ var teams = await getTeams();
         }
       </div>
     </div>
-    <!-- <div>
-            <SectionHeader title="News" imageMetadata={typeWriterImage} />
+    <div>
+      <SectionHeader title="News" imageMetadata={typeWriterImage} />
 
-            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                {
-                    latestTableTennisNews.map((news) => (
-                        <NewsCard
-                            body={
-                                news.content
-                                    ?.split(" ")
-                                    .slice(0, 15)
-                                    .join(" ") + " ..."
-                            }
-                            title={news.title}
-                            link={"/news/" + createSlug(news.title!)}
-                        />
-                    ))
-                }
-            </div>
-        </div> -->
+      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+        {
+          latestTableTennisNews.map((news) => (
+            <NewsCard
+              body={news.content?.split(" ").slice(0, 15).join(" ") + " ..."}
+              title={news.title}
+              link={"/news/" + createSlug(news.title!)}
+            />
+          ))
+        }
+      </div>
+    </div>
     <div>
       <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 

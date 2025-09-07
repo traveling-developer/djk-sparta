@@ -24,35 +24,35 @@ var teams = await getTeams();
 ---
 
 <Layout
-    title="Tischtennis"
-    description="Tischtennis in Nürnberg bei DJK Sparta Noris: Training (Di, Mi, Fr). Infos, Termine & Kontakt hier!"
+  title="Tischtennis"
+  description="Tischtennis in Nürnberg bei DJK Sparta Noris: Training (Di, Mi, Fr). Infos, Termine & Kontakt hier!"
 >
-    <main>
-        <Header title="Tischtennis" imageMetadata={racketImage} />
+  <main>
+    <Header title="Tischtennis" imageMetadata={racketImage} />
 
-        <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-            <Events />
-            <TrainingTimes />
-        </div>
+    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+      <Events />
+      <TrainingTimes />
+    </div>
 
-        <div>
-            <SectionHeader title="Mannschaften" imageMetadata={teamImage} />
+    <div>
+      <SectionHeader title="Mannschaften" imageMetadata={teamImage} />
 
-            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                {
-                    teams.map((team) => (
-                        <Team
-                            name={team.name}
-                            league={team.league}
-                            rank={team.rank}
-                            points={team.points}
-                            link={team.link}
-                        />
-                    ))
-                }
-            </div>
-        </div>
-        <!-- <div>
+      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+        {
+          teams.map((team) => (
+            <Team
+              name={team.name}
+              league={team.league}
+              rank={team.rank}
+              points={team.points}
+              link={team.link}
+            />
+          ))
+        }
+      </div>
+    </div>
+    <!-- <div>
             <SectionHeader title="News" imageMetadata={typeWriterImage} />
 
             <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
@@ -72,34 +72,34 @@ var teams = await getTeams();
                 }
             </div>
         </div> -->
-        <div>
-            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+    <div>
+      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
-            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                <TableTennisHeadOfDepartment />
-                <ContactCard
-                    title="Armin Ufert (2. Abteilungsleiter)"
-                    mobile="+49 176 78102208"
-                    mail="armin.ufert@gmx.de"
-                />
-                <ContactCard
-                    title="Anton Nagatkin (2. Abteilungsleiter)"
-                    mobile="+49 176 74729697"
-                />
-            </div>
-        </div>
-
-        <GoogleMaps
-            latitude={49.43233666177542}
-            longitude={11.088991326381146}
-            zoom={15}
-            title="DJK Sparta Noris TT"
-            hasInfoWindow={true}
-            displayInfoWindowOnClick={false}
-            infoWindowContent='<h1 class="text-xl">DJK Sparta Tischtennis</h1><p>Eingang über den Pausenhof der Sperberschule.<br/>Zugang über die Langobardenstraße.</p>'
+      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+        <TableTennisHeadOfDepartment />
+        <ContactCard
+          title="Armin Ufert (2. Abteilungsleiter)"
+          mobile="+49 176 78102208"
+          mail="armin.ufert@gmx.de"
         />
-        <div>
-            <Sponsors category={SponsorsCategory.tableTennis} />
-        </div>
-    </main>
+        <ContactCard
+          title="Anton Nagatkin (2. Abteilungsleiter)"
+          mobile="+49 176 74729697"
+        />
+      </div>
+    </div>
+
+    <GoogleMaps
+      latitude={49.43233666177542}
+      longitude={11.088991326381146}
+      zoom={15}
+      title="DJK Sparta Noris TT"
+      hasInfoWindow={true}
+      displayInfoWindowOnClick={false}
+      infoWindowContent='<h1 class="text-xl">DJK Sparta Tischtennis</h1><p>Eingang über den Pausenhof der Sperberschule.<br/>Zugang über die Langobardenstraße.</p>'
+    />
+    <div>
+      <Sponsors category={SponsorsCategory.tableTennis} />
+    </div>
+  </main>
 </Layout>

@@ -1,0 +1,21 @@
+{
+  "name": "news-generator",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npx tsx --env-file=.env.local src/main.ts",
+    "build": "tsc && vite build"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.0",
+    "typescript": "~5.8.3",
+    "vite": "^7.1.2",
+    "@sanity/client": "^7.6.0"
+  },
+  "dependencies": {
+    "@google/genai": "^1.17.0",
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "spielbericht": {
+    "liga": "string",
+    "begegnung": {
+      "heim_team": "string",
+      "gast_team": "string",
+      "ergebnis": "string",
+      "datum": "string (Format: TT.MM.JJJJ)",
+      "uhrzeit": "string (Format: HH:MM Uhr)"
+    },
+    "mannschaften": {
+      "heim_team": {
+        "spieler": [{ "rang": "string", "name": "string" }],
+        "doppel": [{ "rang": "string", "name": "string" }]
+      },
+      "gast_team": {
+        "spieler": [{ "rang": "string", "name": "string" }],
+        "doppel": [{ "rang": "string", "name": "string" }]
+      }
+    },
+    "spiele": [
+      {
+        "typ": "string (z.B. \"Doppel\" oder \"Einzel\")",
+        "heim_spieler": "string (einzelner Spielername oder Spielernamen kombiniert)",
+        "gast_spieler": "string (einzelner Spielername oder Spielernamen kombiniert)",
+        "saetze": ["string (Format: PunkteHeim:PunkteGast)"],
+        "gesamt_saetze": "string (Format: GewonneneSätzeHeim:GewonneneSätzeGast)",
+        "gesamt_spiele": "string (Format: GewonneneSpieleHeim:GewonneneSpieleGast)"
+      }
+    ],
+    "zusammenfassung_baelle": "string (Format: BälleHeim:BälleGast)",
+    "zusammenfassung_saetze": "string (Format: SätzeHeim:SätzeGast)",
+    "zusammenfassung_spiele": "string (Format: SpieleHeim:SpieleGast)",
+    "spielzeiten": {
+      "spielbeginn": "string (Format: HH:MM Uhr)",
+      "spielende": "string (Format: HH:MM)"
+    },
+    "zuschaueranzahl": "number"
+  }
+}

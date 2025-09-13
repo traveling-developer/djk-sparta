@@ -4,28 +4,28 @@ import { news } from "../../lib/news";
 import { createSlug } from "../../lib/convenience";
 
 export async function getStaticPaths() {
-    return news.map((news) => ({
-        params: {
-            slug: createSlug(news.title!),
-        },
-        props: news,
-    }));
+  return news.map((news) => ({
+    params: {
+      slug: createSlug(news.title!),
+    },
+    props: news,
+  }));
 }
 
 const article = Astro.props;
 ---
 
 <Layout title={article.title!}>
-    <main>
-        <div class="text-center my-5 flex items-center flex-col">
-            <div class="mb-5 text-2xl font-semibold">
-                {article.title}
-            </div>
-            <div
-                class="text-justify mx-5 sm:mx-10 lg:mx-15 xl:w-4/5 2xl:w-9/12 whitespace-pre-line"
-            >
-                {article.content}
-            </div>
-        </div>
-    </main>
+  <main>
+    <div class="my-5 flex flex-col items-center text-center">
+      <div class="mb-5 text-2xl font-semibold">
+        {article.title}
+      </div>
+      <div
+        class="mx-5 text-justify whitespace-pre-line sm:mx-10 lg:mx-15 xl:w-4/5 2xl:w-9/12"
+      >
+        {article.content}
+      </div>
+    </div>
+  </main>
 </Layout>

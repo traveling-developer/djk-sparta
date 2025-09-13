@@ -8,7 +8,6 @@ const currentSchedule =
   "https://www.mytischtennis.de/clicktt/ByTTV/24-25/verein/207077/DJK-Sparta-Noris-Nuernberg/spielplan/";
 
 export async function downloadMatchReports(): Promise<MatchReport[]> {
-  //TODO fix, so that all matches on this date will be downloaded
   const today = new Date().toLocaleDateString("de-DE", {
     day: "2-digit",
     month: "2-digit",
@@ -22,10 +21,16 @@ export async function downloadMatchReports(): Promise<MatchReport[]> {
 
     const $ = cheerio.load(data);
 
-    for (const element of $(".table tbody tr")) {
-      const date = $(element).find("td").eq(0).text().trim();
+    let currentDate = "";
 
-      if (!date.includes(today)) {
+    for (const element of $(".table tbody tr")) {
+      const dateCell = $(element).find("td").eq(0).text().trim();
+
+      if (dateCell !== "") {
+        currentDate = dateCell;
+      }
+
+      if (!currentDate.includes(today)) {
         continue;
       }
 

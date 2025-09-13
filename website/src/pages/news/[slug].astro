@@ -23,7 +23,12 @@ const article = Astro.props;
 
     <div class="my-5 flex flex-col items-center text-center">
       <h2 class="mt-5 mb-8 p-0.5 text-xl font-semibold sm:text-2xl">
-        {article.title}
+        {article.category === "table-tennis" && "🏓 "}
+        {article.category === "soccer" && "⚽ "}
+        {article.category === "general" && "🤝 "}
+        {article.category === "health-sport" && "🧘‍♀️ "}
+        {article.category === "indiaca" && "🪶 "}
+        {article.category === "tennis" && "🎾 "}{article.title}
       </h2>
       <div class="mx-5 sm:w-2/3 lg:w-1/2 xl:w-1/2 2xl:w-2/5">
         <div class="text-justify whitespace-pre-line">

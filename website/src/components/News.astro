@@ -19,6 +19,7 @@ import SectionHeader from "./SectionHeader.astro";
             body={news.content?.split(" ").slice(0, 15).join(" ") + " ..."}
             title={news.title}
             link={"/news/" + createSlug(news.title!)}
+            category={news.category}
           />
         ))
     }

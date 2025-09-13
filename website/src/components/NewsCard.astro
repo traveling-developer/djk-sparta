@@ -3,9 +3,10 @@ interface Props {
   title?: string;
   body?: string;
   link?: string;
+  category?: string;
 }
 
-const { link, title, body } = Astro.props;
+const { link, title, body, category } = Astro.props;
 ---
 
 <div
@@ -13,6 +14,12 @@ const { link, title, body } = Astro.props;
 >
   <div class="card-body">
     <h2 class="card-title">
+      {category === "table-tennis" && "🏓 "}
+      {category === "soccer" && "⚽ "}
+      {category === "general" && "🤝 "}
+      {category === "health-sport" && "🧘‍♀️ "}
+      {category === "indiaca" && "🪶 "}
+      {category === "tennis" && "🎾 "}
       {title}
     </h2>
     <p>

@@ -9,14 +9,14 @@ import SectionHeader from "./SectionHeader.astro";
 
 <SectionHeader title="News" imageMetadata={typeWriterImage} />
 
-<div class="flex flex-wrap justify-center gap-6 mb-20 mt-5">
-    {
-        latestNews.map((news) => (
-            <NewsCard
-                body={news.content?.split(" ").slice(0, 15).join(" ") + " ..."}
-                title={news.title}
-                link={"/news/" + createSlug(news.title!)}
-            />
-        ))
-    }
+<div class="mt-5 mb-20 flex flex-wrap justify-center gap-6">
+  {
+    latestNews.map((news) => (
+      <NewsCard
+        body={news.content?.split(" ").slice(0, 15).join(" ") + " ..."}
+        title={news.title}
+        link={"/news/" + createSlug(news.title!)}
+      />
+    ))
+  }
 </div>

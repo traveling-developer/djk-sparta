@@ -2,6 +2,8 @@
 import Layout from "../../layouts/Layout.astro";
 import { news } from "../../lib/news";
 import { createSlug } from "../../lib/convenience";
+import typeWriterImage from "../../assets/typewriter.webp";
+import SectionHeader from "../../components/SectionHeader.astro";
 
 export async function getStaticPaths() {
   return news.map((news) => ({
@@ -15,16 +17,21 @@ export async function getStaticPaths() {
 const article = Astro.props;
 ---
 
-<Layout title={article.title!}>
+<Layout title={article.title!} description={article.title!}>
   <main>
+    <SectionHeader title="News" imageMetadata={typeWriterImage} />
+
     <div class="my-5 flex flex-col items-center text-center">
-      <div class="mb-5 text-2xl font-semibold">
+      <h2 class="mt-5 mb-8 p-0.5 text-xl font-semibold sm:text-2xl">
         {article.title}
-      </div>
-      <div
-        class="mx-5 text-justify whitespace-pre-line sm:mx-10 lg:mx-15 xl:w-4/5 2xl:w-9/12"
-      >
-        {article.content}
+      </h2>
+      <div class="mx-5 sm:w-2/3 lg:w-1/2 xl:w-1/2 2xl:w-2/5">
+        <div class="text-justify whitespace-pre-line">
+          {article.content}
+        </div>
+        <div class="mt-5 text-left text-sm">
+          Published at: {article.releaseDate}
+        </div>
       </div>
     </div>
   </main>

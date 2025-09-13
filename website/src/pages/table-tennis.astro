@@ -57,7 +57,7 @@ var teams = await getTeams();
 
       <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
         {
-          latestTableTennisNews.map((news) => (
+          latestTableTennisNews.slice(0, 4).map((news) => (
             <NewsCard
               body={news.content?.split(" ").slice(0, 15).join(" ") + " ..."}
               title={news.title}

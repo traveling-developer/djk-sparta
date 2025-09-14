@@ -13,9 +13,11 @@ const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 export async function generateReport(report: MatchReport) {
   const uploadedReport = await ai.files.upload({ file: report.filePath });
 
-  const jsonReport = await generateJSONFromReport(uploadedReport);
+  const jsonReport = await withRetry(() =>
+    generateJSONFromReport(uploadedReport)
+  );
 
-  const content = await generateContent(jsonReport);
+  const content = await withRetry(() => generateContent(jsonReport));
 
   await deleteUploadedFile(uploadedReport);
 
@@ -61,4 +63,18 @@ async function generateJSONFromReport(uploadedReport: File) {
 
 async function deleteUploadedFile(uploadedReport: File) {
   await ai.files.delete({ name: uploadedReport.name! });
+}
+
+async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.pow(2, i) * 1000)
+      );
+    }
+  }
+  throw new Error("Max retries reached");
 }

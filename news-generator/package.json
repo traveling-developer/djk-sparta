@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx tsx --env-file=.env.local src/main.ts",
     "build": "tsc && vite build",
-    "generate": "npx tsx --env-file=.env.local src/main.ts"
+    "generate": "npx tsx src/main.ts"
   },
   "devDependencies": {
     "prettier": "^3.6.0",

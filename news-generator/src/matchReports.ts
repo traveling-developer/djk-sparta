@@ -5,10 +5,12 @@ import { pdfsFolderPath } from "./constants";
 import { MatchReport } from "./types";
 
 const currentSchedule =
-  "https://www.mytischtennis.de/clicktt/ByTTV/24-25/verein/207077/DJK-Sparta-Noris-Nuernberg/spielplan/";
+  "https://www.mytischtennis.de/clicktt/ByTTV/25-26/verein/207077/DJK-Sparta-Noris-Nuernberg/spielplan/";
 
 export async function downloadMatchReports(): Promise<MatchReport[]> {
-  const today = new Date().toLocaleDateString("de-DE", {
+  const yesterday = new Date(
+    new Date().setDate(new Date().getDate() - 1)
+  ).toLocaleDateString("de-DE", {
     day: "2-digit",
     month: "2-digit",
     year: "2-digit",
@@ -30,7 +32,7 @@ export async function downloadMatchReports(): Promise<MatchReport[]> {
         currentDate = dateCell;
       }
 
-      if (!currentDate.includes(today)) {
+      if (!currentDate.includes(yesterday)) {
         continue;
       }
 

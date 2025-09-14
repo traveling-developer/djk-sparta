@@ -41,11 +41,6 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
       if (juniors == true) {
         if (!name.includes("Junioren")) {
           continue;
-        } else if (
-          infosFromSubPage.rank == "0" &&
-          infosFromSubPage.goalDifference == "0:0"
-        ) {
-          continue;
         } else {
           if (name == "E-Junioren") {
             const newLocal = $(element)
@@ -57,6 +52,19 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
             } else {
               name = "E1-Junioren";
             }
+          }
+          if (name == "F-Junioren") {
+            const newLocal = $(element)
+              .find(".bfv-composition-entry__team-name")
+              .text()
+              .trim();
+            if (newLocal.includes("2")) {
+              name = "F2-Junioren";
+            } else {
+              name = "F1-Junioren";
+            }
+            infosFromSubPage.rank = "n.a.";
+            infosFromSubPage.goalDifference = "n.a.";
           }
         }
       } else {

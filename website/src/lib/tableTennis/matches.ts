@@ -27,10 +27,6 @@ export async function getMatches() {
       const guestTeam = $(element).find("td").eq(5).text().trim();
       const result = $(element).find("td").eq(6).text().trim();
 
-      if (date === "") {
-        date = allMatches[allMatches.length - 1].date;
-      }
-
       date = formatDateToGerman(date);
       time = formatTimeToGerman(time);
       allMatches.push({ date, time, homeTeam, guestTeam, result });

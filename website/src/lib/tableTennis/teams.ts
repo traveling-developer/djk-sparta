@@ -10,17 +10,16 @@ interface Team {
 }
 
 const url =
-  "https://www.mytischtennis.de/clicktt/ByTTV/25-26/verein/207077/DJK-Sparta-Noris-Nuernberg/mannschaften/";
+  "https://www.mytischtennis.de/click-tt/ByTTV/25--26/verein/207077/DJK_Sparta_Noris_N%C3%BCrnberg/mannschaften";
 
 export async function getTeams(): Promise<Team[]> {
   try {
     const { data } = await axios.get(url);
-
     const $ = cheerio.load(data);
 
     const teams: Team[] = [];
 
-    $(".table tbody tr").each((index, element) => {
+    $("tbody tr").each((index, element) => {
       let name = $(element)
         .find("td")
         .eq(0)
@@ -28,20 +27,24 @@ export async function getTeams(): Promise<Team[]> {
         .trim()
         .replace(/\s?\(.*?\)/, "");
       name = name.replace("Erwachsene", "Herren");
+
       if (name == "Herren") {
         name = "Herren I";
       }
+
       const leagueElement = $(element).find("td").eq(1);
       const league = leagueElement
         .text()
         .trim()
-        .replace(/\s?\(Bayerischer TTV\)/, "")
+        .replace("Erwachsene", "")
+        .replace("(Bayerischer TTV)", "")
         .replace(/\s?\(Bayerischer TTV - Mittelfranken-Nord\)/, "");
-      const link =
-        "https://www.mytischtennis.de/" +
-        leagueElement.children().first().attr("href")!;
-      const rank = $(element).find("td").eq(3).text().trim();
-      const points = $(element).find("td").eq(4).text().trim();
+
+      const linkHref = leagueElement.find("a").attr("href");
+      const link = linkHref ? "https://www.mytischtennis.de" + linkHref : "";
+
+      const rank = $(element).find("td").eq(2).text().trim();
+      const points = $(element).find("td").eq(3).text().trim();
 
       if (league.includes("Pokal") || league.includes("Relegation")) {
         return;

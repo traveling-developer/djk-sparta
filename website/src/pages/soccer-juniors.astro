@@ -14,64 +14,63 @@ var teams = await getTeams(true);
 ---
 
 <Layout title="Fußball">
-    <main>
-        <Header title="Fußball - Junioren" imageMetadata={soccerImage} />
+  <main>
+    <Header title="Fußball - Junioren" imageMetadata={soccerImage} />
 
-        <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-            <div
-                class="w-72 sm:w-[34rem] card bg-spartaGray text-white shadow-md shadow-gray-400"
-            >
-                <div class="card-body">
-                    <h2 class="card-title">Trainingszeiten</h2>
-                    <p>
-                        Bambini / G-Jugend <br /> Montag 17:30 - 18:30 Uhr
-                    </p>
-                    <p>F-Jugend <br /> Montag & Mittwoch 17:00 - 18:30 Uhr</p>
-                    <p>
-                        E1-Jugend <br /> Dienstag 17:30 - 19:00 Uhr & Freitag 16:00
-                        - 17:30 Uhr
-                    </p>
-                    <p>
-                        E2-Jugend <br /> Dienstag & Donnerstag 17:00 - 18:30 Uhr
-                    </p>
-                    <p>
-                        D-Jugend <br /> Dienstag & Donnerstag 17:30 - 19:00 Uhr
-                    </p>
-                    <p>
-                        C-Jugend <br />Dienstag & Donnerstag 17:30 - 19:00 Uhr
-                    </p>
-                    <p>B-Jugend <br /> Montag & Mittwoch 17:30 - 19:00 Uhr</p>
-                </div>
-            </div>
+    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+      <div
+        class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-[34rem]"
+      >
+        <div class="card-body">
+          <h2 class="card-title">Trainingszeiten</h2>
+          <p>
+            Bambini / G-Jugend <br /> Montag 17:30 - 18:30 Uhr
+          </p>
+          <p>F-Jugend <br /> Montag & Mittwoch 17:00 - 18:30 Uhr</p>
+          <p>
+            E1-Jugend <br /> Dienstag 17:30 - 19:00 Uhr & Freitag 16:00 - 17:30 Uhr
+          </p>
+          <p>
+            E2-Jugend <br /> Dienstag & Donnerstag 17:00 - 18:30 Uhr
+          </p>
+          <p>
+            D-Jugend <br /> Dienstag & Donnerstag 17:30 - 19:00 Uhr
+          </p>
+          <p>
+            C-Jugend <br />Dienstag & Donnerstag 17:30 - 19:00 Uhr
+          </p>
+          <p>B-Jugend <br /> Montag & Mittwoch 17:30 - 19:00 Uhr</p>
         </div>
+      </div>
+    </div>
 
-        <div>
-            <SectionHeader title="Mannschaften" imageMetadata={teamImage} />
+    <div>
+      <SectionHeader title="Mannschaften" imageMetadata={teamImage} />
 
-            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                {
-                    teams.map((team) => (
-                        <TeamCard
-                            name={team.name}
-                            league={team.league}
-                            rank={team.rank}
-                            goalDifference={team.goalDifference}
-                            link={team.link}
-                        />
-                    ))
-                }
-            </div>
-        </div>
+      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+        {
+          teams.map((team) => (
+            <TeamCard
+              name={team.name}
+              league={team.league}
+              rank={team.rank}
+              goalDifference={team.goalDifference}
+              link={team.link}
+            />
+          ))
+        }
+      </div>
+    </div>
 
-        <div>
-            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+    <div>
+      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
-            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                <ContactCard
-                    title="Robert Scherret (Jugendleiter)"
-                    mobile="015207115488"
-                />
-            </div>
-        </div>
-    </main>
+      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+        <ContactCard
+          title="Robert Scherret (Jugendleiter)"
+          mobile="015207115488"
+        />
+      </div>
+    </div>
+  </main>
 </Layout>

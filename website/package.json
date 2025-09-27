@@ -9,18 +9,18 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.5.1",
+    "@astrojs/sitemap": "^3.6.0",
     "@tailwindcss/vite": "^4.1.13",
-    "astro": "^5.13.5",
+    "astro": "^5.14.1",
     "tailwindcss": "^4.1.13",
     "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
-    "@sanity/client": "^7.6.0",
-    "axios": "^1.10.0",
+    "@sanity/client": "^7.11.2",
+    "axios": "^1.12.2",
     "cheerio": "^1.1.0",
-    "daisyui": "^5.0.43",
-    "groq": "^4.8.1",
+    "daisyui": "^5.1.24",
+    "groq": "^4.10.1",
     "prettier": "^3.6.0",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.13"

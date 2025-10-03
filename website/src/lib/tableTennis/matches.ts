@@ -26,7 +26,6 @@ export async function getMatches() {
       const homeTeam = $(element).find("td").eq(4).text().trim();
       const guestTeam = $(element).find("td").eq(5).text().trim();
       const result = $(element).find("td").eq(6).text().trim();
-
       const { date, time } = formatDateTimeToGerman(rawDate, rawTime);
       allMatches.push({ date, time, homeTeam, guestTeam, result });
     });
@@ -50,23 +49,27 @@ export function convertToDate(date: string, time: string) {
 }
 
 export function formatDateTimeToGerman(date: string, time: string) {
-  const [month, day, year] = date.replace(/^[A-Za-z]+,\s+/, "").split("/");
-  const [, hours, minutes, period] =
-    time.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)/i) || [];
+  const sanitizedDate = date.replace(/^[A-Za-z.,]+\s+/, "");
+  const [day, month, year] = sanitizedDate.split(".");
 
-  if (!hours) {
-    throw new Error(`Invalid time format: ${time}`);
+  let hours: string, minutes: string;
+
+  const amPmMatch = time.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if (amPmMatch) {
+    const [, h, m, period] = amPmMatch;
+    const hour24 =
+      (parseInt(h) % 12) + (period.toUpperCase() === "PM" ? 12 : 0);
+    hours = hour24.toString();
+    minutes = m;
+  } else {
+    const timeMatch = time.match(/^(\d{1,2}):(\d{2})/);
+    if (!timeMatch) {
+      throw new Error(`Invalid time format: ${time}`);
+    }
+    [, hours, minutes] = timeMatch;
   }
 
-  const hour24 =
-    (parseInt(hours) % 12) + (period.toUpperCase() === "PM" ? 12 : 0);
-  const dateObj = new Date(
-    2000 + +year,
-    +month - 1,
-    +day,
-    hour24 + 2,
-    +minutes,
-  );
+  const dateObj = new Date(2000 + +year, +month - 1, +day, +hours, +minutes);
 
   const weekday = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"][dateObj.getDay()];
   const pad = (n: number) => n.toString().padStart(2, "0");

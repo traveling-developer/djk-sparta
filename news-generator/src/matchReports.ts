@@ -16,7 +16,7 @@ const fourthTeam =
 export async function downloadMatchReports(): Promise<MatchReport[]> {
   const yesterday = new Date(
     new Date().setDate(new Date().getDate() - 1)
-  ).toLocaleDateString("en", {
+  ).toLocaleDateString("de", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

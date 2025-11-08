@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "prettier": "^3.6.0",
-    "typescript": "~5.8.3",
+    "typescript": "^5.9.3",
     "vite": "^7.1.2",
     "@sanity/client": "^7.6.0"
   },

@@ -16,14 +16,14 @@ import ContactCard from "../components/ContactCard.astro";
 ---
 
 <Layout title="Kontakt">
-    <main>
-        <Header title="Kontakt" imageMetadata={contactImage} />
+  <main>
+    <Header title="Kontakt" imageMetadata={contactImage} />
 
-        <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-            <FirstBoardMember />
-            <SecondBoardMember />
-            <Treasurer />
-            <!-- <SoccerHeadOfDepartment isOnContactsPage={true} />
+    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+      <FirstBoardMember />
+      <SecondBoardMember />
+      <Treasurer />
+      <!-- <SoccerHeadOfDepartment isOnContactsPage={true} />
             <ContactCard
                 title="Robert Scherret (Fußball - Jugendleiter)"
                 mobile="015207115488"
@@ -31,17 +31,17 @@ import ContactCard from "../components/ContactCard.astro";
             <HealthSportHeadOfDepartment isOnContactsPage={true} />
             <IndiacaHeadOfDepartment isOnContactsPage={true} />
             <TennisHeadOfDepartment isOnContactsPage={true} /> -->
-            <TableTennisHeadOfDepartment isOnContactsPage={true} />
-        </div>
+      <TableTennisHeadOfDepartment isOnContactsPage={true} />
+    </div>
 
-        <GoogleMaps
-            latitude={49.416459843204485}
-            longitude={11.068967769662304}
-            zoom={15}
-            title="DJK Sparta Noris Nürnberg e.V."
-            hasInfoWindow={true}
-            displayInfoWindowOnClick={false}
-            infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
-        />
-    </main>
+    <GoogleMaps
+      latitude={49.416459843204485}
+      longitude={11.068967769662304}
+      zoom={15}
+      title="DJK Sparta Noris Nürnberg e.V."
+      hasInfoWindow={true}
+      displayInfoWindowOnClick={false}
+      infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
+    />
+  </main>
 </Layout>

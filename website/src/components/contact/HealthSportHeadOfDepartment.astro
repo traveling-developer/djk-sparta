@@ -2,15 +2,15 @@
 import ContactCard from "../ContactCard.astro";
 
 interface Props {
-    isOnContactsPage?: boolean;
+  isOnContactsPage?: boolean;
 }
 
 const { isOnContactsPage = false } = Astro.props;
 ---
 
 <ContactCard
-    title={isOnContactsPage
-        ? "... (Gesundheitssport)"
-        : "... (1. Abteilungsleiter)"}
-    mail="..."
+  title={isOnContactsPage
+    ? "Sabine Fuchs (Gesundheitssport)"
+    : "Sabine Fuchs (Abteilungsleiterin)"}
+  mobile="0157 746 079 63"
 />

@@ -1,13 +1,14 @@
 ---
 import healthSportImage from "../assets/healthSport.webp";
 import contactImage from "../assets/contact.webp";
+import teamImage from "../assets/team.webp";
 
-import ContactCard from "../components/ContactCard.astro";
 import Header from "../components/Header.astro";
 import SectionHeader from "../components/SectionHeader.astro";
 import SmallHero from "../components/SmallHero.astro";
 
 import Layout from "../layouts/Layout.astro";
+import HealthSportHeadOfDepartment from "../components/contact/HealthSportHeadOfDepartment.astro";
 ---
 
 <Layout title="Gesundheitssport">
@@ -16,12 +17,105 @@ import Layout from "../layouts/Layout.astro";
     <SmallHero
       text="Die Gesundheitssport-Abteilung der DJK Sparta Noris Nürnberg bietet ein vielfältiges Programm für mehr Wohlbefinden und Fitness. Ob sanftes Training, Entspannungskurse oder gezielte Gesundheitsübungen – hier findest du die perfekte Balance zwischen Bewegung und Gesundheit!"
     />
-    <!-- TODO <div>
-            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+    <div>
+      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
-            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                <ContactCard title="..." mobile="..." />
+      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+        <HealthSportHeadOfDepartment />
+      </div>
+    </div>
+    <div>
+      <SectionHeader title="Angebote" imageMetadata={teamImage} />
+      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+        <div
+          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
+        >
+          <div class="card-body">
+            <h2 class="card-title">Herzsport mit Verordnung</h2>
+            <div class="space-y-3">
+              <div>
+                <div class="font-semibold">
+                  Mittwoch 14:00 bis 15:00 & 15:15 bis 16:15
+                </div>
+                <div class="text-sm opacity-80">
+                  Großer Saal, Bleiweißzentrum, Hintere Bleiweißstraße 15
+                </div>
+              </div>
+              <div>
+                <div class="font-semibold">Donnerstag, 18:45 bis 20:00</div>
+                <div class="text-sm opacity-80">
+                  Turnhalle, Adam-Kraft-Realschule, Lutherplatz 8, U-Bahn
+                  Haltestelle Maffeiplatz Ausgang Zwinglistr.
+                </div>
+              </div>
             </div>
-        </div> -->
+          </div>
+        </div>
+
+        <div
+          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
+        >
+          <div class="card-body">
+            <h2 class="card-title">Wirbelsäulen Gymnastik</h2>
+            <div class="space-y-3">
+              <div>
+                <div class="font-semibold">Montag, 17:30 bis 18:30</div>
+                <div class="text-sm opacity-80">
+                  Turnhalle, Sperberschule, Sperberstr. 85
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
+        >
+          <div class="card-body">
+            <h2 class="card-title">Gymnastik und Tanz</h2>
+            <div class="space-y-3">
+              <div>
+                <div class="font-semibold">Montag, 19:45 bis 21:00</div>
+                <div class="text-sm opacity-80">
+                  Turnhalle, Sperberschule, Sperberstr. 85
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
+        >
+          <div class="card-body">
+            <h2 class="card-title">Fitness und Ausdauer für Ältere</h2>
+            <div class="space-y-3">
+              <div>
+                <div class="font-semibold">Montag, 9:30 bis 10:30</div>
+                <div class="text-sm opacity-80">
+                  Pfaarsaal Verkärung Christi, Sperberstr. 53, Ecke Ajtoschstr.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
+        >
+          <div class="card-body">
+            <h2 class="card-title">Sport für Ältere</h2>
+            <div class="space-y-3">
+              <div>
+                <div class="font-semibold">Mittwoch, 9:30 bis 10:30</div>
+                <div class="text-sm opacity-80">
+                  Pfaarsaal Verkärung Christi, Sperberstr. 53, Ecke Ajtoschstr.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </Layout>

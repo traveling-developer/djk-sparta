@@ -43,8 +43,8 @@ export async function getTeams(): Promise<Team[]> {
       const linkHref = leagueElement.find("a").attr("href");
       const link = linkHref ? "https://www.mytischtennis.de" + linkHref : "";
 
-      const rank = $(element).find("td").eq(2).text().trim();
-      const points = $(element).find("td").eq(3).text().trim();
+      const rank = $(element).find("td").eq(3).text().trim();
+      const points = $(element).find("td").eq(4).text().trim();
 
       if (league.includes("Pokal") || league.includes("Relegation")) {
         return;

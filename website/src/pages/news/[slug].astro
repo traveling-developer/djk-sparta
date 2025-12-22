@@ -4,6 +4,7 @@ import { news } from "../../lib/news";
 import { createSlug } from "../../lib/convenience";
 import typeWriterImage from "../../assets/typewriter.webp";
 import SectionHeader from "../../components/SectionHeader.astro";
+import { Picture } from "astro:assets";
 
 export async function getStaticPaths() {
   return news.map((news) => ({
@@ -34,6 +35,21 @@ const article = Astro.props;
         <div class="text-justify whitespace-pre-line">
           {article.content}
         </div>
+        {
+          (article as any).imageUrl && (
+            <div class="mt-5">
+              <Picture
+                src={(article as any).imageUrl}
+                alt="Ein passendes Bild zu diesem Artikel"
+                inferSize={true}
+                widths={[400, 800, 1200]}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 50vw"
+                formats={["webp"]}
+                class="w-full rounded-lg"
+              />
+            </div>
+          )
+        }
         <div class="mt-5 text-left text-sm">
           Published at: {article.releaseDate}
         </div>

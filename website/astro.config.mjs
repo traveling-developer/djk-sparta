@@ -10,4 +10,7 @@ export default defineConfig({
     site: 'https://' + siteUrl,
     vite: { plugins: [tailwindcss()], },
     integrations: [sitemap()],
+    image: {
+        domains: ['cdn.sanity.io'],
+    },
 });

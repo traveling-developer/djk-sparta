@@ -11,32 +11,29 @@ import SmallHero from "../components/SmallHero.astro";
 ---
 
 <Layout title="Tennis">
-    <main>
-        <Header title="Tennis" imageMetadata={tennisImage} />
-        <SmallHero
-            text="Die Tennisabteilung der DJK Sparta Noris Nürnberg bietet ideale Bedingungen für Spieler jeden Alters und Niveaus. Ob Anfänger oder erfahrener Tennisspieler - bei uns steht der Spaß am Spiel im Mittelpunkt!"
-        />
-        <div>
-            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+  <main>
+    <Header title="Tennis" imageMetadata={tennisImage} />
+    <SmallHero
+      text="Die Tennisabteilung der DJK Sparta Noris Nürnberg bietet ideale Bedingungen für Spieler jeden Alters und Niveaus. Ob Anfänger oder erfahrener Tennisspieler - bei uns steht der Spaß am Spiel im Mittelpunkt!"
+    />
+    <div>
+      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
-            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                <ContactCard
-                    title="Alexander Kolodziej"
-                    mobile="0176 402 064 56"
-                />
-                <ContactCard title="Villi Brand" mobile="0172 864 953 1" />
-                <ContactCard title="Egor Meisler" mobile="0176 769 703 5" />
-            </div>
-        </div>
+      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+        <ContactCard title="Alexander Kolodziej" mobile="0176 402 064 56" />
+        <ContactCard title="Villi Brand" mobile="0172 864 953 1" />
+        <ContactCard title="Egor Meisler" mobile="0176 769 703 5" />
+      </div>
+    </div>
 
-        <GoogleMaps
-            latitude={49.416459843204485}
-            longitude={11.068967769662304}
-            zoom={15}
-            title="DJK Sparta Noris Nürnberg e.V."
-            hasInfoWindow={true}
-            displayInfoWindowOnClick={false}
-            infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
-        />
-    </main>
+    <GoogleMaps
+      latitude={49.416459843204485}
+      longitude={11.068967769662304}
+      zoom={15}
+      title="DJK Sparta Noris Nürnberg e.V."
+      hasInfoWindow={true}
+      displayInfoWindowOnClick={false}
+      infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
+    />
+  </main>
 </Layout>

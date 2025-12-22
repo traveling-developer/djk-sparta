@@ -10,70 +10,70 @@ import DepartmentCard from "./DepartmentCard.astro";
 import SectionHeader from "./SectionHeader.astro";
 
 import {
-    healthSport,
-    indiaca,
-    soccer,
-    tennis,
-    racket,
+  healthSport,
+  indiaca,
+  soccer,
+  tennis,
+  racket,
 } from "../lib/alternative-texts";
 
 interface Department {
-    name: string;
-    link: string;
-    imageMetadata: ImageMetadata;
-    imageAlt: string;
+  name: string;
+  link: string;
+  imageMetadata: ImageMetadata;
+  imageAlt: string;
 }
 
 const departments: Department[] = [
-    {
-        name: "Fußball - Herren",
-        link: "/soccer-adults",
-        imageMetadata: soccerImage,
-        imageAlt: soccer,
-    },
-    {
-        name: "Fußball - Junioren",
-        link: "/soccer-juniors",
-        imageMetadata: soccerImage,
-        imageAlt: soccer,
-    },
-    {
-        name: "Gesundheitssport",
-        link: "/health-sport",
-        imageMetadata: healthSportImage,
-        imageAlt: healthSport,
-    },
-    {
-        name: "Indiaca",
-        link: "/indiaca",
-        imageMetadata: indiacaImage,
-        imageAlt: indiaca,
-    },
-    {
-        name: "Tennis",
-        link: "/tennis",
-        imageMetadata: tennisImage,
-        imageAlt: tennis,
-    },
-    {
-        name: "Tischtennis",
-        link: "/table-tennis",
-        imageMetadata: racketImage,
-        imageAlt: racket,
-    },
+  {
+    name: "Fußball - Herren",
+    link: "/soccer-adults",
+    imageMetadata: soccerImage,
+    imageAlt: soccer,
+  },
+  {
+    name: "Fußball - Junioren",
+    link: "/soccer-juniors",
+    imageMetadata: soccerImage,
+    imageAlt: soccer,
+  },
+  {
+    name: "Gesundheitssport",
+    link: "/health-sport",
+    imageMetadata: healthSportImage,
+    imageAlt: healthSport,
+  },
+  {
+    name: "Indiaca",
+    link: "/indiaca",
+    imageMetadata: indiacaImage,
+    imageAlt: indiaca,
+  },
+  {
+    name: "Tennis",
+    link: "/tennis",
+    imageMetadata: tennisImage,
+    imageAlt: tennis,
+  },
+  {
+    name: "Tischtennis",
+    link: "/table-tennis",
+    imageMetadata: racketImage,
+    imageAlt: racket,
+  },
 ];
 ---
 
 <SectionHeader title="Abteilungen" imageMetadata={departmentsImage} />
-<div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-    {
-        departments.map((department) => (
-            <DepartmentCard
-                title={department.name}
-                link={department.link}
-                imageMetadata={department.imageMetadata}
-                imageAlt={department.imageAlt}
-            />
-        ))
-    }
+<div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+  {
+    departments.map((department) => (
+      <DepartmentCard
+        title={department.name}
+        link={department.link}
+        imageMetadata={department.imageMetadata}
+        imageAlt={department.imageAlt}
+      />
+    ))
+  }
 </div>

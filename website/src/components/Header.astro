@@ -7,82 +7,82 @@ import letteringImage from "../assets/lettering.webp";
 import { logoLettering, spartaner } from "../lib/alternative-texts";
 
 interface Props {
-    title: string;
-    imageMetadata: ImageMetadata;
+  title: string;
+  imageMetadata: ImageMetadata;
 }
 
 const { title, imageMetadata } = Astro.props;
 
 const smallBackground = await getImage({
-    src: imageMetadata,
-    width: 640,
+  src: imageMetadata,
+  width: 640,
 });
 
 const mediumBackground = await getImage({
-    src: imageMetadata,
-    width: 1536,
+  src: imageMetadata,
+  width: 1536,
 });
 
 const largeBackground = await getImage({
-    src: imageMetadata,
-    width: 2560,
+  src: imageMetadata,
+  width: 2560,
 });
 
 const originalBackground = await getImage({
-    src: imageMetadata,
+  src: imageMetadata,
 });
 ---
 
 <div
-    class="responsive-bg relative w-full sm:h-64 h-36 bg-cover bg-center flex items-center justify-center"
-    style={`--bg-small: url(${smallBackground.src}); --bg-medium: url(${mediumBackground.src}); --bg-large: url(${largeBackground.src}); --bg-original: url(${originalBackground.src});`}
+  class="responsive-bg relative flex h-36 w-full items-center justify-center bg-cover bg-center sm:h-64"
+  style={`--bg-small: url(${smallBackground.src}); --bg-medium: url(${mediumBackground.src}); --bg-large: url(${largeBackground.src}); --bg-original: url(${originalBackground.src});`}
 >
-    <div class="absolute inset-0 bg-black opacity-40"></div>
-    <Picture
-        src={spartanerImage}
-        formats={["webp"]}
-        alt={spartaner}
-        pictureAttributes={{
-            class: "relative md:w-32 w-20 mr-5 lg:mx-auto hidden sm:block",
-        }}
-        widths={[200]}
-        sizes={`200px`}
-    />
-    <h1 class="relative text-white md:text-7xl sm:text-6xl text-4xl font-bold">
-        {title}
-    </h1>
-    <Picture
-        src={letteringImage}
-        formats={["webp"]}
-        alt={logoLettering}
-        pictureAttributes={{
-            class: "relative w-44 mx-auto hidden lg:block",
-        }}
-        widths={[200]}
-        sizes={`200px`}
-    />
+  <div class="absolute inset-0 bg-black opacity-40"></div>
+  <Picture
+    src={spartanerImage}
+    formats={["webp"]}
+    alt={spartaner}
+    pictureAttributes={{
+      class: "relative md:w-32 w-20 mr-5 lg:mx-auto hidden sm:block",
+    }}
+    widths={[200]}
+    sizes={`200px`}
+  />
+  <h1 class="relative text-4xl font-bold text-white sm:text-6xl md:text-7xl">
+    {title}
+  </h1>
+  <Picture
+    src={letteringImage}
+    formats={["webp"]}
+    alt={logoLettering}
+    pictureAttributes={{
+      class: "relative w-44 mx-auto hidden lg:block",
+    }}
+    widths={[200]}
+    sizes={`200px`}
+  />
 </div>
 
 <style>
+  .responsive-bg {
+    background-image: var(--bg-small);
+  }
+
+  @media (min-width: 640px) {
     .responsive-bg {
-        background-image: var(--bg-small);
+      background-image: var(--bg-medium);
     }
+  }
 
-    @media (min-width: 640px) {
-        .responsive-bg {
-            background-image: var(--bg-medium);
-        }
+  @media (min-width: 1536px) {
+    .responsive-bg {
+      background-image: var(--bg-large);
     }
+  }
 
-    @media (min-width: 1536px) {
-        .responsive-bg {
-            background-image: var(--bg-large);
-        }
+  @media (min-width: 2560px) {
+    .responsive-bg {
+      background-image: var(--bg-original);
     }
-
-    @media (min-width: 2560px) {
-        .responsive-bg {
-            background-image: var(--bg-original);
-        }
-    }
+  }
 </style>

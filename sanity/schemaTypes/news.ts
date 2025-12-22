@@ -18,6 +18,11 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'image',
+      type: 'image',
+      title: 'Bild',
+    }),
+    defineField({
       name: 'category',
       type: 'string',
       title: 'Kategorie',

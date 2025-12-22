@@ -13,6 +13,59 @@
  */
 
 // Source: schema.json
+export type News = {
+  _id: string;
+  _type: "news";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  content?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  category?: "general" | "soccer" | "health-sport" | "indiaca" | "tennis" | "table-tennis";
+  releaseDate?: string;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
+export type SoccerTeam = {
+  _id: string;
+  _type: "soccerTeam";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  trainerName?: string;
+  trainerMail?: string;
+  trainingLocation?: string;
+  trainingTimes?: string;
+};
+
 export type SanityImagePaletteSwatch = {
   _type: "sanity.imagePaletteSwatch";
   background?: string;
@@ -39,20 +92,15 @@ export type SanityImageDimensions = {
   aspectRatio?: number;
 };
 
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
+export type SanityImageMetadata = {
+  _type: "sanity.imageMetadata";
+  location?: Geopoint;
+  dimensions?: SanityImageDimensions;
+  palette?: SanityImagePalette;
+  lqip?: string;
+  blurHash?: string;
+  hasAlpha?: boolean;
+  isOpaque?: boolean;
 };
 
 export type SanityFileAsset = {
@@ -75,6 +123,13 @@ export type SanityFileAsset = {
   path?: string;
   url?: string;
   source?: SanityAssetSourceData;
+};
+
+export type SanityAssetSourceData = {
+  _type: "sanity.assetSourceData";
+  name?: string;
+  id?: string;
+  url?: string;
 };
 
 export type SanityImageAsset = {
@@ -100,17 +155,6 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData;
 };
 
-export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
-  location?: Geopoint;
-  dimensions?: SanityImageDimensions;
-  palette?: SanityImagePalette;
-  lqip?: string;
-  blurHash?: string;
-  hasAlpha?: boolean;
-  isOpaque?: boolean;
-};
-
 export type Geopoint = {
   _type: "geopoint";
   lat?: number;
@@ -124,39 +168,7 @@ export type Slug = {
   source?: string;
 };
 
-export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
-};
-
-export type News = {
-  _id: string;
-  _type: "news";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  content?: string;
-  category?: "general" | "soccer" | "health-sport" | "indiaca" | "tennis" | "table-tennis";
-  releaseDate?: string;
-};
-
-export type SoccerTeam = {
-  _id: string;
-  _type: "soccerTeam";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  trainerName?: string;
-  trainerMail?: string;
-  trainingLocation?: string;
-  trainingTimes?: string;
-};
-
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData | News | SoccerTeam;
+export type AllSanitySchemaTypes = News | SanityImageCrop | SanityImageHotspot | SoccerTeam | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint | Slug;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../website/src/lib/news.ts
 // Variable: LATEST_NEWS
@@ -169,6 +181,18 @@ export type LATEST_NEWSResult = Array<{
   _rev: string;
   title?: string;
   content?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   category?: "general" | "health-sport" | "indiaca" | "soccer" | "table-tennis" | "tennis";
   releaseDate?: string;
 }>;
@@ -182,6 +206,18 @@ export type LATEST_TABLE_TENNIS_NEWSResult = Array<{
   _rev: string;
   title?: string;
   content?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   category?: "general" | "health-sport" | "indiaca" | "soccer" | "table-tennis" | "tennis";
   releaseDate?: string;
 }>;
@@ -195,6 +231,18 @@ export type NEWSResult = Array<{
   _rev: string;
   title?: string;
   content?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   category?: "general" | "health-sport" | "indiaca" | "soccer" | "table-tennis" | "tennis";
   releaseDate?: string;
 }>;

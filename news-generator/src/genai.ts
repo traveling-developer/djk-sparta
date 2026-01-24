@@ -30,7 +30,7 @@ async function generateContent(
   jsonReport: string | undefined
 ): Promise<string> {
   const generatedContent = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
+    model: "gemini-3-flash",
     contents:
       "Du bist Pressewart der DJK Sparta Noris Nürnberg und schreibst einen Spielbericht für die Vereinshomepage basierend auf den folgenden JSON-Daten. Der Bericht sollte 150 bis 250 Wörter umfassen und aus der Perspektive unseres Vereins geschrieben sein, dabei aber sportlich fair bleiben. Der Ton sollte sachlich-positiv sein und auch bei Niederlagen konstruktive Aspekte hervorheben. Verwende keinen Markdown, sondern nur Fließtext mit natürlichen Absätzen. Beginne mit einem kurzen, aussagekräftigen Titel, der das Ergebnis widerspiegelt. Im Bericht solltest du das Endergebnis prominent nennen und den Spielverlauf kurz skizzieren - war es ein durchgehend ausgeglichenes Spiel oder gab es deutliche Phasen? Hebe zwei bis drei besondere Einzelleistungen hervor, wobei du auf die Nennung von Satzergebnissen verzichtest. Konzentriere dich stattdessen darauf, wer besonders überzeugte oder wichtige Punkte holte. Bei Siegen solltest du die Erfolgsfaktoren benennen, bei Niederlagen positive Aspekte und Lichtblicke finden. Schließe den Bericht mit einem kurzen Fazit oder einem Ausblick auf die kommenden Aufgaben ab. Die DJK Sparta Noris Nürnberg sollte im Text als 'wir' oder 'unser Team' bezeichnet werden, während der Gegner beim Vereinsnamen genannt wird. JSON-Daten:" +
       jsonReport,
@@ -53,7 +53,7 @@ async function generateJSONFromReport(uploadedReport: File) {
   content.push(fileContent);
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
+    model: "gemini-3-flash",
     contents: content,
     config: { responseMimeType: "application/json" },
   });

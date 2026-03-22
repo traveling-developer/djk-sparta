@@ -1,9 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
 
 import historyImage from "../assets/history.webp";
-import Header from "../components/Header.astro";
-import UnderConstruction from "../components/icons/UnderConstruction.astro";
 ---
 
 <Layout
@@ -12,9 +11,87 @@ import UnderConstruction from "../components/icons/UnderConstruction.astro";
 >
   <main>
     <Header title="Vereinsgeschichte" imageMetadata={historyImage} />
-    <div class="mx-auto my-10 w-1/2">
-      <h1 class="mb-10 text-2xl">Demnächst verfügbar.</h1>
-      <UnderConstruction class="size-5" />
+
+    <div class="mx-auto my-12 max-w-3xl px-6 leading-relaxed text-gray-800">
+      <h2 class="text-spartaRed mb-4 text-2xl font-bold">
+        Gründung & Glanzzeiten
+      </h2>
+      <p class="mb-5">
+        Die DJK Sparta Noris Nürnberg e.V. ist ein modern geführter
+        Mehrspartenverein im Süden von Nürnberg. Gegründet <strong>1918</strong> schloss
+        sich der damalige FC Sparta dem Sportverband der „Deutschen Jugendkraft" (DJK)
+        an, der von der katholischen Kirche im Jahre <strong>1920</strong> im unterfränkischen
+        Würzburg gegründet worden war.
+      </p>
+      <p class="mb-5">
+        In der damaligen Fußballhochburg Nürnberg glänzte die DJK Sparta und
+        feierte ihre größten sportlichen Erfolge: <strong>1927</strong> gewann sie
+        im Endspiel in Köln vor stolzen <strong>40.000</strong> Zuschauern mit <strong
+          >6:1</strong
+        >
+        gegen die DJK TuS Homberg die deutsche DJK-Meisterschaft. Den zweiten Titel
+        sicherte sich die Mannschaft <strong>1932</strong> in Dortmund, vor
+        <strong>35.000</strong> begeisterten Fans ein überzeugender
+        <strong>5:2</strong>-Sieg gegen die DJK Adler Essen.
+      </p>
+
+      <div class="my-8 border-t border-gray-200"></div>
+
+      <h2 class="text-spartaRed mb-4 text-2xl font-bold">
+        Unterbrechung & Neubeginn
+      </h2>
+      <p class="mb-5">
+        Die Gleichschaltung durch den Nationalsozialismus und das folgende
+        Verbot der DJK im Jahr <strong>1935</strong> beendeten diese ruhmreichen Zeiten
+        zunächst. Nach dem Zweiten Weltkrieg lebte die DJK-Sportgemeinschaft wieder
+        auf, und im Jahre <strong>1954</strong> fusionierten die wiedergegründeten
+        Vereine DJK Sparta und DJK Noris zur heutigen DJK Sparta Noris Nürnberg e.V.
+      </p>
+      <p class="mb-5">
+        In den folgenden Jahrzehnten beheimaten wir weitere erfolgreiche
+        Abteilungen im Faustball, Kegeln, Schach, Tanzsport und Fußball-Damen.
+      </p>
+
+      <div class="my-8 border-t border-gray-200"></div>
+
+      <h2 class="text-spartaRed mb-4 text-2xl font-bold">Der moderne Verein</h2>
+      <p class="mb-5">
+        Heute finden unsere knapp <strong>500 Mitglieder</strong> in fünf Abteilungen,
+        Fußball, Tischtennis, Tennis, Indiaca und Gesundheitssport mit den Schwerpunkten
+        Koronarsport, Wirbelsäule, Osteoporose und Gymnastik, ihre sportliche und
+        kulturelle Heimat.
+      </p>
+      <p class="mb-5">
+        Unser großes Aushängeschild ist die Tischtennisabteilung, die seit über
+        <strong>vier Jahrzehnten</strong> in der Bayernliga ein fester Bestandteil
+        ist und bereits am Tor zur Regionalliga anklopfte. Zahlreiche Bayerische Meistertitel
+        sowie ein amtierender deutscher Meister und Nationalspieler in der Klasse
+        für Menschen mit Behinderung, der an der Qualifikation für die Olympischen
+        Spiele in Tokio teilnahm, zeugen von der Qualität dieser Abteilung.
+      </p>
+      <p class="mb-5">
+        Im Juniorenbereich der Fußballer arbeitet ein vorzügliches Trainerteam:
+        Fast <strong>95 Prozent</strong> unserer Trainer und Trainerinnen verfügen
+        über eine qualifizierte Ausbildung beim Bayerischen Fußball-Verband oder DFB,
+        überwiegend C-Lizenz, teils auch A-Lizenz. Integration und Inklusion sind
+        wichtige Bestandteile unserer Vereinsphilosophie, verknüpft im christlichen
+        Gedanken mit der DJK-Familie.
+      </p>
+      <p class="mb-5">
+        Das Vereinsgelände wurde zuletzt grundlegend erneuert: Beide
+        Fußballplätze wurden saniert, eine Beregnungsanlage installiert, die
+        Trainingsbeleuchtung auf energiesparende LED-Technik umgestellt und eine
+        umfassende Kabinensanierung durchgeführt.
+      </p>
+      <p>
+        Durch die Verleihung der <strong>„Goldenen Raute"</strong> des Bayerischen
+        Fußballverbandes und der <strong
+          >Sportplakette des Bundespräsidenten</strong
+        >
+        zu unserem 100-jährigen Gründungsfest sehen wir uns in unserer Vereinsentwicklung
+        bestätigt – und sind für die nächsten Generationen ein guter sportlicher und
+        familiärer Verein.
+      </p>
     </div>
   </main>
 </Layout>

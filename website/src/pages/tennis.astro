@@ -14,17 +14,35 @@ import TennisHeadOfDepartment from "../components/contact/TennisHeadOfDepartment
 <Layout title="Tennis">
   <main>
     <Header title="Tennis" imageMetadata={tennisImage} />
-    <SmallHero
-      text="Die Tennisabteilung der DJK Sparta Noris Nürnberg bietet ideale Bedingungen für Spieler jeden Alters und Niveaus. Ob Anfänger oder erfahrener Tennisspieler - bei uns steht der Spaß am Spiel im Mittelpunkt!"
-    />
+    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+      <div
+        class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-[28rem]"
+      >
+        <div class="card-body">
+          <h2 class="card-title">Mannschaften</h2>
+          <div>U30 Herren</div>
+          <div>U40 Herren</div>
+        </div>
+      </div>
+      <div
+        class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-[28rem]"
+      >
+        <div class="card-body">
+          <h2 class="card-title">Trainingszeiten</h2>
+          <div>Dienstag von 16 bis 20 Uhr</div>
+          <div>Donnerstag von 16 bis 20 Uhr</div>
+        </div>
+      </div>
+    </div>
     <div>
       <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
       <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
         <TennisHeadOfDepartment />
         <ContactCard title="Alexander Kolodziej" mobile="0176 402 064 56" />
-        <ContactCard title="Villi Brand" mobile="0172 864 953 1" />
-        <ContactCard title="Egor Meisler" mobile="0176 769 703 5" />
+        <ContactCard title="Wilhelm Hess" mobile="0172 864 953 1" />
+        <ContactCard title="Egor Meisler" mobile="0176 476 970 35" />
+        <ContactCard title="Edward Akinshyn" mobile="0157 817 789 87" />
       </div>
     </div>
 

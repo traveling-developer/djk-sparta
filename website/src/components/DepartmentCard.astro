@@ -2,30 +2,92 @@
 import { Picture } from "astro:assets";
 
 interface Props {
-  title: string;
+  name: string;
+  sub?: string;
   link: string;
   imageMetadata: ImageMetadata;
   imageAlt: string;
+  tag: string;
+  count: string;
+  index?: number;
 }
 
-const { title, link, imageMetadata, imageAlt } = Astro.props;
+const {
+  name,
+  sub,
+  link,
+  imageMetadata,
+  imageAlt,
+  count,
+  index = 0,
+} = Astro.props;
 ---
 
 <a
   href={link}
-  class="card max-h-40 w-72 bg-neutral-100 text-black shadow-md shadow-gray-400"
+  class="bg-sparta-ink hover:bg-sparta-ink-soft flex min-h-90 flex-col p-6 text-white no-underline transition-colors duration-200 hover:opacity-100"
 >
-  <div class="card-body items-center py-4 text-center">
-    <h2 class="card-title">{title}</h2>
-  </div>
-  <figure>
+  <div class="dept-image-wrap">
     <Picture
       src={imageMetadata}
       formats={["webp"]}
       alt={imageAlt}
-      widths={[290]}
-      sizes={`290px`}
-      fallbackFormat="jpeg"
+      widths={[400, 600, 800]}
+      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+      class="dept-image"
     />
-  </figure>
+  </div>
+
+  <div
+    class="font-display mb-3 text-[32px] leading-[0.95] font-bold tracking-[-0.02em] uppercase"
+  >
+    {name}
+    {sub && <span class="text-sparta-red"> · {sub}</span>}
+  </div>
+
+  <div class="text-md flex items-center justify-between">
+    <span class="text-sparta-red font-semibold">Zur Abteilung →</span>
+  </div>
 </a>
+
+<style>
+  .dept-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .dept-index {
+    font-family: ui-monospace, "Menlo", monospace;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .dept-tag {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .dept-image-wrap {
+    flex: 1;
+    margin-bottom: 20px;
+    min-height: 160px;
+    overflow: hidden;
+    background: #1a1a1d;
+  }
+  .dept-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .dept-count {
+    color: rgba(255, 255, 255, 0.55);
+  }
+</style>

@@ -1,79 +1,122 @@
 ---
-import departmentsImage from "../assets/departments.webp";
-import racketImage from "../assets/racket.webp";
 import soccerImage from "../assets/soccer.webp";
 import healthSportImage from "../assets/healthSport.webp";
 import indiacaImage from "../assets/indiaca.webp";
 import tennisImage from "../assets/tennis.webp";
+import racketImage from "../assets/racket.webp";
 
 import DepartmentCard from "./DepartmentCard.astro";
-import SectionHeader from "./SectionHeader.astro";
 
-import {
-  healthSport,
-  indiaca,
-  soccer,
-  tennis,
-  racket,
-} from "../lib/alternative-texts";
-
-interface Department {
-  name: string;
-  link: string;
-  imageMetadata: ImageMetadata;
-  imageAlt: string;
-}
-
-const departments: Department[] = [
+const departments = [
   {
-    name: "Fußball - Herren",
+    name: "Fußball",
+    sub: "Herren",
     link: "/soccer-adults",
     imageMetadata: soccerImage,
-    imageAlt: soccer,
+    imageAlt: "Fußball auf dem Rasen",
+    tag: "Landesliga",
+    count: "3 Mannschaften",
   },
   {
-    name: "Fußball - Junioren",
+    name: "Fußball",
+    sub: "Junioren",
     link: "/soccer-juniors",
     imageMetadata: soccerImage,
-    imageAlt: soccer,
+    imageAlt: "Fußball Junioren beim Training",
+    tag: "U7 – U19",
+    count: "8 Jugendteams",
   },
   {
     name: "Gesundheitssport",
     link: "/health-sport",
     imageMetadata: healthSportImage,
-    imageAlt: healthSport,
+    imageAlt: "Gesundheitssport Gruppe",
+    tag: "Zertifiziert",
+    count: "12 Kurse / Woche",
   },
   {
     name: "Indiaca",
     link: "/indiaca",
     imageMetadata: indiacaImage,
-    imageAlt: indiaca,
+    imageAlt: "Indiaca Hallensport",
+    tag: "Hallensport",
+    count: "2 Gruppen",
   },
   {
     name: "Tennis",
     link: "/tennis",
     imageMetadata: tennisImage,
-    imageAlt: tennis,
+    imageAlt: "Tennisplatz",
+    tag: "Outdoor",
+    count: "4 Sandplätze",
   },
   {
     name: "Tischtennis",
     link: "/table-tennis",
     imageMetadata: racketImage,
-    imageAlt: racket,
+    imageAlt: "Tischtennisschläger",
+    tag: "Verbandsoberliga",
+    count: "5 Mannschaften",
   },
 ];
 ---
 
-<SectionHeader title="Abteilungen" imageMetadata={departmentsImage} />
-<div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-  {
-    departments.map((department) => (
-      <DepartmentCard
-        title={department.name}
-        link={department.link}
-        imageMetadata={department.imageMetadata}
-        imageAlt={department.imageAlt}
-      />
-    ))
+<section
+  id="abteilungen"
+  class="bg-sparta-ink px-6 py-14 text-white md:px-14 md:py-10"
+>
+  <div
+    class="mb-12 flex flex-col items-start gap-10 md:flex-row md:items-end md:justify-between"
+  >
+    <div>
+      <h2 class="depts-headline">
+        Finde deinen<br />Sport.
+      </h2>
+    </div>
+    <p class="m-0 max-w-80 shrink-0 text-sm leading-[1.55]">
+      Vom Fußballplatz bis zur Tennishalle, jeder Spartaner beginnt mit einem
+      ersten Training. Schnupperstunden sind immer kostenlos.
+    </p>
+  </div>
+
+  <div
+    class="grid grid-cols-1 gap-px bg-white/10 md:grid-cols-2 lg:grid-cols-3"
+  >
+    {
+      departments.map((d, i) => (
+        <DepartmentCard
+          name={d.name}
+          sub={d.sub}
+          link={d.link}
+          imageMetadata={d.imageMetadata}
+          imageAlt={d.imageAlt}
+          tag={d.tag}
+          count={d.count}
+          index={i}
+        />
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #d81e28;
+    font-weight: 600;
+    margin-bottom: 10px;
   }
-</div>
+
+  .depts-headline {
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-size: clamp(56px, 8vw, 96px);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    margin: 0;
+    color: #fff;
+  }
+</style>

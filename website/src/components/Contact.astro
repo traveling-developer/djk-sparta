@@ -1,16 +1,234 @@
 ---
-import contactImage from "../assets/contact.webp";
-
-import SectionHeader from "./SectionHeader.astro";
 import FirstBoardMember from "./contact/FirstBoardMember.astro";
 import SecondBoardMember from "./contact/SecondBoardMember.astro";
 import Treasurer from "./contact/Treasurer.astro";
+
+const {
+  latitude = 49.416459843204485,
+  longitude = 11.068967769662304,
+  zoom = 15,
+  title = "DJK Sparta Noris Nürnberg e.V.",
+  hasInfoWindow = true,
+  displayInfoWindowOnClick = false,
+  infoWindowContent = "DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg",
+  infoWindowHeader = "",
+  headerDisabled = true,
+} = Astro.props;
+
+const apiKey = import.meta.env.GOOGLE_MAPS_API;
 ---
 
-<SectionHeader title="Kontakt" imageMetadata={contactImage} />
+<section
+  id="kontakt"
+  class="bg-sparta-ink px-6 py-14 text-white md:px-14 md:py-22.5"
+>
+  <div class="grid grid-cols-1 items-start gap-15 md:grid-cols-[1fr_1.4fr]">
+    <!-- Left: address + office -->
+    <div class="contact-info">
+      <div class="section-label">Kontakt &amp; Anfahrt</div>
+      <h2 class="contact-headline">
+        Dort, wo<br /><span class="contact-headline-red">Sparta</span> lebt.
+      </h2>
 
-<div class="mt-5 mb-20 flex flex-wrap justify-center gap-6">
-  <FirstBoardMember />
-  <SecondBoardMember />
-  <Treasurer />
-</div>
+      <address
+        class="[&_a]:hover:text-sparta-red mb-7 font-mono text-[13px] leading-[1.9] not-italic [&_a]:no-underline"
+      >
+        DJK Sparta Noris Nürnberg e.V.<br />
+        Wacholderweg 60<br />
+        90441 Nürnberg · Weiherhaus<br /><br />
+        <a href="tel:+4991148059 55">+49 911 480 59 55</a><br />
+        <a href="mailto:info@djkspartanoris.de">info@djkspartanoris.de</a>
+      </address>
+
+      <div class="border-t border-white/12 pt-5">
+        <div class="contact-office-label">Geschäftsstelle</div>
+        <div class="contact-office-hours">
+          Di &amp; Fr · 8 - 12 Uhr · oder nach Vereinbarung
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div id="map" class="h-full min-h-[400px] w-full text-black">
+        <div
+          id="fallback"
+          class="flex h-full flex-col items-center justify-center px-5 text-center text-white"
+        >
+          Google Maps konnte nicht geladen werden. Bitte akzeptiere die Cookies,
+          um Google Maps anzuzeigen.
+
+          <button
+            class="btn bg-sparta-red hover:bg-sparta-red-deep mt-5 text-white"
+            type="button"
+            data-cc="show-preferencesModal">Cookie-Einstellungen öffnen</button
+          >
+        </div>
+      </div>
+
+      <script
+        is:inline
+        type="text/plain"
+        data-category="functionality"
+        data-service="Google Maps"
+        define:vars={{
+          latitude,
+          longitude,
+          zoom,
+          title,
+          hasInfoWindow,
+          displayInfoWindowOnClick,
+          infoWindowContent,
+          infoWindowHeader,
+          headerDisabled,
+          apiKey,
+        }}
+      >
+        ((g) => {
+          var h,
+            a,
+            k,
+            p = "The Google Maps JavaScript API",
+            c = "google",
+            l = "importLibrary",
+            q = "__ib__",
+            m = document,
+            b = window;
+          b = b[c] || (b[c] = {});
+          var d = b.maps || (b.maps = {}),
+            r = new Set(),
+            e = new URLSearchParams(),
+            u = () =>
+              h ||
+              (h = new Promise(async (f, n) => {
+                await (a = m.createElement("script"));
+                e.set("libraries", [...r] + "");
+                for (k in g)
+                  e.set(
+                    k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+                    g[k],
+                  );
+                e.set("callback", c + ".maps." + q);
+                a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+                d[q] = f;
+                a.onerror = () => (h = n(Error(p + " could not load.")));
+                a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+                m.head.append(a);
+              }));
+          d[l]
+            ? console.warn(p + " only loads once. Ignoring:", g)
+            : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
+        })({
+          key: apiKey,
+          v: "weekly",
+        });
+        let map;
+
+        async function initMap() {
+          const fallbackElement = document.getElementById("fallback");
+          fallbackElement.remove();
+
+          const position = {
+            lat: latitude,
+            lng: longitude,
+          };
+
+          const { Map } = await google.maps.importLibrary("maps");
+          const { AdvancedMarkerElement } =
+            await google.maps.importLibrary("marker");
+
+          map = new Map(document.getElementById("map"), {
+            zoom: zoom,
+            center: position,
+            mapId: "customMap",
+          });
+
+          const marker = new AdvancedMarkerElement({
+            map: map,
+            position: position,
+            title: title,
+          });
+
+          if (hasInfoWindow) {
+            const infowindow = new google.maps.InfoWindow({
+              content: infoWindowContent,
+              headerContent: infoWindowHeader,
+              headerDisabled: headerDisabled,
+              ariaLabel: "Label",
+            });
+            if (displayInfoWindowOnClick) {
+              marker.addListener("click", () => {
+                infowindow.open({
+                  anchor: marker,
+                  map,
+                });
+              });
+            } else {
+              infowindow.open({
+                anchor: marker,
+                map,
+              });
+            }
+          }
+        }
+
+        initMap();
+      </script>
+    </div>
+  </div>
+
+  <!-- Below: contact persons -->
+  <div class="contact-persons mt-15">
+    <div class="contact-persons-label">Ansprechpartner</div>
+    <div class="grid grid-cols-1 gap-3 lg:grid-cols-3">
+      <FirstBoardMember />
+      <SecondBoardMember />
+      <Treasurer />
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #d81e28;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .contact-headline {
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    margin: 0 0 28px;
+    color: #fff;
+  }
+  .contact-headline-red {
+    color: #d81e28;
+  }
+
+  .contact-office-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+    margin-bottom: 8px;
+  }
+  .contact-office-hours {
+    font-size: 14px;
+  }
+
+  /* Persons */
+  .contact-persons-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+</style>

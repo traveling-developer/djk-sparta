@@ -1,67 +1,149 @@
 ---
-import sponsorImage from "../assets/sponsors.webp";
 import taxAndFriendsImage from "../assets/sponsors/TaxandFriends.svg";
-import SectionHeader from "./SectionHeader.astro";
-import SponsorCard from "./SponsorCard.astro";
 
 export enum SponsorsCategory {
-    all,
-    tableTennis,
-    soccer,
-    indiaca
-}
-
-function isTableTennis(): boolean {
-    return (
-        category == SponsorsCategory.tableTennis ||
-        category == SponsorsCategory.all
-    );
-}
-
-function isIndiaca(): boolean {
-    return (
-        category == SponsorsCategory.indiaca
-    );
+  all,
+  tableTennis,
+  soccer,
+  indiaca,
 }
 
 const { category = SponsorsCategory.all } = Astro.props;
+
+const isTableTennis =
+  category === SponsorsCategory.tableTennis ||
+  category === SponsorsCategory.all;
+const isIndiaca = category === SponsorsCategory.indiaca;
+
+type Sponsor = { name: string; link: string; image?: string; imageAlt: string };
+
+const sponsors: Sponsor[] = [
+  ...(isTableTennis
+    ? [
+        {
+          name: "Tax & Friends",
+          link: "https://steuerkanzlei-taxandfriends.de",
+          image: taxAndFriendsImage.src,
+          imageAlt: "Logo Tax & Friends Steuerkanzlei",
+        },
+        {
+          name: "Dr. Neubauer",
+          link: "https://www.drneubauer.com",
+          imageAlt: "Dr. Neubauer",
+        },
+      ]
+    : []),
+  ...(isIndiaca
+    ? [
+        {
+          name: "MR Datentechnik",
+          link: "https://mr-daten.de/",
+          imageAlt: "MR Datentechnik",
+        },
+        {
+          name: "Ballsportdirekt.de",
+          link: "https://www.ballsportdirekt.de/",
+          imageAlt: "Ballsportdirekt.de",
+        },
+      ]
+    : []),
+];
 ---
 
-<div>
-    <SectionHeader title="Partner" imageMetadata={sponsorImage} />
+{
+  sponsors.length > 0 && (
+    <section class="bg-sparta-paper border-sparta-line border-y px-6 py-10 md:p-14">
+      <div class="flex flex-col items-start gap-10 md:flex-row md:items-center">
+        <div class="sponsors-label-block">
+          <div class="sponsors-eyebrow">Förderer</div>
+          <div class="sponsors-title">Danke an Unsere Partner</div>
+        </div>
 
-    <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-        {
-            isTableTennis() && (
-                <SponsorCard
-                    name="Steuerkanzlei Tax&Friends"
-                    link="https://steuerkanzlei-taxandfriends.de"
-                    image={taxAndFriendsImage.src}
-                    imageAlt="Logo von Tax and Friends in bunten Farben."
+        <div
+          class="sponsors-grid w-full md:w-auto"
+          style={`grid-template-columns: repeat(${sponsors.length}, 1fr)`}
+        >
+          {sponsors.map((s) => (
+            <a
+              href={s.link}
+              target="_blank"
+              rel="noopener"
+              class="sponsor-cell"
+              title={s.name}
+            >
+              {s.image ? (
+                <img
+                  src={s.image}
+                  alt={s.imageAlt}
+                  class="max-h-25 max-w-full object-contain"
                 />
-                <SponsorCard
-                    name="Dr. Neubauer"
-                    link="https://www.drneubauer.com"
-                    image="https://cdn.pixabay.com/photo/2019/03/10/14/04/table-tennis-4046277_1280.jpg"
-                    imageAlt="tbd"
-                />
-            )
-        }
-        {
-            isIndiaca() && (
-            <SponsorCard
-                    name="MR Datentechnik"
-                    link="https://mr-daten.de/"
-                    image={}
-                    imageAlt="TBD"
-                />
-                <SponsorCard
-                    name="Ballsportdirekt.de"
-                    link="https://www.ballsportdirekt.de/"
-                    image={}
-                    imageAlt="TBD"
-                />
-            )
-        }
-    </div>
-</div>
+              ) : (
+                <span
+                  class="font-display text-sparta-ink-soft text-center text-xl font-semibold uppercase tracking-[0.5px]"
+                >
+                  {s.name}
+                </span>
+              )}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .sponsors-label-block {
+    flex-shrink: 0;
+    max-width: 200px;
+  }
+
+  .sponsors-eyebrow {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #d81e28;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .sponsors-title {
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1;
+    color: #0c0c0e;
+  }
+
+  .sponsors-grid {
+    flex: 1;
+    display: grid;
+    gap: 1px;
+    background: #e4e2dd;
+  }
+
+  .sponsor-cell {
+    background: #fafaf8;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .sponsor-cell:hover {
+    background: #f1f0ec;
+    opacity: 1;
+  }
+
+
+
+  @media (max-width: 700px) {
+    .sponsors-grid {
+      width: 100%;
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+</style>

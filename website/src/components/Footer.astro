@@ -1,44 +1,221 @@
-<footer
-  class="footer footer-vertical md:footer-horizontal bg-spartaGray p-10 text-white"
->
-  <aside>
-    <img
-      src="/sparta_wb.svg"
-      alt="Sparta Logo"
-      class="h-24 w-24 rounded-full"
-    />
-  </aside>
-  <nav>
-    <h6 class="footer-title">Verein</h6>
-    <a href="/member" class="link link-hover">Mitglied werden</a>
-    <a href="/legal-notice" class="link link-hover">Impressum</a>
-    <a href="/data-privacy" class="link link-hover">Datenschutz</a>
-  </nav>
-  <nav>
-    <h6 class="footer-title">Abteilungen</h6>
-    <a href="/soccer-adults" class="link link-hover">Fußball - Herren</a>
-    <a href="/soccer-juniors" class="link link-hover">Fußball - Junioren</a>
-    <a href="/health-sport" class="link link-hover">Gesundheitssport</a>
-    <a href="/indiaca" class="link link-hover">Indiaca</a>
-    <a href="/tennis" class="link link-hover">Tennis</a>
-    <a href="/table-tennis" class="link link-hover">Tischtennis</a>
-  </nav>
-  <nav>
-    <h6 class="footer-title">Geschäftsstelle</h6>
-    <p>Wacholderweg 60</p>
-    <p>90441 Nürnberg</p>
-    <p>Freitag 8 – 12 Uhr</p>
-    <p>+49 (0) 911 480 59 55</p>
-  </nav>
-  <nav>
-    <h6 class="footer-title">Social</h6>
-    <div class="grid grid-flow-col gap-4">
-      <a href="https://www.facebook.com/djkspartanoris" target="_blank">
-        <img src="/facebook.svg" alt="Facebook Logo" class="h-10 w-10" />
-      </a>
-      <a href="https://www.instagram.com/djk_sparta_noris_nbg" target="_blank">
-        <img src="/instagram.svg" alt="Instagram Logo" class="h-10 w-10" />
-      </a>
+---
+const verein = [
+  { label: "Mitglied werden", href: "/member" },
+  { label: "Vereinsgeschichte", href: "/history" },
+  { label: "Sportgaststätte", href: "/restaurant" },
+  { label: "Impressum", href: "/legal-notice" },
+  { label: "Datenschutz", href: "/data-privacy" },
+];
+
+const abteilungen = [
+  { label: "Fußball Herren", href: "/soccer-adults" },
+  { label: "Fußball Junioren", href: "/soccer-juniors" },
+  { label: "Gesundheitssport", href: "/health-sport" },
+  { label: "Indiaca", href: "/indiaca" },
+  { label: "Tennis", href: "/tennis" },
+  { label: "Tischtennis", href: "/table-tennis" },
+];
+---
+
+<footer class="bg-[#0c0c0e] text-white/80">
+  <!-- Wordmark strip -->
+  <div
+    class="flex items-end justify-between gap-10 border-b border-white/10 px-14 pt-10 pb-7.5 max-[900px]:flex-col max-[900px]:items-start max-[900px]:px-6 max-[900px]:pt-8 max-[900px]:pb-6"
+  >
+    <div class="wordmark-text">
+      Sparta<br /><span>Noris.</span>
     </div>
-  </nav>
+    <p class="wordmark-tagline text-white">
+      Traditionsverein im Nürnberger Süden.<br />
+      Fünf Abteilungen, über 490 Mitglieder, seit 1918.
+    </p>
+  </div>
+
+  <!-- Link columns -->
+  <div
+    class="grid grid-cols-[1.4fr_1fr_1fr_1fr] gap-10 px-14 pt-12 pb-8 max-[900px]:grid-cols-2 max-[900px]:px-6 max-[900px]:py-8 max-[560px]:grid-cols-1"
+  >
+    <div class="footer-brand-col">
+      <div class="footer-sigma">
+        <img
+          src="/sparta_rw.svg"
+          alt=""
+          class="footer-logo"
+          aria-hidden="true"
+          width="34"
+          height="34"
+        />
+        <span class="footer-brand-name">DJK Sparta Noris</span>
+      </div>
+      <address class="footer-address">
+        Wacholderweg 60<br />
+        90441 Nürnberg · Weiherhaus<br />
+        <a href="tel:+4991148059 55">+49 911 480 59 55</a><br />
+        <a href="mailto:info@djkspartanoris.de">info@djkspartanoris.de</a>
+      </address>
+      <div class="footer-social">
+        <a
+          href="https://www.facebook.com/djkspartanoris"
+          target="_blank"
+          rel="noopener"
+          class="social-btn"
+          aria-label="Facebook"
+        >
+          <img src="/facebook.svg" alt="" width="16" height="16" />
+        </a>
+        <a
+          href="https://www.instagram.com/djk_sparta_noris_nbg"
+          target="_blank"
+          rel="noopener"
+          class="social-btn"
+          aria-label="Instagram"
+        >
+          <img src="/instagram.svg" alt="" width="16" height="16" />
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-link-col">
+      <div class="footer-col-title">Verein</div>
+      {
+        verein.map((l) => (
+          <a href={l.href} class="footer-link">
+            {l.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="footer-link-col">
+      <div class="footer-col-title">Abteilungen</div>
+      {
+        abteilungen.map((l) => (
+          <a href={l.href} class="footer-link">
+            {l.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="footer-link-col">
+      <div class="footer-col-title">Geschäftsstelle</div>
+      <p class="footer-hours">Di &amp; Fr · 8 - 12 Uhr</p>
+      <p class="footer-hours">oder nach Vereinbarung</p>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div
+    class="flex flex-wrap justify-between gap-2 border-t border-white/10 px-14 py-4.5 font-mono text-[11px] tracking-[0.5px] text-white/70 max-[900px]:flex-col max-[900px]:gap-1 max-[900px]:px-6 max-[900px]:py-4"
+  >
+    <span>© 1918-2026 · DJK Sparta Noris Nürnberg e.V.</span>
+    <span>Sport · Freundschaft · Tradition · Glaube</span>
+  </div>
 </footer>
+
+<style>
+  .wordmark-text {
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-weight: 700;
+    font-size: clamp(60px, 10vw, 120px);
+    line-height: 0.85;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .wordmark-text span {
+    color: #d81e28;
+    font-style: italic;
+  }
+
+  .wordmark-tagline {
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 360px;
+    margin: 0;
+  }
+
+  /* Brand column */
+  .footer-sigma {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .footer-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .footer-brand-name {
+    color: #fff;
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .footer-address {
+    font-size: 12px;
+    line-height: 1.8;
+    font-style: normal;
+  }
+  .footer-address a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+  }
+  .footer-address a:hover {
+    color: #fff;
+    opacity: 1;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  .social-btn {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  .social-btn:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    opacity: 1;
+  }
+
+  /* Link columns */
+  .footer-col-title {
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .footer-link {
+    display: block;
+    font-size: 12.5px;
+    padding: 5px 0;
+    text-decoration: none;
+  }
+  .footer-link:hover {
+    color: #fff;
+    opacity: 1;
+  }
+
+  .footer-hours {
+    font-size: 12.5px;
+    margin: 0;
+    padding: 5px 0;
+  }
+</style>

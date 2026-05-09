@@ -1,0 +1,37 @@
+---
+import { Picture } from "astro:assets";
+import spartanerImage from "../assets/spartaner.webp";
+---
+
+<section class="bg-sparta-paper mt-4 mb-5 md:mt-0">
+  <div class="mx-auto max-w-450 px-6 md:px-14 md:pt-5">
+    <div class="grid grid-cols-1 gap-x-8 md:grid-cols-[1.4fr_1fr]">
+      <h1
+        class="font-display text-sparta-ink text-[clamp(56px,9vw,150px)] leading-[0.85] font-bold tracking-[-0.04em] uppercase md:mt-5 md:text-[clamp(56px,8vw,150px)] xl:mt-0 2xl:text-[clamp(56px,9vw,150px)]"
+      >
+        Schreib uns.<br />
+        <span class="text-sparta-red italic">Komm vorbei.</span>
+      </h1>
+
+      <div
+        class="mx-auto hidden max-w-40 self-center md:block md:max-w-45 lg:max-w-55 2xl:max-w-60"
+      >
+        <Picture
+          src={spartanerImage}
+          formats={["webp"]}
+          alt="DJK Sparta Noris"
+          widths={[300, 600]}
+          sizes="300px"
+          class="block h-auto w-full"
+        />
+      </div>
+
+      <div class="flex flex-col justify-center pt-5 md:pt-0">
+        <p class="text-[17px] leading-[1.55] text-[#1a1a1d]">
+          Egal ob Probetraining, Mitgliedschaft oder Pressefrage, wir antworten
+          in der Regel innerhalb von 48 Stunden.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

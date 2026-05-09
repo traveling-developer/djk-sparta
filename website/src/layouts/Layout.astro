@@ -1,53 +1,40 @@
 ---
 import "../styles/global.css";
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
+import "@fontsource/inter/latin-600.css";
+import "@fontsource/inter/latin-700.css";
+import "@fontsource/oswald/latin-400.css";
+import "@fontsource/oswald/latin-500.css";
+import "@fontsource/oswald/latin-600.css";
+import "@fontsource/oswald/latin-700.css";
 import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
 import CookieConsent from "../components/cookieConsent/CookieConsent.astro";
 
 interface Props {
-	title: string;
-	description: string;
+  title: string;
+  description?: string;
 }
 
-const { title, description = "DJK Sparta Noris Nürnberg" + " - " + title } =
-	Astro.props;
+const { title, description = "DJK Sparta Noris Nürnberg — " + title } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="de">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="sitemap" href="/sitemap-index.xml" />
-		<link rel="icon" type="image/svg+xml" href="/sparta_rw.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>DJK Sparta Noris Nürnberg - {title}</title>
-	</head>
-	<body>
-		<div class="flex flex-col min-h-screen">
-			<Navbar />
-			<div class="flex-grow">
-				<slot />
-			</div>
-			<Footer />
-		</div>
-		<CookieConsent />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" type="image/svg+xml" href="/sparta_rw.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>DJK Sparta Noris Nürnberg — {title}</title>
+  </head>
+  <body>
+    <Navbar />
+    <slot />
+    <Footer />
+    <CookieConsent />
+  </body>
 </html>
-<style is:global>
-	/* :root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-	html {
-		font-family: system-ui, sans-serif;
-	} */
-</style>

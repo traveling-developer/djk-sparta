@@ -13,7 +13,32 @@
 }
 
 @theme {
+  /* Legacy tokens (used by existing sub-pages) */
   --color-spartaGray: oklch(0.2603 0 0);
   --color-spartaRed: oklch(0.587 0.2164 29.16);
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  /* V1 editorial tokens */
+  --font-display: "Oswald", "Arial Narrow", sans-serif;
+
+  --color-sparta-paper: #FAFAF8;
+  --color-sparta-paper-alt: #F1F0EC;
+  --color-sparta-ink: #0C0C0E;
+  --color-sparta-ink-soft: #1A1A1D;
+  --color-sparta-red: #D81E28;
+  --color-sparta-red-deep: #A51119;
+  --color-sparta-line: #E4E2DD;
+  --color-sparta-mute: #6A6A70;
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #FAFAF8;
+  color: #0C0C0E;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+a:hover { opacity: 0.82; }
+html { scroll-behavior: smooth; }

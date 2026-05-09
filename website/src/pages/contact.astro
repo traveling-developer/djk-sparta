@@ -1,51 +1,189 @@
 ---
-import contactImage from "../assets/contact.webp";
-
-import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
-import GoogleMaps from "../components/GoogleMaps.astro";
 import Treasurer from "../components/contact/Treasurer.astro";
 import SecondBoardMember from "../components/contact/SecondBoardMember.astro";
 import FirstBoardMember from "../components/contact/FirstBoardMember.astro";
 import TableTennisHeadOfDepartment from "../components/contact/TableTennisHeadOfDepartment.astro";
-import SoccerHeadOfDepartment from "../components/contact/SoccerHeadOfDepartment.astro";
 import HealthSportHeadOfDepartment from "../components/contact/HealthSportHeadOfDepartment.astro";
-import IndiacaHeadOfDepartment from "../components/contact/IndiacaHeadOfDepartment.astro";
 import TennisHeadOfDepartment from "../components/contact/TennisHeadOfDepartment.astro";
-import ContactCard from "../components/ContactCard.astro";
-import ThirdBoardMember from "../components/contact/ThirdBoardMember.astro";
 import SecondTreasurer from "../components/contact/SecondTreasurer.astro";
+import ContactHero from "../components/ContactHero.astro";
+import GoogleMap from "../components/GoogleMap.astro";
+import ThirdBoardMember from "../components/contact/ThirdBoardMember.astro";
 ---
 
 <Layout title="Kontakt">
   <main>
-    <Header title="Kontakt" imageMetadata={contactImage} />
+    <ContactHero />
 
-    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-      <FirstBoardMember />
-      <SecondBoardMember />
-      <ThirdBoardMember />
-      <Treasurer />
-      <SecondTreasurer />
-      <!-- <SoccerHeadOfDepartment isOnContactsPage={true} />
-            <ContactCard
-                title="Robert Scherret (Fußball - Jugendleiter)"
-                mobile="015207115488"
-            />
-            <IndiacaHeadOfDepartment isOnContactsPage={true} />-->
-      <TennisHeadOfDepartment isOnContactsPage={true} />
-      <TableTennisHeadOfDepartment isOnContactsPage={true} />
-      <HealthSportHeadOfDepartment isOnContactsPage={true} />
+    <div class="bg-sparta-ink px-6 pt-5 pb-14 text-white md:px-14 md:pb-18">
+      <div
+        class="font-display text-sparta-red m-0 mb-7 text-[clamp(32px,4vw,52px)] leading-[0.95] font-bold tracking-[-0.03em] uppercase"
+      >
+        Ansprechpartner
+      </div>
+      <div class="grid grid-cols-1 gap-3 lg:grid-cols-3">
+        <FirstBoardMember />
+        <SecondBoardMember />
+        <ThirdBoardMember />
+        <Treasurer />
+        <SecondTreasurer />
+
+        <TennisHeadOfDepartment isOnContactsPage={true} />
+        <TableTennisHeadOfDepartment isOnContactsPage={true} />
+        <HealthSportHeadOfDepartment isOnContactsPage={true} />
+      </div>
+
+      <div
+        class="mt-10 grid grid-cols-1 items-start gap-15 md:grid-cols-[1fr_1.4fr]"
+      >
+        <div>
+          <h2
+            class="font-display m-0 mb-7 text-[clamp(40px,5vw,64px)] leading-[0.95] font-bold tracking-[-0.03em] text-white uppercase"
+          >
+            Dort, wo<br /><span class="text-[#d81e28]">Sparta</span> lebt.
+          </h2>
+
+          <address
+            class="[&_a]:hover:text-sparta-red mb-7 font-mono text-[13px] leading-[1.9] not-italic [&_a]:no-underline"
+          >
+            DJK Sparta Noris Nürnberg e.V.<br />
+            Wacholderweg 60<br />
+            90441 Nürnberg · Weiherhaus<br /><br />
+            <a href="tel:+499114805955">+49 911 480 59 55</a><br />
+            <a href="mailto:info@djkspartanoris.de">info@djkspartanoris.de</a>
+          </address>
+
+          <div class="border-t border-white/12 pt-5">
+            <div
+              class="mb-2 text-[11px] tracking-[2px] text-white/55 uppercase"
+            >
+              Geschäftsstelle
+            </div>
+            <div class="text-sm">
+              Di &amp; Fr · 8 - 12 Uhr · oder nach Vereinbarung
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <GoogleMap />
+        </div>
+      </div>
     </div>
+    <!-- FAQ -->
+    <section class="bg-white px-6 py-14 text-[#1a1a1d] md:px-14 md:py-22.5">
+      <div
+        class="mx-auto grid max-w-450 grid-cols-1 items-start gap-10 md:grid-cols-[1fr_1.4fr] md:gap-15"
+      >
+        <h2
+          class="font-display m-0 text-[clamp(40px,5vw,64px)] leading-[0.95] font-bold tracking-[-0.03em] uppercase md:sticky md:top-10"
+        >
+          Häufige<br /><span class="text-[#d81e28] italic">Fragen.</span>
+        </h2>
 
-    <GoogleMaps
-      latitude={49.416459843204485}
-      longitude={11.068967769662304}
-      zoom={15}
-      title="DJK Sparta Noris Nürnberg e.V."
-      hasInfoWindow={true}
-      displayInfoWindowOnClick={false}
-      infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
-    />
+        <div class="border-t border-black/10">
+          <details
+            name="faq"
+            class="group border-b border-black/10 [&[open]_.faq-icon]:rotate-45"
+          >
+            <summary
+              class="font-display flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-xl font-semibold uppercase marker:hidden"
+            >
+              <span class="flex items-baseline gap-4">
+                <span class="font-mono text-[12px] font-normal text-[#d81e28]"
+                  >01</span
+                >
+                <span>Wie kann ich Mitglied werden?</span>
+              </span>
+              <span
+                class="faq-icon text-2xl leading-none text-[#d81e28] transition-transform"
+                aria-hidden="true">+</span
+              >
+            </summary>
+            <div class="pb-5 text-[15px] leading-[1.65] text-black/70">
+              Ein Aufnahmeantrag liegt in der Geschäftsstelle bereit oder kann
+              online ausgefüllt werden. Nach Eingang erhältst du innerhalb
+              weniger Tage Bescheid und einen Mitgliedsausweis.
+            </div>
+          </details>
+
+          <details
+            name="faq"
+            class="group border-b border-black/10 [&[open]_.faq-icon]:rotate-45"
+          >
+            <summary
+              class="font-display flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-xl font-semibold uppercase marker:hidden"
+            >
+              <span class="flex items-baseline gap-4">
+                <span class="font-mono text-[12px] font-normal text-[#d81e28]"
+                  >02</span
+                >
+                <span>Was kostet eine Mitgliedschaft?</span>
+              </span>
+              <span
+                class="faq-icon text-2xl leading-none text-[#d81e28] transition-transform"
+                aria-hidden="true">+</span
+              >
+            </summary>
+            <div class="pb-5 text-[15px] leading-[1.65] text-black/70">
+              Die Beiträge variieren je nach Abteilung und Altersgruppe. Eine
+              aktuelle Übersicht findest du in der Beitragsordnung oder direkt
+              bei der Geschäftsstelle.
+            </div>
+          </details>
+
+          <details
+            name="faq"
+            class="group border-b border-black/10 [&[open]_.faq-icon]:rotate-45"
+          >
+            <summary
+              class="font-display flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-xl font-semibold uppercase marker:hidden"
+            >
+              <span class="flex items-baseline gap-4">
+                <span class="font-mono text-[12px] font-normal text-[#d81e28]"
+                  >03</span
+                >
+                <span>Gibt es ein Probetraining?</span>
+              </span>
+              <span
+                class="faq-icon text-2xl leading-none text-[#d81e28] transition-transform"
+                aria-hidden="true">+</span
+              >
+            </summary>
+            <div class="pb-5 text-[15px] leading-[1.65] text-black/70">
+              Ja, in fast allen Abteilungen sind ein bis zwei Probetrainings
+              kostenlos möglich. Melde dich vorher kurz bei der zuständigen
+              Abteilungsleitung an.
+            </div>
+          </details>
+
+          <details
+            name="faq"
+            class="group border-b border-black/10 [&[open]_.faq-icon]:rotate-45"
+          >
+            <summary
+              class="font-display flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-xl font-semibold uppercase marker:hidden"
+            >
+              <span class="flex items-baseline gap-4">
+                <span class="font-mono text-[12px] font-normal text-[#d81e28]"
+                  >04</span
+                >
+                <span>Wo finde ich die Trainingszeiten?</span>
+              </span>
+              <span
+                class="faq-icon text-2xl leading-none text-[#d81e28] transition-transform"
+                aria-hidden="true">+</span
+              >
+            </summary>
+            <div class="pb-5 text-[15px] leading-[1.65] text-black/70">
+              Die aktuellen Trainingszeiten findest du auf der jeweiligen
+              Abteilungsseite. Sie können sich saisonal ändern, daher lohnt sich
+              ein Blick vor dem ersten Besuch.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
   </main>
 </Layout>

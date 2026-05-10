@@ -1,4 +1,6 @@
 ---
+import PersonCard from "./PersonCard.astro";
+
 interface Props {
   title?: string;
   phone?: string;
@@ -6,89 +8,18 @@ interface Props {
   mobile?: string;
 }
 
-const { title, phone, mail, mobile } = Astro.props;
+const { title = "", phone, mail, mobile } = Astro.props;
+
+const match = title.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+const name = match ? match[1].trim() : title;
+const role = match ? match[2].trim() : undefined;
 ---
 
-<div class="contact-card">
-  <h3 class="contact-card-title">{title}</h3>
-
-  {
-    phone && (
-      <div class="contact-row">
-        <span class="contact-type">Tel</span>
-        <a href={`tel:${phone}`} class="contact-value">
-          {phone}
-        </a>
-      </div>
-    )
-  }
-
-  {
-    mobile && (
-      <div class="contact-row">
-        <span class="contact-type">Mobil</span>
-        <a href={`tel:${mobile}`} class="contact-value">
-          {mobile}
-        </a>
-      </div>
-    )
-  }
-
-  {
-    mail && (
-      <div class="contact-row">
-        <span class="contact-type">Mail</span>
-        <a href={`mailto:${mail}`} class="contact-value">
-          {mail.replace("@", "(at)")}
-        </a>
-      </div>
-    )
-  }
-</div>
-
-<style>
-  .contact-card {
-    padding: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  .contact-card-title {
-    font-family: "Oswald", "Arial Narrow", sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
-    margin: 0 0 16px;
-    color: #fff;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  }
-
-  .contact-row {
-    display: flex;
-    gap: 12px;
-    align-items: baseline;
-    padding: 6px 0;
-    font-size: 13px;
-  }
-
-  .contact-type {
-    font-family: ui-monospace, "Menlo", monospace;
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
-    min-width: 36px;
-    flex-shrink: 0;
-  }
-
-  .contact-value {
-    text-decoration: none;
-  }
-  .contact-value:hover {
-    color: #d81e28;
-    opacity: 1;
-  }
-</style>
+<PersonCard
+  name={name}
+  role={role}
+  mail={mail}
+  phone={phone}
+  mobile={mobile}
+  variant="dark"
+/>

@@ -1,66 +1,249 @@
 ---
-import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
-import ContactCard from "../components/ContactCard.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import TeamCard from "../components/soccer/TeamCard.astro";
+import Breadcrumb from "../components/Breadcrumb.astro";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import TrainingWeek from "../components/department/TrainingWeek.astro";
+import CoachesGrid from "../components/department/CoachesGrid.astro";
+import DepartmentCTA from "../components/department/DepartmentCTA.astro";
+import TeamsGrid from "../components/soccer/TeamsGrid.astro";
+import TableAndFixturesSection from "../components/soccer/TableAndFixturesSection.astro";
+import TrainingAndFixturesSection from "../components/soccer/TrainingAndFixturesSection.astro";
 
-import soccerImage from "../assets/soccer.webp";
-import contactImage from "../assets/contact.webp";
-import teamImage from "../assets/team.webp";
+const breadcrumb = [
+  { label: "Home", href: "/" },
+  { label: "Abteilungen" },
+  { label: "Fußball — Herren" },
+];
 
-import { getTeams } from "../lib/soccer/teams";
-import SoccerHeadOfDepartment from "../components/contact/SoccerHeadOfDepartment.astro";
-import Events from "../components/soccer/Events.astro";
-var teams = await getTeams(false);
+const heroMeta = ["Abteilung № 01", "Saison 2025 / 2026", "gegründet 1925"];
+
+const heroStats = [
+  { value: "3", label: "Mannschaften" },
+  { value: "Landesliga", label: "Ostnordost" },
+  { value: "68", label: "Aktive Spieler" },
+  { value: "4×", label: "Training / Woche" },
+  { value: "1925", label: "Gegründet" },
+];
+
+const teams = [
+  {
+    name: "Erste Mannschaft",
+    league: "Landesliga Ostnordost",
+    coach: "Michael Schreiner",
+    place: "4.",
+    played: 19,
+    w: 11,
+    d: 4,
+    l: 4,
+    pts: 37,
+    imageLabel: "herren I · action",
+  },
+  {
+    name: "Zweite Mannschaft",
+    league: "Kreisklasse 1",
+    coach: "Thomas Uebler",
+    place: "2.",
+    played: 18,
+    w: 12,
+    d: 3,
+    l: 3,
+    pts: 39,
+    imageLabel: "herren II · training",
+  },
+  {
+    name: "Alte Herren",
+    league: "Freundschaftsspiele",
+    coach: "Gerhard Hasler",
+    place: "—",
+    played: 12,
+    w: 7,
+    d: 2,
+    l: 3,
+    pts: 23,
+    imageLabel: "alte herren · team",
+  },
+];
+
+const leagueRows = [
+  {
+    position: 1,
+    team: "TSV Altenberg",
+    played: 19,
+    w: 14,
+    d: 3,
+    l: 2,
+    pts: 45,
+  },
+  { position: 2, team: "SV Eibach", played: 19, w: 13, d: 3, l: 3, pts: 42 },
+  {
+    position: 3,
+    team: "FC Burgfarrnbach",
+    played: 19,
+    w: 12,
+    d: 4,
+    l: 3,
+    pts: 40,
+  },
+  {
+    position: 4,
+    team: "Sparta Noris",
+    played: 19,
+    w: 11,
+    d: 4,
+    l: 4,
+    pts: 37,
+    highlight: true,
+  },
+  { position: 5, team: "ASV Zirndorf", played: 19, w: 10, d: 5, l: 4, pts: 35 },
+  { position: 6, team: "TSV Katzwang", played: 19, w: 9, d: 4, l: 6, pts: 31 },
+  {
+    position: 7,
+    team: "SpVgg Mögeldorf",
+    played: 19,
+    w: 8,
+    d: 3,
+    l: 8,
+    pts: 27,
+  },
+  { position: 8, team: "FC Stein", played: 19, w: 6, d: 6, l: 7, pts: 24 },
+  {
+    position: 9,
+    team: "TSV Wendelstein",
+    played: 19,
+    w: 5,
+    d: 4,
+    l: 10,
+    pts: 19,
+  },
+  { position: 10, team: "SV Buch", played: 19, w: 3, d: 2, l: 14, pts: 11 },
+];
+
+const fixtures = [
+  {
+    date: "SA 19.04",
+    time: "15:00",
+    home: "Sparta I",
+    away: "TSV Altenberg",
+    isHome: true,
+    venue: "Wacholderplatz",
+  },
+  {
+    date: "SO 20.04",
+    time: "10:30",
+    home: "Sparta II",
+    away: "FC Stein II",
+    isHome: true,
+    venue: "Platz 2",
+  },
+  {
+    date: "SA 26.04",
+    time: "14:00",
+    home: "SV Eibach",
+    away: "Sparta I",
+    isHome: false,
+    venue: "Eibach Arena",
+  },
+  {
+    date: "SA 03.05",
+    time: "15:00",
+    home: "Sparta I",
+    away: "FC Burgfarrnbach",
+    isHome: true,
+    venue: "Wacholderplatz",
+  },
+  {
+    date: "SO 04.05",
+    time: "11:00",
+    home: "SpVgg Mögeldorf II",
+    away: "Sparta II",
+    isHome: false,
+    venue: "Mögeldorf",
+  },
+];
+
+const week = [
+  [],
+  [{ team: "Herren I", time: "18:45-20:30" }],
+  [{ team: "PM Bonifaz", time: "18:30-20:30" }],
+  [
+    { team: "Herren I", time: "18:45-20:30" },
+    { team: "AH", time: "19:00-20:30" },
+  ],
+  [],
+  [],
+  [],
+];
+
+const coaches = [
+  {
+    name: "Michael Schreiner",
+    role: "Abteilungsleiter · Trainer Herren I",
+    email: "ms@djkspartanoris.de",
+    phone: "+49 171 234 56 78",
+  },
+  {
+    name: "Thomas Uebler",
+    role: "Trainer Herren II",
+    email: "tu@djkspartanoris.de",
+    phone: "+49 171 234 56 79",
+  },
+  {
+    name: "Gerhard Hasler",
+    role: "Betreuer Alte Herren",
+    email: "gh@djkspartanoris.de",
+    phone: "+49 171 234 56 80",
+  },
+  {
+    name: "Andrea Keller",
+    role: "Schriftführerin · Organisation",
+    email: "ak@djkspartanoris.de",
+    phone: "+49 171 234 56 81",
+  },
+];
 ---
 
-<Layout title="Fußball">
-    <main>
-        <Header title="Fußball - Herren" imageMetadata={soccerImage} />
+<Layout title="Fußball Herren">
+  <main>
+    <DepartmentHero
+      title="Fußball"
+      accent="Herren."
+      lead="Drei Mannschaften, ein Wappen. Von der Landesliga bis zur Altherrenrunde — Leidenschaft für das runde Leder auf Sparta-Art."
+    />
 
-        <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-            <Events />
-            <div
-                class="w-72 sm:w-[28rem] card bg-spartaGray text-white shadow-md shadow-gray-400"
-            >
-                <div class="card-body">
-                    <h2 class="card-title">Trainingszeiten</h2>
-                    <p>AH <br /> Donnerstag 19:00 - 20:30 Uhr</p>
-                    <p>
-                        1. Mannschaft <br /> Dienstag & Donnerstag 18:45 - 20:45
-                        Uhr
-                    </p>
-                    <p>PM Bonifaz <br /> Mittwoch 18:30 - 20:30 Uhr</p>
-                </div>
-            </div>
-        </div>
+    <TrainingAndFixturesSection week={week} fixtures={fixtures} />
 
-        <div>
-            <SectionHeader title="Mannschaften" imageMetadata={teamImage} />
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Mannschaften"
+        title="Drei Teams · ein Verein"
+      />
+      <TeamsGrid teams={teams} />
+    </section>
 
-            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                {
-                    teams.map((team) => (
-                        <TeamCard
-                            name={team.name}
-                            league={team.league}
-                            rank={team.rank}
-                            goalDifference={team.goalDifference}
-                            link={team.link}
-                        />
-                    ))
-                }
-            </div>
-        </div>
+    <section class="bg-black px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Ansprechpartner"
+        title="Unser Team neben dem Platz"
+      />
+      <CoachesGrid people={coaches} variant="dark" />
+    </section>
 
-        <!-- TODO <div>
-            <SectionHeader title="Kontakt" imageMetadata={contactImage} />
-
-            <div class="flex flex-wrap justify-center gap-6 mb-10 mt-5">
-                <SoccerHeadOfDepartment />
-                <ContactCard title="TBD (2. Abteilungsleiter)" mail="..." />
-            </div>
-        </div> -->
-    </main>
+    <DepartmentCTA
+      eyebrow="Neuer Spieler? Neuer Trainer?"
+      title="Schnür die"
+      accent="Schuhe."
+      lead="Komm zum Probetraining. Erste zwei Einheiten sind kostenlos — bring Freunde, bring Bälle, bring gute Laune."
+      watermark="11"
+      actions={[
+        {
+          label: "Trainer kontaktieren",
+          href: "mailto:ms@djkspartanoris.de",
+          variant: "ink",
+        },
+        { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },
+      ]}
+    />
+  </main>
 </Layout>

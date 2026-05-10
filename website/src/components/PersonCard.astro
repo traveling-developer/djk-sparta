@@ -1,0 +1,71 @@
+---
+type Variant = "light" | "dark";
+
+interface Props {
+  name: string;
+  role?: string;
+  mail?: string;
+  phone?: string;
+  mobile?: string;
+  variant?: Variant;
+}
+
+const { name, role, mail, phone, mobile, variant = "dark" } = Astro.props;
+
+const isDark = variant === "dark";
+const cardClass = isDark
+  ? "border-white/12 bg-white/8 text-white"
+  : "border-sparta-line bg-white text-sparta-ink";
+const dividerClass = isDark ? "border-white/12" : "border-sparta-line";
+const labelColor = isDark ? "text-white/70" : "text-sparta-mute";
+const roleColor = isDark ? "text-white/55" : "text-sparta-mute";
+
+const obfuscate = (m: string) => m.replace("@", "(at)");
+
+const rows: { label: string; value: string; href: string }[] = [];
+if (phone)
+  rows.push({
+    label: "Tel",
+    value: phone,
+    href: `tel:${phone.replace(/\s/g, "")}`,
+  });
+if (mobile)
+  rows.push({
+    label: "Mobil",
+    value: mobile,
+    href: `tel:${mobile.replace(/\s/g, "")}`,
+  });
+if (mail)
+  rows.push({ label: "Mail", value: obfuscate(mail), href: `mailto:${mail}` });
+---
+
+<div class={`border p-6 ${cardClass}`}>
+  <h3
+    class="font-display m-0 text-lg leading-[1.2] font-bold tracking-[0.02em] uppercase"
+  >
+    {name}
+  </h3>
+  {role && <div class={`mt-1.5 text-xs ${roleColor}`}>{role}</div>}
+
+  {
+    rows.length > 0 && (
+      <>
+        <div class={`my-4 border-t ${dividerClass}`} />
+        <div class="flex flex-col">
+          {rows.map((r) => (
+            <div class="flex items-baseline gap-3 py-1.5 text-[13px]">
+              <span
+                class={`min-w-9 shrink-0 font-mono text-[10px] tracking-[1px] uppercase ${labelColor}`}
+              >
+                {r.label}
+              </span>
+              <a href={r.href} class="hover:text-sparta-red no-underline">
+                {r.value}
+              </a>
+            </div>
+          ))}
+        </div>
+      </>
+    )
+  }
+</div>

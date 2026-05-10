@@ -1,0 +1,51 @@
+---
+interface Fixture {
+  date: string;
+  time: string;
+  home: string;
+  away: string;
+  isHome: boolean;
+  venue: string;
+}
+
+interface Props {
+  fixtures: Fixture[];
+}
+
+const { fixtures } = Astro.props;
+---
+
+<div class="flex flex-col gap-2.5">
+  {
+    fixtures.map((g, i) => {
+      const isFirst = i === 0;
+      const wrapperClass = isFirst
+        ? "bg-sparta-red"
+        : "bg-white/[0.04] border border-white/10";
+      const badgeClass = g.isHome
+        ? isFirst
+          ? "bg-black/30 text-white"
+          : "bg-sparta-red text-white"
+        : "border border-white/30 text-white";
+      return (
+        <div
+          class={`flex items-center justify-between gap-4 px-5 py-4.5 ${wrapperClass}`}
+        >
+          <div>
+            <div class="mb-1.5 text-[10px] tracking-[2px] text-white/80 uppercase">
+              {g.date} · {g.time} · {g.venue}
+            </div>
+            <div class="font-display text-[18px] leading-[1.1] font-bold uppercase">
+              {g.home} <span class="opacity-50">vs.</span> {g.away}
+            </div>
+          </div>
+          <div
+            class={`px-2.5 py-1 text-[10px] font-bold tracking-[2px] uppercase ${badgeClass}`}
+          >
+            {g.isHome ? "Heim" : "Ausw."}
+          </div>
+        </div>
+      );
+    })
+  }
+</div>

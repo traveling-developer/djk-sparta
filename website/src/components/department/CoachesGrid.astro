@@ -1,0 +1,35 @@
+---
+import PersonCard from "../PersonCard.astro";
+
+type Variant = "light" | "dark";
+
+interface Person {
+  name: string;
+  role?: string;
+  email?: string;
+  phone?: string;
+  mobile?: string;
+}
+
+interface Props {
+  people: Person[];
+  variant?: Variant;
+}
+
+const { people, variant = "light" } = Astro.props;
+---
+
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+  {
+    people.map((p) => (
+      <PersonCard
+        name={p.name}
+        role={p.role}
+        mail={p.email}
+        phone={p.phone}
+        mobile={p.mobile}
+        variant={variant}
+      />
+    ))
+  }
+</div>

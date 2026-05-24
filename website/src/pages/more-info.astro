@@ -1,0 +1,88 @@
+---
+import Header from "../components/Header.astro";
+import Layout from "../layouts/Layout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+
+import letteringImage from "../assets/contact.webp";
+import typewriterImage from "../assets/typewriter.webp";
+import teamImage from "../assets/team.webp";
+import contactImage from "../assets/contact.webp";
+---
+
+<Layout title="Weitere Informationen">
+  <main>
+    <Header title="Weitere Informationen" imageMetadata={letteringImage} />
+
+    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+      <div
+        class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
+      >
+        <div class="card-body">
+          <ul class="list-disc space-y-2 pl-5">
+            <li>
+              <a
+                href="/Fußball-Jugendkonzept.pdf"
+                target="_blank"
+                class="link hover:text-spartaRed"
+              >
+                Fußball-Jugendkonzept (PDF)
+              </a>
+            </li>
+            <li>
+              <a
+                href="/Selbstverpflichtung.pdf"
+                target="_blank"
+                class="link hover:text-spartaRed"
+              >
+                Selbstverpflichtungserklärung (PDF)
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div>
+    <SectionHeader title="Schiedsrichter" imageMetadata={teamImage} />
+
+    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+      <div
+        class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
+      >
+        <div class="card-body">
+          <ul class="space-y-1">
+            <li>Hans-Georg Grell</li>
+            <li>Erna Grell</li>
+            <li>Maximilian Hasler</li>
+            <li>Marcel Schwager</li>
+            <li>Bianca Seyschab</li>
+            <li>Dieter Wolfsberger</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+
+    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+      <div
+        class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
+      >
+        <div class="card-body items-center text-center">
+          <p>Bei Fragen oder Anliegen meldet euch gerne bei uns!</p>
+          <div class="card-actions mt-2">
+            <a
+              href="/contact"
+              class="btn btn-outline hover:border-spartaRed hover:bg-spartaRed text-white transition duration-300 ease-in-out hover:-translate-y-1"
+            >
+              Zu den Ansprechpartnern
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,26 +1,60 @@
 ---
-import racketImage from "../assets/racket.webp";
-import contactImage from "../assets/contact.webp";
-import typeWriterImage from "../assets/typewriter.webp";
-import teamImage from "../assets/team.webp";
-
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import ContactCard from "../components/ContactCard.astro";
-import NewsCard from "../components/NewsCard.astro";
-import Team from "../components/tableTennis/Team.astro";
-import TrainingTimes from "../components/tableTennis/TrainingTimes.astro";
-import Events from "../components/tableTennis/Events.astro";
-import GoogleMaps from "../components/GoogleMaps.astro";
-import TableTennisHeadOfDepartment from "../components/contact/TableTennisHeadOfDepartment.astro";
-
-import { createSlug } from "../lib/convenience";
-import { latestTableTennisNews } from "../lib/news";
-import { getTeams } from "../lib/tableTennis/teams";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import TrainingAndFixturesSection from "../components/soccer/TrainingAndFixturesSection.astro";
+import CoachesGrid from "../components/department/CoachesGrid.astro";
+import DepartmentCTA from "../components/department/DepartmentCTA.astro";
+import TableTennisTeamsGrid from "../components/tableTennis/TableTennisTeamsGrid.astro";
+import TableTennisLocation from "../components/tableTennis/TableTennisLocation.astro";
+import News from "../components/News.astro";
 import Sponsors, { SponsorsCategory } from "../components/Sponsors.astro";
 
-var teams = await getTeams();
+import { getTeams } from "../lib/tableTennis/teams";
+import { getMatches } from "../lib/tableTennis/matches";
+
+const teams = await getTeams();
+const rawMatches = await getMatches();
+
+const fixtures = rawMatches.slice(0, 5).map((m) => ({
+  date: m.date,
+  time: m.time,
+  home: m.homeTeam,
+  away: m.guestTeam,
+  isHome: /sparta/i.test(m.homeTeam),
+  venue: /sparta/i.test(m.homeTeam) ? "Sperberschule" : "—",
+}));
+
+const week = [
+  [],
+  [{ team: "Alle Leistungsklassen", time: "ab 18:00" }],
+  [{ team: "alle Leistungsklassen", time: "ab 18:00" }],
+  [],
+  [{ team: "alle Leistungsklassen", time: "ab 18:00" }],
+  [],
+  [],
+];
+
+const coaches = [
+  {
+    name: "Jürgen Fietz",
+    role: "1. Abteilungsleiter",
+    email: "juergen.fietz@djkspartanoris.de",
+    phone: "0911 542 611",
+    mobile: "0170 337 303 5",
+  },
+  {
+    name: "Armin Ufert",
+    role: "2. Abteilungsleiter",
+    email: "armin.ufert@gmx.de",
+    mobile: "+49 176 78102208",
+  },
+  {
+    name: "Anton Nagatkin",
+    role: "2. Abteilungsleiter",
+    mobile: "+49 176 74729697",
+  },
+];
 ---
 
 <Layout
@@ -28,75 +62,58 @@ var teams = await getTeams();
   description="Tischtennis in Nürnberg bei DJK Sparta Noris: Training (Di, Mi, Fr). Infos, Termine & Kontakt hier!"
 >
   <main>
-    <Header title="Tischtennis" imageMetadata={racketImage} />
-
-    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-      <Events />
-      <TrainingTimes />
-    </div>
-
-    <div>
-      <SectionHeader title="Mannschaften" imageMetadata={teamImage} />
-
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        {
-          teams.map((team) => (
-            <Team
-              name={team.name}
-              league={team.league}
-              rank={team.rank}
-              points={team.points}
-              link={team.link}
-            />
-          ))
-        }
-      </div>
-    </div>
-    <div>
-      <SectionHeader title="News" imageMetadata={typeWriterImage} />
-
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        {
-          latestTableTennisNews
-            .slice(0, 4)
-            .map((news) => (
-              <NewsCard
-                body={news.content?.split(" ").slice(0, 15).join(" ") + " ..."}
-                title={news.title}
-                link={"/news/" + createSlug(news.title!)}
-              />
-            ))
-        }
-      </div>
-    </div>
-    <div>
-      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
-
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        <TableTennisHeadOfDepartment />
-        <ContactCard
-          title="Armin Ufert (2. Abteilungsleiter)"
-          mobile="+49 176 78102208"
-          mail="armin.ufert@gmx.de"
-        />
-        <ContactCard
-          title="Anton Nagatkin (2. Abteilungsleiter)"
-          mobile="+49 176 74729697"
-        />
-      </div>
-    </div>
-
-    <GoogleMaps
-      latitude={49.43233666177542}
-      longitude={11.088991326381146}
-      zoom={15}
-      title="DJK Sparta Noris TT"
-      hasInfoWindow={true}
-      displayInfoWindowOnClick={false}
-      infoWindowContent='<h1 class="text-xl">DJK Sparta Tischtennis</h1><p>Eingang über den Pausenhof der Sperberschule.<br/>Zugang über die Langobardenstraße.</p>'
+    <DepartmentHero
+      title="Tischtennis"
+      accent="Bei Sparta."
+      lead="Schnell, präzise, gesellig. Spielbetrieb in mehreren Mannschaften, offenes Training für alle Spielstärken — Tischtennis auf Sparta-Art."
     />
-    <div>
-      <Sponsors category={SponsorsCategory.tableTennis} />
-    </div>
+
+    <TrainingAndFixturesSection
+      trainingsEyebrow="Trainingszeiten · Sperberschule"
+      trainingsTitle="Trainingswoche"
+      fixturesEyebrow="Nächste Spiele"
+      fixturesTitle="Termine"
+      week={week}
+      fixtures={fixtures}
+    />
+
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Mannschaften"
+        title="Punktspielbetrieb"
+      />
+      <TableTennisTeamsGrid teams={teams} />
+    </section>
+
+    <News category="table-tennis" />
+
+    <TableTennisLocation />
+
+    <DepartmentCTA
+      eyebrow="Probetraining gefällig?"
+      title="Schläger"
+      accent="raus."
+      lead="Komm einfach vorbei!"
+      watermark="TT"
+      actions={[
+        {
+          label: "Schreib uns",
+          href: "mailto:juergen.fietz@djkspartanoris.de",
+          variant: "ink",
+        },
+        { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },
+      ]}
+    />
+
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Ansprechpartner"
+        title="Das Team hinter unserem Erfolg"
+      />
+      <CoachesGrid people={coaches} variant="dark" />
+    </section>
+
+    <Sponsors category={SponsorsCategory.tableTennis} />
   </main>
 </Layout>

@@ -6,7 +6,7 @@ import TrainingAndFixturesSection from "../components/soccer/TrainingAndFixtures
 import CoachesGrid from "../components/department/CoachesGrid.astro";
 import DepartmentCTA from "../components/department/DepartmentCTA.astro";
 import TableTennisTeamsGrid from "../components/tableTennis/TableTennisTeamsGrid.astro";
-import TableTennisLocation from "../components/tableTennis/TableTennisLocation.astro";
+import Location from "../components/department/Location.astro";
 import News from "../components/News.astro";
 import Sponsors, { SponsorsCategory } from "../components/Sponsors.astro";
 
@@ -87,7 +87,25 @@ const coaches = [
 
     <News category="table-tennis" />
 
-    <TableTennisLocation />
+    <Location
+      titleTop="Sperber"
+      titleAccent="Halle."
+      latitude={49.43233666177542}
+      longitude={11.088991326381146}
+      mapTitle="DJK Sparta Noris TT"
+      infoWindowContent='<h1 class="text-xl">DJK Sparta Tischtennis</h1><p>Eingang über den Pausenhof der Sperberschule.<br/>Zugang über die Langobardenstraße.</p>'
+    >
+      <Fragment slot="address">
+        Schulsporthalle Sperberschule<br />
+        Sperberstr. 85<br />
+        Eingang Langobardenstr.<br />
+        90461 Nürnberg
+      </Fragment>
+      <Fragment slot="hint">
+        Eingang über den Pausenhof der Sperberschule. Zugang über die
+        Langobardenstraße.
+      </Fragment>
+    </Location>
 
     <DepartmentCTA
       eyebrow="Probetraining gefällig?"

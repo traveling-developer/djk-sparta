@@ -1,0 +1,78 @@
+---
+import GoogleMap from "../GoogleMap.astro";
+
+interface Props {
+  eyebrow?: string;
+  titleTop: string;
+  titleAccent: string;
+  latitude: number;
+  longitude: number;
+  zoom?: number;
+  mapTitle: string;
+  infoWindowContent: string;
+}
+
+const {
+  eyebrow = "Sportstätte · Anfahrt",
+  titleTop,
+  titleAccent,
+  latitude,
+  longitude,
+  zoom = 15,
+  mapTitle,
+  infoWindowContent,
+} = Astro.props;
+
+const hasHint = Astro.slots.has("hint");
+---
+
+<section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+  <div
+    class="grid grid-cols-1 items-start gap-10 md:grid-cols-[1fr_1.4fr] md:gap-15"
+  >
+    <div>
+      <div
+        class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase"
+      >
+        {eyebrow}
+      </div>
+      <h2
+        class="font-display m-0 mb-7 text-[clamp(40px,5vw,64px)] leading-[0.95] font-bold tracking-[-0.03em] text-white uppercase"
+      >
+        {titleTop}<br /><span class="text-sparta-red italic">{titleAccent}</span
+        >
+      </h2>
+
+      <address
+        class="mb-7 font-mono text-[13px] leading-[1.9] text-white/85 not-italic"
+      >
+        <slot name="address" />
+      </address>
+
+      {
+        hasHint && (
+          <div class="border-t border-white/12 pt-5">
+            <div class="mb-2 text-[11px] tracking-[2px] text-white/55 uppercase">
+              Hinweis
+            </div>
+            <div class="text-sm leading-[1.55]">
+              <slot name="hint" />
+            </div>
+          </div>
+        )
+      }
+    </div>
+
+    <div>
+      <GoogleMap
+        latitude={latitude}
+        longitude={longitude}
+        zoom={zoom}
+        title={mapTitle}
+        hasInfoWindow={true}
+        displayInfoWindowOnClick={false}
+        infoWindowContent={infoWindowContent}
+      />
+    </div>
+  </div>
+</section>

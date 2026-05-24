@@ -1,109 +1,180 @@
 ---
-import contactImage from "../../assets/contact.webp";
-import indiacaImage from "../../assets/indiaca.webp";
-
-import ContactCard from "../../components/ContactCard.astro";
-import GoogleMaps from "../../components/GoogleMaps.astro";
-import Header from "../../components/Header.astro";
-import Menu from "../../components/indiaca/Menu.astro";
-import SectionHeader from "../../components/SectionHeader.astro";
-import Sponsors, { SponsorsCategory } from "../../components/Sponsors.astro";
 import Layout from "../../layouts/Layout.astro";
+import DepartmentHero from "../../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../../components/department/DepartmentSectionHeader.astro";
+import DepartmentCTA from "../../components/department/DepartmentCTA.astro";
+import CoachesGrid from "../../components/department/CoachesGrid.astro";
+import GoogleMap from "../../components/GoogleMap.astro";
+
+interface Slot {
+  day: string;
+  time: string;
+  note?: string;
+}
+
+interface Offer {
+  title: string;
+  slots: Slot[];
+  location: string;
+}
+
+const offers: Offer[] = [
+  {
+    title: "Hallentraining",
+    slots: [{ day: "Montag", time: "ab 20:00" }],
+    location: "Schulsporthalle · ganzjährig",
+  },
+  {
+    title: "Outdoor-Training",
+    slots: [
+      {
+        day: "Mittwoch",
+        time: "nach Absprache",
+        note: "ab April · wetterabhängig",
+      },
+    ],
+    location: "Sparta-Sportgelände, Wacholderweg 60",
+  },
+];
+
+const contacts = [
+  {
+    name: "Herbert Langfritz",
+    role: "Ansprechpartner",
+    email: "indiaca@djkspartanoris.de",
+  },
+];
 ---
 
-<Layout title="Indiaca">
+<Layout
+  title="Indiaca"
+  description="Indiaca bei DJK Sparta Noris Nürnberg: Rückschlagspiel ähnlich Volleyball — schnell erlernbar, actionreich, für jedes Alter. Hallen- und Outdoor-Training."
+>
   <main>
-    <Header title="Indiaca" imageMetadata={indiacaImage} />
+    <DepartmentHero
+      title="Indiaca"
+      accent="Bei Sparta."
+      lead="Rückschlagspiel ähnlich dem Volleyball — schnell erlernbar, actionreich und ein begeisternder Mannschaftssport für Jung und Alt."
+    />
 
-    <!-- TODO <Menu path="indiaca" /> -->
-
-    <div class="hero">
-      <div class="hero-content">
-        <div class="mx-10 my-5 text-lg">
-          <p>
-            Indiaca ist ein Rückschlagspiel ähnlich dem Volleyball und bietet
-            somit ideale Bedingungen für Powerplay am Ball. Es ist ein absolut
-            begeisternder Mannschaftssport für Jung und Alt!<br />
-            Vom Studenten über den Midager bis hin zu sportlichen Menschen jedes Alters.
-          </p>
-          <br />
-          <p>
-            Insbesondere Interessenten, die einmal etwas Neues, eine eher
-            weniger bekannte Teamsportart suchen, möchten wir zum Reinschnuppern
-            in den actionreichen und schnell erlernbaren Indiacasport einladen.
-          </p>
-          <br />
-          <p class="font-semibold">
-            Gerne begrüßen wir Interessenten/innen am Hallentraining -
-            wöchentlich montags ab 20.00h - bei uns.
-          </p>
-          <br />
-          <p>
-            Wetterbedingt und nach Absprache bieten wir nun ab üblicherweise ab
-            dem monat April zusätzlich auch ein Training outdoor auf unserem
-            Sportgelände an: Trainingstag ist Mittwoch.
-          </p>
-          <br />
-          <p>
-            Wer also Lust auf eine neue Sportart hat, ist in unserem Verein, dem
-            einzigen in Nürnberg mit dem Sportangebot Indiaca goldrichtig und
-            herzlich willkommen...
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
-
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        <ContactCard
-          title="Herbert Langfritz (Ansprechpartner)"
-          mail="indiaca@djkspartanoris.de"
-        />
-      </div>
-    </div>
-
-    <div>
-      <SectionHeader
-        title="Weitere Informationen"
-        imageMetadata={contactImage}
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Trainingszeiten"
+        title="Wann wir spielen"
       />
 
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        <div
-          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-[28rem]"
-        >
-          <div class="card-body">
-            <h2 class="card-title">Diese Seite befindet sich im Aufbau</h2>
-            <p class="mt-2">
-              Unsere Indiaca-Seite wird derzeit überarbeitet. Informationen zu
-              Trainingszeiten, Turnieren und weiteren Aktivitäten findest du bis
-              auf Weiteres auf unserer alten externen Website.
-            </p>
-            <div class="card-actions mt-4 justify-end">
-              <a
-                href="https://indiaca-nuernberg.jimdoweb.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn btn-outline hover:border-spartaRed hover:bg-spartaRed transition duration-300 ease-in-out hover:-translate-y-1"
-              >
-                Zur Indiaca-Website →
-              </a>
-            </div>
-          </div>
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {
+          offers.map((offer) => (
+            <article class="flex flex-col overflow-hidden border border-white/12 bg-white/8 text-white">
+              <div class="flex flex-1 flex-col p-6">
+                <h3 class="font-display m-0 text-[26px] leading-[1.05] font-bold tracking-[-0.01em] uppercase">
+                  {offer.title}
+                </h3>
+
+                <div class="mt-5 flex flex-col gap-4 border-t border-white/12 pt-5">
+                  {offer.slots.map((slot) => (
+                    <div>
+                      <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <span class="font-display text-[15px] font-bold tracking-[0.5px] uppercase">
+                          {slot.day}
+                        </span>
+                        <span class="font-mono text-[13px]">{slot.time}</span>
+                      </div>
+                      {slot.note && (
+                        <div class="mt-1 font-mono text-[11px] tracking-[1px] text-white/55 uppercase">
+                          {slot.note}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  <div class="text-[13px] leading-[1.5] text-white/85">
+                    {offer.location}
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Was ist Indiaca?"
+        title="Powerplay am Ball"
+      />
+
+      <div class="grid max-w-3xl grid-cols-1 gap-5">
+        <p class="text-sparta-ink-soft m-0 text-[17px] leading-[1.6]">
+          Indiaca ist ein Rückschlagspiel ähnlich dem Volleyball und bietet
+          somit ideale Bedingungen für Powerplay am Ball. Es ist ein absolut
+          begeisternder Mannschaftssport für Jung und Alt! Vom Studenten über
+          den Midager bis hin zu sportlichen Menschen jedes Alters.
+        </p>
+        <p class="text-sparta-ink-soft m-0 text-[17px] leading-[1.6]">
+          Insbesondere Interessenten, die einmal etwas Neues, eine eher weniger
+          bekannte Teamsportart suchen, möchten wir zum Reinschnuppern in den
+          actionreichen und schnell erlernbaren Indiacasport einladen.
+        </p>
+        <p class="text-sparta-ink-soft m-0 text-[17px] leading-[1.6]">
+          Wer also Lust auf eine neue Sportart hat, ist in unserem Verein, dem
+          einzigen in Nürnberg mit dem Sportangebot Indiaca goldrichtig und
+          herzlich willkommen...
+        </p>
+      </div>
+    </section>
+
+    <DepartmentCTA
+      eyebrow="Lust auf was Neues?"
+      title="Schau"
+      accent="vorbei."
+      lead="Komm einfach zum Hallentraining am Montag oder schreib uns vorab eine Nachricht."
+      actions={[
+        {
+          label: "Schreib uns",
+          href: "mailto:indiaca@djkspartanoris.de",
+          variant: "ink",
+        },
+        { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },
+      ]}
+    />
+
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Ansprechpartner"
+        title="Dein Kontakt zur Abteilung"
+      />
+      <CoachesGrid people={contacts} variant="dark" />
+    </section>
+
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Mehr erfahren"
+        title="Weitere Informationen"
+      />
+
+      <div class="grid grid-cols-1 items-start gap-8 md:grid-cols-[1.4fr_1fr]">
+        <p class="text-sparta-ink-soft m-0 max-w-2xl text-[17px] leading-[1.6]">
+          Unsere ausführliche Indiaca-Seite wird derzeit überarbeitet.
+          Informationen zu Turnieren und weiteren Aktivitäten findest du bis auf
+          Weiteres auf unserer bisherigen externen Website.
+        </p>
+
+        <div class="flex md:justify-end">
+          <a
+            href="https://indiaca-nuernberg.jimdoweb.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-sparta-ink font-display inline-flex items-center justify-between gap-4 px-6 py-4.5 text-sm font-bold tracking-[2px] text-white uppercase no-underline transition-colors hover:bg-black"
+          >
+            <span>Zur Indiaca-Website</span>
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
       </div>
-    </div>
-
-    <GoogleMaps
-      latitude={49.416459843204485}
-      longitude={11.068967769662304}
-      zoom={15}
-      title="DJK Sparta Noris Nürnberg e.V."
-      hasInfoWindow={true}
-      displayInfoWindowOnClick={false}
-      infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
-    />
+    </section>
   </main>
 </Layout>

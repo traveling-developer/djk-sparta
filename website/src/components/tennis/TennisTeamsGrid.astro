@@ -1,0 +1,105 @@
+---
+interface Team {
+  name: string;
+  league: string;
+  rank: string;
+  points: string;
+  link: string;
+}
+
+interface Props {
+  teams: Team[];
+}
+
+const { teams } = Astro.props;
+---
+
+{
+  teams.length === 0 ? (
+    <article class="border-sparta-line overflow-hidden border">
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="bg-white p-8 md:p-10">
+          <div class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase">
+            Saisonpause
+          </div>
+          <h3 class="font-display text-sparta-ink m-0 mb-5 text-[clamp(32px,4vw,48px)] leading-[0.95] font-bold tracking-[-0.02em] uppercase">
+            Bald geht's
+            <br />
+            <span class="text-sparta-red italic">wieder los.</span>
+          </h3>
+          <p class="text-sparta-ink-soft m-0 text-[15px] leading-[1.6]">
+            Die neuen Mannschaften und Ligaeinteilungen werden in Kürze bekannt
+            gegeben. Sobald die Spiele wieder rollen, findest du hier alle Teams
+            mit aktuellem Tabellenstand.
+          </p>
+        </div>
+        <div class="bg-sparta-ink p-8 text-white md:p-10">
+          <div class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase">
+            Mitspielen?
+          </div>
+          <h3 class="font-display m-0 mb-5 text-[clamp(32px,4vw,48px)] leading-[0.95] font-bold tracking-[-0.02em] text-white uppercase">
+            Komm auf den
+            <br />
+            <span class="text-sparta-red italic">Court.</span>
+          </h3>
+          <p class="m-0 mb-6 text-[15px] leading-[1.6] text-white/75">
+            Wir suchen immer neue Spieler — egal ob Sandplatz-Anfänger oder
+            routinierter Aufschlagriese. Komm zum Training, schau's dir an,
+            mach mit.
+          </p>
+          <a
+            href="mailto:info@djkspartanoris.de"
+            class="bg-sparta-red font-display hover:text-sparta-red inline-flex items-center gap-3 px-5 py-3 text-[12px] font-bold tracking-[2px] text-white uppercase no-underline transition-colors hover:bg-white"
+          >
+            <span>Schreib uns</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </article>
+  ) : (
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {teams.map((team) => (
+        <article class="text-sparta-ink border-sparta-line flex flex-col overflow-hidden border bg-white">
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="font-display m-0 text-[28px] leading-none font-bold uppercase">
+              {team.name}
+            </h3>
+            <div class="mt-1.5 mb-5 text-[13px] opacity-70">{team.league}</div>
+
+            <div class="border-sparta-line grid grid-cols-2 border-t pt-5">
+              <div class="pr-5">
+                <div class="font-display text-[clamp(48px,7vw,72px)] leading-none font-bold tracking-[-2px]">
+                  {team.rank}
+                </div>
+                <div class="mt-2 font-mono text-[10px] tracking-[2px] uppercase opacity-55">
+                  Tabellenrang
+                </div>
+              </div>
+              <div class="border-sparta-line border-l pl-5">
+                <div class="font-display text-sparta-red text-[clamp(48px,7vw,72px)] leading-none font-bold tracking-[-2px]">
+                  {team.points}
+                </div>
+                <div class="mt-2 font-mono text-[10px] tracking-[2px] uppercase opacity-55">
+                  Punkte
+                </div>
+              </div>
+            </div>
+
+            {team.link && (
+              <a
+                href={team.link}
+                target="_blank"
+                rel="noopener"
+                class="font-display text-sparta-red border-sparta-line mt-auto flex items-center justify-between gap-2 border-t pt-5 text-[11px] font-bold tracking-[2px] uppercase no-underline hover:opacity-70"
+              >
+                <span>BTV-Spielplan</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+}

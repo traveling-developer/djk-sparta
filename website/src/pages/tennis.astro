@@ -1,59 +1,122 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import tennisImage from "../assets/tennis.webp";
-import contactImage from "../assets/contact.webp";
-import Header from "../components/Header.astro";
-import ContactCard from "../components/ContactCard.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import GoogleMaps from "../components/GoogleMaps.astro";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import TrainingAndFixturesSection from "../components/soccer/TrainingAndFixturesSection.astro";
+import CoachesGrid from "../components/department/CoachesGrid.astro";
+import DepartmentCTA from "../components/department/DepartmentCTA.astro";
+import Location from "../components/department/Location.astro";
+import TennisTeamsGrid from "../components/tennis/TennisTeamsGrid.astro";
 
-import SmallHero from "../components/SmallHero.astro";
-import TennisHeadOfDepartment from "../components/contact/TennisHeadOfDepartment.astro";
+const week = [
+  [],
+  [{ team: "Alle Leistungsklassen", time: "16:00-20:00" }],
+  [],
+  [{ team: "Alle Leistungsklassen", time: "16:00-20:00" }],
+  [],
+  [],
+  [],
+];
+
+const teams = [
+  {
+    name: "Herren U30",
+    league: "-",
+    rank: "-",
+    points: "-",
+  },
+  {
+    name: "Herren U40",
+    league: "-",
+    rank: "-",
+    points: "-",
+  },
+];
+
+const coaches = [
+  {
+    name: "Markus Krämer",
+    role: "1. Abteilungsleiter",
+    mobile: "0179 59 56 101",
+  },
+  {
+    name: "Alexander Kolodziej",
+    mobile: "0176 402 064 56",
+  },
+  {
+    name: "Wilhelm Hess",
+    mobile: "0172 864 953 1",
+  },
+  {
+    name: "Egor Meisler",
+    mobile: "0176 476 970 35",
+  },
+  {
+    name: "Edward Akinshyn",
+    mobile: "0157 817 789 87",
+  },
+];
 ---
 
 <Layout title="Tennis">
   <main>
-    <Header title="Tennis" imageMetadata={tennisImage} />
-    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-      <div
-        class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-[28rem]"
-      >
-        <div class="card-body">
-          <h2 class="card-title">Mannschaften</h2>
-          <div>U30 Herren</div>
-          <div>U40 Herren</div>
-        </div>
-      </div>
-      <div
-        class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-[28rem]"
-      >
-        <div class="card-body">
-          <h2 class="card-title">Trainingszeiten</h2>
-          <div>Dienstag von 16 bis 20 Uhr</div>
-          <div>Donnerstag von 16 bis 20 Uhr</div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
+    <DepartmentHero
+      title="Tennis"
+      accent="Bei Sparta."
+      lead="Zwei Herren-Mannschaften, vier Outdoor-Plätze, zwei Trainingstage. Tennis im Grünen am Sparta-Vereinsheim — vom Punktspielbetrieb bis zum Feierabend-Match."
+    />
 
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        <TennisHeadOfDepartment />
-        <ContactCard title="Alexander Kolodziej" mobile="0176 402 064 56" />
-        <ContactCard title="Wilhelm Hess" mobile="0172 864 953 1" />
-        <ContactCard title="Egor Meisler" mobile="0176 476 970 35" />
-        <ContactCard title="Edward Akinshyn" mobile="0157 817 789 87" />
-      </div>
-    </div>
+    <TrainingAndFixturesSection
+      trainingsEyebrow="Trainingszeiten · Wacholderweg"
+      trainingsTitle="Trainingswoche"
+      week={week}
+    />
 
-    <GoogleMaps
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Mannschaften"
+        title="Punktspielbetrieb"
+      />
+      <TennisTeamsGrid teams={teams} />
+    </section>
+
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Ansprechpartner"
+        title="Unser Team am Platz"
+      />
+      <CoachesGrid people={coaches} variant="dark" />
+    </section>
+
+    <Location
+      titleTop="Wacholder"
+      titleAccent="Plätze."
       latitude={49.416459843204485}
       longitude={11.068967769662304}
-      zoom={15}
-      title="DJK Sparta Noris Nürnberg e.V."
-      hasInfoWindow={true}
-      displayInfoWindowOnClick={false}
+      mapTitle="DJK Sparta Noris Nürnberg e.V."
       infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
+    >
+      <Fragment slot="address">
+        Sparta-Tennisanlage<br />
+        Wacholderweg 60<br />
+        90441 Nürnberg · Weiherhaus
+      </Fragment>
+    </Location>
+
+    <DepartmentCTA
+      eyebrow="Spiellust?"
+      title="Schlag"
+      accent="auf."
+      lead="Bring deine Schuhe und gute Laune mit. Einen Schläger leihen wir dir gerne."
+      actions={[
+        {
+          label: "Schreib uns",
+          href: "mailto:info@djkspartanoris.de",
+          variant: "ink",
+        },
+        { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },
+      ]}
     />
   </main>
 </Layout>

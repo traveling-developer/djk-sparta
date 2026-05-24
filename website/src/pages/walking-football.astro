@@ -1,0 +1,44 @@
+---
+import Header from "../components/Header.astro";
+import Layout from "../layouts/Layout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+import ContactCard from "../components/ContactCard.astro";
+
+import soccerImage from "../assets/soccer.webp";
+import contactImage from "../assets/contact.webp";
+---
+
+<Layout title="Walking Football">
+  <main>
+    <Header title="Walking Football" imageMetadata={soccerImage} />
+
+    <div class="hero mt-5 mb-10">
+      <div class="hero-content flex-col text-center">
+        <p class="text-xl italic">
+          Kicken im Gehen! Wer spielt, gewinnt an Lebensfreude - egal in welchem
+          Tempo!
+        </p>
+        <div
+          class="card via-spartaRed bg-gradient-to-b from-[#8b0000] to-[#ff6666] text-white shadow-md shadow-gray-400 sm:w-[28rem]"
+        >
+          <div class="card-body items-center text-center">
+            <h2 class="card-title text-2xl">Termin zum Vormerken</h2>
+            <p class="text-lg font-semibold">Samstag, 06.06.2026</p>
+            <p class="text-sm opacity-90">
+              Sportanlage Wacholderweg 60<br />
+              90441 Nürnberg
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div>
+    <SectionHeader title="Kontakt & Anmeldung" imageMetadata={contactImage} />
+
+    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+      <ContactCard title="Hans-Georg Grell" mobile="0179 1223062" />
+    </div>
+  </div>
+</Layout>

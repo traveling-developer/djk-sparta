@@ -1,121 +1,162 @@
 ---
-import healthSportImage from "../assets/healthSport.webp";
-import contactImage from "../assets/contact.webp";
-import teamImage from "../assets/team.webp";
-
-import Header from "../components/Header.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import SmallHero from "../components/SmallHero.astro";
-
 import Layout from "../layouts/Layout.astro";
-import HealthSportHeadOfDepartment from "../components/contact/HealthSportHeadOfDepartment.astro";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import DepartmentCTA from "../components/department/DepartmentCTA.astro";
+import CoachesGrid from "../components/department/CoachesGrid.astro";
+
+interface Slot {
+  day: string;
+  time: string;
+  location: string;
+}
+
+interface Offer {
+  title: string;
+  slots: Slot[];
+}
+
+const offers: Offer[] = [
+  {
+    title: "Herzsport mit Verordnung",
+    slots: [
+      {
+        day: "Mittwoch",
+        time: "14:00 – 15:00 & 15:15 – 16:15",
+        location: "Großer Saal, Bleiweißzentrum, Hintere Bleiweißstraße 15",
+      },
+      {
+        day: "Donnerstag",
+        time: "18:45 – 20:00",
+        location:
+          "Turnhalle, Adam-Kraft-Realschule, Lutherplatz 8 (U-Bahn Maffeiplatz, Ausgang Zwinglistr.)",
+      },
+    ],
+  },
+  {
+    title: "Wirbelsäulen­gymnastik",
+    slots: [
+      {
+        day: "Montag",
+        time: "17:30 – 18:30",
+        location: "Turnhalle, Sperberschule, Sperberstr. 85",
+      },
+    ],
+  },
+  {
+    title: "Gymnastik und Tanz",
+    slots: [
+      {
+        day: "Montag",
+        time: "19:45 – 21:00",
+        location: "Turnhalle, Sperberschule, Sperberstr. 85",
+      },
+    ],
+  },
+  {
+    title: "Fitness und Ausdauer für Ältere",
+    slots: [
+      {
+        day: "Montag",
+        time: "9:30 – 10:30",
+        location:
+          "Pfarrsaal Verklärung Christi, Sperberstr. 53, Ecke Ajtoschstr.",
+      },
+    ],
+  },
+  {
+    title: "Sport für Ältere",
+    slots: [
+      {
+        day: "Mittwoch",
+        time: "9:30 – 10:30",
+        location:
+          "Pfarrsaal Verklärung Christi, Sperberstr. 53, Ecke Ajtoschstr.",
+      },
+    ],
+  },
+];
+
+const contacts = [
+  {
+    name: "Sabine Fuchs",
+    role: "Abteilungsleiterin",
+    mobile: "0157 746 079 63",
+  },
+];
 ---
 
-<Layout title="Gesundheitssport">
+<Layout
+  title="Gesundheitssport"
+  description="Gesundheitssport bei DJK Sparta Noris Nürnberg: Herzsport, Wirbelsäulengymnastik, Gymnastik & Tanz, Fitness für Ältere. Kursangebote, Termine & Kontakt."
+>
   <main>
-    <Header title="Gesundheitssport" imageMetadata={healthSportImage} />
-    <SmallHero
-      text="Die Gesundheitssport-Abteilung der DJK Sparta Noris Nürnberg bietet ein vielfältiges Programm für mehr Wohlbefinden und Fitness. Ob sanftes Training oder gezielte Gesundheitsübungen – hier findest du die perfekte Balance zwischen Bewegung und Gesundheit!"
+    <DepartmentHero
+      title="Aktiv"
+      accent="gesund."
+      lead="Sanftes Training, gezielte Gesundheitsübungen und die richtige Balance aus Bewegung und Wohlbefinden — unser Programm für alle, die gesund und fit bleiben wollen."
     />
-    <div>
-      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
 
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        <HealthSportHeadOfDepartment />
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Programm"
+        title="Angebote"
+      />
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {
+          offers.map((offer) => (
+            <article class="flex flex-col overflow-hidden border border-white/12 bg-white/8 text-white">
+              <div class="flex flex-1 flex-col p-6">
+                <h3 class="font-display m-0 text-[26px] leading-[1.05] font-bold tracking-[-0.01em] uppercase">
+                  {offer.title}
+                </h3>
+
+                <div class="mt-5 flex flex-col gap-4 border-t border-white/12 pt-5">
+                  {offer.slots.map((slot) => (
+                    <div>
+                      <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <span class="font-display text-[15px] font-bold tracking-[0.5px] uppercase">
+                          {slot.day}
+                        </span>
+                        <span class="font-mono text-[13px]">{slot.time}</span>
+                      </div>
+                      <div class="mt-1.5 text-[13px] leading-normal text-white/85">
+                        {slot.location}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </article>
+          ))
+        }
       </div>
-    </div>
-    <div>
-      <SectionHeader title="Angebote" imageMetadata={teamImage} />
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        <div
-          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
-        >
-          <div class="card-body">
-            <h2 class="card-title">Herzsport mit Verordnung</h2>
-            <div class="space-y-3">
-              <div>
-                <div class="font-semibold">
-                  Mittwoch 14:00 bis 15:00 & 15:15 bis 16:15
-                </div>
-                <div class="text-sm opacity-80">
-                  Großer Saal, Bleiweißzentrum, Hintere Bleiweißstraße 15
-                </div>
-              </div>
-              <div>
-                <div class="font-semibold">Donnerstag, 18:45 bis 20:00</div>
-                <div class="text-sm opacity-80">
-                  Turnhalle, Adam-Kraft-Realschule, Lutherplatz 8, U-Bahn
-                  Haltestelle Maffeiplatz Ausgang Zwinglistr.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    </section>
 
-        <div
-          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
-        >
-          <div class="card-body">
-            <h2 class="card-title">Wirbelsäulen Gymnastik</h2>
-            <div class="space-y-3">
-              <div>
-                <div class="font-semibold">Montag, 17:30 bis 18:30</div>
-                <div class="text-sm opacity-80">
-                  Turnhalle, Sperberschule, Sperberstr. 85
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <DepartmentCTA
+      eyebrow="Probestunde gefällig?"
+      title="Beweg dich"
+      accent="mit uns."
+      lead="Schau einfach in einem unserer Kurse vorbei oder schreib uns vorab eine Nachricht."
+      actions={[
+        {
+          label: "Ruf uns an",
+          href: "tel:+4915774607963",
+          variant: "ink",
+        },
+        { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },
+      ]}
+    />
 
-        <div
-          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
-        >
-          <div class="card-body">
-            <h2 class="card-title">Gymnastik und Tanz</h2>
-            <div class="space-y-3">
-              <div>
-                <div class="font-semibold">Montag, 19:45 bis 21:00</div>
-                <div class="text-sm opacity-80">
-                  Turnhalle, Sperberschule, Sperberstr. 85
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
-        >
-          <div class="card-body">
-            <h2 class="card-title">Fitness und Ausdauer für Ältere</h2>
-            <div class="space-y-3">
-              <div>
-                <div class="font-semibold">Montag, 9:30 bis 10:30</div>
-                <div class="text-sm opacity-80">
-                  Pfaarsaal Verkärung Christi, Sperberstr. 53, Ecke Ajtoschstr.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-96"
-        >
-          <div class="card-body">
-            <h2 class="card-title">Sport für Ältere</h2>
-            <div class="space-y-3">
-              <div>
-                <div class="font-semibold">Mittwoch, 9:30 bis 10:30</div>
-                <div class="text-sm opacity-80">
-                  Pfaarsaal Verkärung Christi, Sperberstr. 53, Ecke Ajtoschstr.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Ansprechpartner"
+        title="Dein Kontakt zur Abteilung"
+      />
+      <CoachesGrid people={contacts} variant="dark" />
+    </section>
   </main>
 </Layout>

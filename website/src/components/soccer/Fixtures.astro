@@ -17,6 +17,18 @@ const { fixtures } = Astro.props;
 
 <div class="flex flex-col gap-2.5">
   {
+    fixtures.length === 0 && (
+      <div class="border border-white/10 bg-white/4 px-5 py-6">
+        <div class="font-display text-[18px] leading-[1.1] font-bold uppercase">
+          Keine bevorstehenden Termine
+        </div>
+        <div class="mt-2 font-mono text-[12px] leading-normal text-white/55">
+          Sobald neue Spiele angesetzt sind, erscheinen sie hier.
+        </div>
+      </div>
+    )
+  }
+  {
     fixtures.map((g, i) => {
       const isFirst = i === 0;
       const wrapperClass = isFirst

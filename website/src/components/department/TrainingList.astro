@@ -7,9 +7,15 @@ interface Session {
 
 interface Props {
   week: Session[][];
+  cols?: 2 | 3;
 }
 
-const { week } = Astro.props;
+const { week, cols = 2 } = Astro.props;
+
+const gridClass =
+  cols === 3
+    ? "grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3"
+    : "grid grid-cols-1 gap-3 md:grid-cols-2";
 const dayLabels = [
   "Montag",
   "Dienstag",
@@ -29,7 +35,7 @@ const activeDays = week
   .filter((d) => d.sessions.length > 0);
 ---
 
-<div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+<div class={gridClass}>
   {
     activeDays.map(({ label, isWeekend, sessions }) => (
       <div class="border border-white/10 bg-white/3 p-4">

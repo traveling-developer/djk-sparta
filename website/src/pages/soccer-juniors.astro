@@ -1,91 +1,102 @@
 ---
-import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
-import ContactCard from "../components/ContactCard.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import TeamCard from "../components/soccer/TeamCard.astro";
-
-import soccerImage from "../assets/soccer.webp";
-import contactImage from "../assets/contact.webp";
-import teamImage from "../assets/team.webp";
-import christmasImage from "../assets/soccerTrainerChristmasImage.webp";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import TrainingAndFixturesSection from "../components/soccer/TrainingAndFixturesSection.astro";
+import CoachesGrid from "../components/department/CoachesGrid.astro";
+import DepartmentCTA from "../components/department/DepartmentCTA.astro";
+import SoccerJuniorsTeamsGrid from "../components/soccer/SoccerJuniorsTeamsGrid.astro";
 
 import { getTeams } from "../lib/soccer/teams";
-import { Picture } from "astro:assets";
-var teams = await getTeams(true);
+
+const teams = await getTeams(true);
+
+const week = [
+  // Mo
+  [
+    { team: "Bambini", time: "17:15-17:45" },
+    { team: "G-Jugend", time: "18:00-19:00" },
+    { team: "F1-Jugend", time: "17:00-18:30" },
+    { team: "F2-Jugend", time: "17:30-19:00" },
+    { team: "A-Jugend", time: "19:00-20:30" },
+  ],
+  // Di
+  [
+    { team: "E1-Jugend", time: "17:00-18:30" },
+    { team: "E2-Jugend", time: "17:00-18:30" },
+    { team: "D-Jugend", time: "17:30-19:00" },
+  ],
+  // Mi
+  [
+    { team: "F1-Jugend", time: "17:00-18:30" },
+    { team: "A-Jugend", time: "19:00-20:30" },
+  ],
+  // Do
+  [
+    { team: "E1-Jugend", time: "17:00-18:30" },
+    { team: "E2-Jugend", time: "17:00-18:30" },
+  ],
+  // Fr
+  [
+    { team: "D-Jugend", time: "16:00-17:30" },
+    { team: "F2-Jugend", time: "17:30-19:00" },
+  ],
+  [], // Sa
+  [], // So
+];
+
+const coaches = [
+  {
+    name: "Robert Scherret",
+    role: "Jugendleiter",
+    mobile: "0152 0711 5488",
+  },
+];
 ---
 
-<Layout title="Fußball">
+<Layout title="Fußball Junioren">
   <main>
-    <Header title="Fußball - Junioren" imageMetadata={soccerImage} />
+    <DepartmentHero
+      title="Fußball"
+      accent="Junioren."
+      lead="Von Bambinis bis A-Jugend — bei Sparta wachsen junge Kicker über den Verein hinaus. Fünf Trainingstage, eine Leidenschaft."
+    />
 
-    <div class="mt-5 mb-10 flex flex-wrap items-center justify-center gap-6">
-      <div
-        class="card bg-spartaGray w-72 text-white shadow-md shadow-gray-400 sm:w-[34rem]"
-      >
-        <div class="card-body">
-          <h2 class="card-title">Trainingszeiten</h2>
-          <p>
-            Bambini <br /> Montag 17:15 - 17:45 Uhr
-          </p>
-          <p>
-            G-Jugend <br /> Montag 18:00 - 19:00 Uhr
-          </p>
-          <p>F1-Jugend <br /> Montag & Mittwoch 17:00 - 18:30 Uhr</p>
-          <p>F2-Jugend <br /> Montag & Freitag 17:30 - 19:00 Uhr</p>
-          <p>
-            E1-Jugend <br /> Dienstag & Donnerstag 17:00 - 18:30 Uhr
-          </p>
-          <p>
-            E2-Jugend <br /> Dienstag & Donnerstag 17:00 - 18:30 Uhr
-          </p>
-          <p>
-            D-Jugend <br /> Dienstag 17:30 - 19:00 & Freitag 16:00 - 17:30 Uhr
-          </p>
-          <p>A-Jugend <br /> Montag & Mittwoch 19:00 - 20:30 Uhr</p>
-        </div>
-      </div>
+    <TrainingAndFixturesSection
+      trainingsEyebrow="Trainingszeiten · Wacholderplatz"
+      trainingsTitle="Trainingswoche"
+      week={week}
+      trainingCols={3}
+    />
 
-      <div
-        class="max-w-80 overflow-hidden rounded-xl shadow-md shadow-gray-400 sm:max-w-lg md:max-w-xl"
-      >
-        <Picture
-          src={christmasImage}
-          alt={"test"}
-          formats={["webp"]}
-          widths={[500, 1280]}
-          sizes={`1280px, 500px`}
-        />
-      </div>
-    </div>
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader eyebrow="Mannschaften" title="Unser Nachwuchs" />
+      <SoccerJuniorsTeamsGrid teams={teams} />
+    </section>
 
-    <div>
-      <SectionHeader title="Mannschaften" imageMetadata={teamImage} />
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Ansprechpartner"
+        title="Unser Team neben dem Platz"
+      />
+      <CoachesGrid people={coaches} variant="dark" />
+    </section>
 
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
+    <DepartmentCTA
+      eyebrow="Probetraining für Kids?"
+      title="Schnür die"
+      accent="Stollen."
+      lead="Bring Sportzeug, Trinkflasche und gute Laune mit."
+      watermark="11"
+      actions={[
         {
-          teams.map((team) => (
-            <TeamCard
-              name={team.name}
-              league={team.league}
-              rank={team.rank}
-              goalDifference={team.goalDifference}
-              link={team.link}
-            />
-          ))
-        }
-      </div>
-    </div>
-
-    <div>
-      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
-
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        <ContactCard
-          title="Robert Scherret (Jugendleiter)"
-          mobile="015207115488"
-        />
-      </div>
-    </div>
+          label: "Schreib uns",
+          href: "mailto:info@djkspartanoris.de",
+          variant: "ink",
+        },
+        { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },
+      ]}
+    />
   </main>
 </Layout>

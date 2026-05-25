@@ -5,6 +5,7 @@ interface Props {
   eyebrow?: string;
   titleTop: string;
   titleAccent: string;
+  hintLabel?: string;
   latitude: number;
   longitude: number;
   zoom?: number;
@@ -16,6 +17,7 @@ const {
   eyebrow = "Sportstätte · Anfahrt",
   titleTop,
   titleAccent,
+  hintLabel = "Hinweis",
   latitude,
   longitude,
   zoom = 15,
@@ -53,7 +55,7 @@ const hasHint = Astro.slots.has("hint");
         hasHint && (
           <div class="border-t border-white/12 pt-5">
             <div class="mb-2 text-[11px] tracking-[2px] text-white/55 uppercase">
-              Hinweis
+              {hintLabel}
             </div>
             <div class="text-sm leading-[1.55]">
               <slot name="hint" />

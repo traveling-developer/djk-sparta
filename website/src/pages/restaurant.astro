@@ -1,61 +1,81 @@
 ---
-import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import CoachesGrid from "../components/department/CoachesGrid.astro";
+import Location from "../components/department/Location.astro";
+import DepartmentCTA from "../components/department/DepartmentCTA.astro";
 
-import contactImage from "../assets/contact.webp";
-import foodImage from "../assets/food.webp";
-import ContactCard from "../components/ContactCard.astro";
-import GoogleMaps from "../components/GoogleMaps.astro";
-import SectionHeader from "../components/SectionHeader.astro";
+const hosts = [
+  {
+    name: "Niki & Serkan",
+    role: "Eure Gastgeber",
+    mobile: "0155 10 363 390",
+  },
+];
 ---
 
 <Layout title="Sportgaststätte">
   <main>
-    <Header title="Sportgaststätte" imageMetadata={foodImage} />
+    <DepartmentHero
+      title="Bei Niki"
+      accent="& Serkan."
+      lead="Griechische und fränkische Gaumenfreuden, Sportübertragungen auf der Leinwand, Niki und Serkan hinterm Tresen — die Sportgaststätte am Wacholderweg."
+    />
 
-    <div class="hero">
-      <div class="hero-content">
-        <div class="mx-10 my-5 text-lg">
-          Niki und Serkan freuen sich darauf Sie zu begrüßen.
-          <p>
-            Griechische und fränkische Gaumenfreuden verbinden hier Sport und
-            Freizeit miteinander.
-          </p>
-          Freuen Sie sich auf gutes Essen und Sportveranstaltungen in Ihrer Sportgaststätte.
-          <div class="flex items-center space-x-2">
-            <p>Zur Facebook-Seite:</p>
-            <a href="https://www.facebook.com/spartanoris/" target="_blank">
-              <img
-                src="/facebook_black.svg"
-                alt="Facebook Logo"
-                class="h-10 w-10"
-              />
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <section
+      class="bg-sparta-ink px-6 pt-16 pb-8 text-white md:px-14 md:pt-22.5 md:pb-10"
+    >
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Ansprechpartner"
+        title="Hinter dem Tresen"
+      />
+      <CoachesGrid people={hosts} variant="dark" />
+    </section>
 
-    <div>
-      <SectionHeader title="Kontakt" imageMetadata={contactImage} />
-
-      <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-        <ContactCard
-          title="Niki und Serkan"
-          phone="0911 / 373 00 598"
-          mobile="0176 / 66 55 1079"
-        />
-      </div>
-    </div>
-
-    <GoogleMaps
+    <Location
+      eyebrow="Adresse · Anfahrt"
+      titleTop="Wacholder"
+      titleAccent="Stube."
+      hintLabel="Öffnungszeiten"
       latitude={49.416459843204485}
       longitude={11.068967769662304}
-      zoom={15}
-      title="Sportgaststätte"
-      hasInfoWindow={true}
-      displayInfoWindowOnClick={false}
+      mapTitle="Sportgaststätte"
       infoWindowContent="Sportgaststätte<br/>Wacholderweg 60<br/>90441 Nürnberg"
+    >
+      <Fragment slot="address">
+        Sportgaststätte DJK Sparta<br />
+        Wacholderweg 60<br />
+        90441 Nürnberg · Weiherhaus
+      </Fragment>
+      <Fragment slot="hint">
+        Mo · geschlossen<br />
+        Di – Do · 11:30 – 22:00 Uhr<br />
+        Fr · 16:30 – 22:00 Uhr<br />
+        Sa · 11:30 – 22:00 Uhr<br />
+        So · 11:30 – 21:00 Uhr
+      </Fragment>
+    </Location>
+
+    <DepartmentCTA
+      eyebrow="Hunger?"
+      title="Setz dich"
+      accent="dazu."
+      lead="Reservieren spart Wartezeit. Anruf genügt — Niki und Serkan freuen sich auf dich."
+      watermark="&"
+      actions={[
+        {
+          label: "Tisch reservieren",
+          href: "tel:015510363390",
+          variant: "ink",
+        },
+        {
+          label: "Speisekarte ansehen",
+          href: "https://www.sportgaststaette-sparta-noris.de/speisekarte-1/",
+          variant: "outline",
+        },
+      ]}
     />
   </main>
 </Layout>

@@ -198,6 +198,15 @@ const coaches = [
     phone: "+49 171 234 56 81",
   },
 ];
+
+const referees = [
+  { name: "Hans-Georg Grell" },
+  { name: "Erna Grell" },
+  { name: "Maximilian Hasler" },
+  { name: "Marcel Schwager" },
+  { name: "Bianca Seyschab" },
+  { name: "Dieter Wolfsberger" },
+];
 ---
 
 <Layout title="Fußball Herren">
@@ -218,13 +227,26 @@ const coaches = [
       <TeamsGrid teams={teams} />
     </section>
 
-    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+    <section
+      class="bg-sparta-ink px-6 pt-16 pb-8 text-white md:px-14 md:pt-22.5 md:pb-10"
+    >
       <DepartmentSectionHeader
         variant="dark"
         eyebrow="Ansprechpartner"
         title="Unser Team neben dem Platz"
       />
       <CoachesGrid people={coaches} variant="dark" />
+    </section>
+
+    <section
+      class="bg-sparta-ink px-6 pt-8 pb-16 text-white md:px-14 md:pt-10 md:pb-22.5"
+    >
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Schiedsrichter"
+        title="Die Pfeife in der Hand"
+      />
+      <CoachesGrid people={referees} variant="dark" />
     </section>
 
     <DepartmentCTA

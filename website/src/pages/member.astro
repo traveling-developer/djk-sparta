@@ -1,22 +1,98 @@
 ---
-import healthSportImage from "../assets/healthSport.webp";
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
-import SmallHero from "../components/SmallHero.astro";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import DepartmentCTA from "../components/department/DepartmentCTA.astro";
+
+interface Step {
+  number: string;
+  title: string;
+  body: string;
+  email?: string;
+}
+
+const steps: Step[] = [
+  {
+    number: "01",
+    title: "Antrag herunterladen",
+    body: "Lade das Aufnahmeformular als PDF herunter.",
+  },
+  {
+    number: "02",
+    title: "Ausfüllen & unterschreiben",
+    body: "Trage deine Daten ein und unterschreibe — bei Minderjährigen zusätzlich ein Erziehungsberechtigter.",
+  },
+  {
+    number: "03",
+    title: "Abgeben oder mailen",
+    body: "Bring den Antrag in der Geschäftsstelle vorbei oder mail ihn an ",
+    email: "info@djkspartanoris.de",
+  },
+];
 ---
 
 <Layout title="Mitglied werden">
   <main>
-    <Header title="Werde Mitglied" imageMetadata={healthSportImage} />
-    <SmallHero
-      text="Sport, Gemeinschaft und Leidenschaft - das sind wir! Wir bieten ein vielfältiges Angebot für alle Altersklassen und Interessen. Egal, ob du dich fit halten, in einer Mannschaft spielen oder einfach Spaß an der Bewegung hast - bei uns bist du genau richtig. Lade dir hier den Aufnahmeantrag herunter, fülle ihn aus und werde Teil unserer Vereinsfamilie! Wir freuen uns auf dich!"
+    <DepartmentHero
+      title="Werde"
+      accent="Mitglied."
+      lead="Sport, Gemeinschaft, Leidenschaft. Fünf Abteilungen für alle Altersklassen und Interessen — vom Probetraining bis zur Mitgliedschaft auf Lebenszeit."
     />
-    <div class="my-10 flex justify-center">
-      <a
-        class="btn btn-lg bg-spartaRed hover:bg-spartaGray text-white"
-        href="/Aufnahmeschein.pdf"
-        download>Aufnahmeantrag herunterladen</a
-      >
-    </div>
+
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="In drei Schritten"
+        title="So wirst du Mitglied"
+      />
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+        {
+          steps.map((s) => (
+            <article class="flex flex-col border border-white/12 bg-white/5 p-6 text-white md:p-8">
+              <div class="font-display text-sparta-red text-[clamp(56px,7vw,88px)] leading-none font-bold tracking-[-2px]">
+                {s.number}
+              </div>
+              <h3 class="font-display mt-5 border-t border-white/12 pt-5 text-xl font-bold uppercase">
+                {s.title}
+              </h3>
+              <p class="mt-2.5 text-[14px] leading-relaxed text-white/85">
+                {s.body}
+                {s.email && (
+                  <>
+                    <a
+                      href={`mailto:${s.email}`}
+                      class="hover:text-sparta-red no-underline transition-colors"
+                    >
+                      {s.email.replace("@", "(at)")}
+                    </a>
+                    .
+                  </>
+                )}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <DepartmentCTA
+      eyebrow="In den Verein"
+      title="Mach den"
+      accent="ersten Schritt."
+      lead="Mitgliedsbeiträge variieren je nach Abteilung — Details gibt's auf Anfrage. Der erste Schritt ist der Antrag."
+      watermark="01"
+      actions={[
+        {
+          label: "Aufnahmeantrag herunterladen",
+          href: "/Aufnahmeschein.pdf",
+          variant: "ink",
+        },
+        {
+          label: "Fragen? Schreib uns",
+          href: "mailto:info@djkspartanoris.de",
+          variant: "outline",
+        },
+      ]}
+    />
   </main>
 </Layout>

@@ -3,6 +3,7 @@ interface Action {
   label: string;
   href: string;
   variant?: "ink" | "outline";
+  download?: boolean;
 }
 
 interface Props {
@@ -55,11 +56,14 @@ const { eyebrow, title, accent, lead, watermark, actions = [] } = Astro.props;
                 ? "border-2 border-white text-white hover:bg-white hover:text-sparta-red"
                 : "bg-sparta-ink text-white hover:bg-black";
             const isExternal = /^https?:\/\//.test(a.href);
+            const isPdf = /\.pdf(\?|$)/i.test(a.href);
+            const opensNewTab = isExternal || isPdf;
             return (
               <a
                 href={a.href}
-                target={isExternal ? "_blank" : undefined}
+                target={opensNewTab ? "_blank" : undefined}
                 rel={isExternal ? "noopener noreferrer" : undefined}
+                download={a.download ? "" : undefined}
                 class={`font-display flex items-center justify-between gap-4 px-6 py-4.5 text-sm font-bold tracking-[2px] uppercase no-underline transition-colors ${cls}`}
               >
                 <span>{a.label}</span>

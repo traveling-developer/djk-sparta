@@ -1,97 +1,147 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import HistoryStatStrip from "../components/history/HistoryStatStrip.astro";
 
-import historyImage from "../assets/history.webp";
+const stats = [
+  { value: "1918", label: "Gegründet" },
+  { value: "1954", label: "Fusion zu DJK Sparta Noris" },
+  { value: "5", label: "Abteilungen" },
+  { value: "~500", label: "Mitglieder" },
+];
 ---
 
 <Layout
   title="Vereinsgeschichte"
-  description="Die Geschichte des DJK Sparta Noris Nürnberg - Erfahre mehr über die Tradition und Entwicklung unseres Sportvereins seit der Gründung."
+  description="Die Geschichte des DJK Sparta Noris Nürnberg — Tradition und Entwicklung des Sportvereins seit der Gründung 1918."
 >
   <main>
-    <Header title="Vereinsgeschichte" imageMetadata={historyImage} />
+    <DepartmentHero
+      title="Sparta "
+      accent="Seit 1918."
+      lead="Vom FC Sparta zum heutigen Mehrspartenverein. Über ein Jahrhundert Vereinsleben — geprägt von Meistertiteln, einer Zwangspause, einer Wiedergeburt und rund 500 Mitgliedern, die hier ihre sportliche Heimat finden."
+    />
 
-    <div class="mx-auto my-12 max-w-3xl px-6 leading-relaxed text-gray-800">
-      <h2 class="text-spartaRed mb-4 text-2xl font-bold">
-        Gründung & Glanzzeiten
-      </h2>
-      <p class="mb-5">
-        Die DJK Sparta Noris Nürnberg e.V. ist ein modern geführter
-        Mehrspartenverein im Süden von Nürnberg. Gegründet <strong>1918</strong> schloss
-        sich der damalige FC Sparta dem Sportverband der „Deutschen Jugendkraft" (DJK)
-        an, der von der katholischen Kirche im Jahre <strong>1920</strong> im unterfränkischen
-        Würzburg gegründet worden war.
-      </p>
-      <p class="mb-5">
-        In der damaligen Fußballhochburg Nürnberg glänzte die DJK Sparta und
-        feierte ihre größten sportlichen Erfolge: <strong>1927</strong> gewann sie
-        im Endspiel in Köln vor stolzen <strong>40.000</strong> Zuschauern mit <strong
-          >6:1</strong
-        >
-        gegen die DJK TuS Homberg die deutsche DJK-Meisterschaft. Den zweiten Titel
-        sicherte sich die Mannschaft <strong>1932</strong> in Dortmund, vor
-        <strong>35.000</strong> begeisterten Fans ein überzeugender
-        <strong>5:2</strong>-Sieg gegen die DJK Adler Essen.
-      </p>
+    <HistoryStatStrip stats={stats} />
 
-      <div class="my-8 border-t border-gray-200"></div>
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Kapitel 01 · 1918 – 1935"
+        title="Gründung & Glanzzeiten"
+      />
+      <div
+        class="text-sparta-ink-soft max-w-3xl space-y-5 text-[17px] leading-relaxed"
+      >
+        <p>
+          Die DJK Sparta Noris Nürnberg e.V. ist ein modern geführter
+          Mehrspartenverein im Süden von Nürnberg. Gegründet
+          <strong class="text-sparta-red font-bold">1918</strong> schloss sich der
+          damalige FC Sparta dem Sportverband der „Deutschen Jugendkraft" (DJK) an,
+          der von der katholischen Kirche im Jahre
+          <strong class="text-sparta-red font-bold">1920</strong> im unterfränkischen
+          Würzburg gegründet worden war.
+        </p>
+        <p>
+          In der damaligen Fußballhochburg Nürnberg glänzte die DJK Sparta und
+          feierte ihre größten sportlichen Erfolge:
+          <strong class="text-sparta-red font-bold">1927</strong> gewann sie im Endspiel
+          in Köln vor stolzen
+          <strong class="text-sparta-red font-bold">40.000</strong> Zuschauern mit
+          <strong class="text-sparta-red font-bold">6:1</strong> gegen die DJK TuS
+          Homberg die deutsche DJK-Meisterschaft. Den zweiten Titel sicherte sich
+          die Mannschaft
+          <strong class="text-sparta-red font-bold">1932</strong> in Dortmund — vor
+          <strong class="text-sparta-red font-bold">35.000</strong>
+          begeisterten Fans ein überzeugender
+          <strong class="text-sparta-red font-bold">5:2</strong>-Sieg gegen die
+          DJK Adler Essen.
+        </p>
+      </div>
+    </section>
 
-      <h2 class="text-spartaRed mb-4 text-2xl font-bold">
-        Unterbrechung & Neubeginn
-      </h2>
-      <p class="mb-5">
-        Die Gleichschaltung durch den Nationalsozialismus und das folgende
-        Verbot der DJK im Jahr <strong>1935</strong> beendeten diese ruhmreichen Zeiten
-        zunächst. Nach dem Zweiten Weltkrieg lebte die DJK-Sportgemeinschaft wieder
-        auf, und im Jahre <strong>1954</strong> fusionierten die wiedergegründeten
-        Vereine DJK Sparta und DJK Noris zur heutigen DJK Sparta Noris Nürnberg e.V.
-      </p>
-      <p class="mb-5">
-        In den folgenden Jahrzehnten beheimaten wir weitere erfolgreiche
-        Abteilungen im Faustball, Kegeln, Schach, Tanzsport und Fußball-Damen.
-      </p>
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Kapitel 02 · 1935 – 1954"
+        title="Unterbrechung & Neubeginn"
+      />
+      <div
+        class="max-w-3xl space-y-5 text-[17px] leading-relaxed text-white/85"
+      >
+        <p>
+          Die Gleichschaltung durch den Nationalsozialismus und das folgende
+          Verbot der DJK im Jahr
+          <strong class="text-sparta-red font-bold">1935</strong> beendeten diese
+          ruhmreichen Zeiten zunächst. Nach dem Zweiten Weltkrieg lebte die DJK-Sportgemeinschaft
+          wieder auf, und im Jahre
+          <strong class="text-sparta-red font-bold">1954</strong> fusionierten die
+          wiedergegründeten Vereine DJK Sparta und DJK Noris zur heutigen DJK Sparta
+          Noris Nürnberg e.V.
+        </p>
+        <p>
+          In den folgenden Jahrzehnten beheimatete der Verein weitere
+          erfolgreiche Abteilungen im Faustball, Kegeln, Schach, Tanzsport und
+          Fußball-Damen.
+        </p>
+      </div>
+    </section>
 
-      <div class="my-8 border-t border-gray-200"></div>
-
-      <h2 class="text-spartaRed mb-4 text-2xl font-bold">Der moderne Verein</h2>
-      <p class="mb-5">
-        Heute finden unsere knapp <strong>500 Mitglieder</strong> in fünf Abteilungen,
-        Fußball, Tischtennis, Tennis, Indiaca und Gesundheitssport mit den Schwerpunkten
-        Koronarsport, Wirbelsäule, Osteoporose und Gymnastik, ihre sportliche und
-        kulturelle Heimat.
-      </p>
-      <p class="mb-5">
-        Unser großes Aushängeschild ist die Tischtennisabteilung, die seit über
-        <strong>vier Jahrzehnten</strong> in der Bayernliga ein fester Bestandteil
-        ist und bereits am Tor zur Regionalliga anklopfte. Zahlreiche Bayerische Meistertitel
-        sowie ein amtierender deutscher Meister und Nationalspieler in der Klasse
-        für Menschen mit Behinderung, der an der Qualifikation für die Olympischen
-        Spiele in Tokio teilnahm, zeugen von der Qualität dieser Abteilung.
-      </p>
-      <p class="mb-5">
-        Im Juniorenbereich der Fußballer arbeitet ein vorzügliches Trainerteam:
-        Fast <strong>95 Prozent</strong> unserer Trainer und Trainerinnen verfügen
-        über eine qualifizierte Ausbildung beim Bayerischen Fußball-Verband oder DFB,
-        überwiegend C-Lizenz, teils auch A-Lizenz. Integration und Inklusion sind
-        wichtige Bestandteile unserer Vereinsphilosophie, verknüpft im christlichen
-        Gedanken mit der DJK-Familie.
-      </p>
-      <p class="mb-5">
-        Das Vereinsgelände wurde zuletzt grundlegend erneuert: Beide
-        Fußballplätze wurden saniert, eine Beregnungsanlage installiert, die
-        Trainingsbeleuchtung auf energiesparende LED-Technik umgestellt und eine
-        umfassende Kabinensanierung durchgeführt.
-      </p>
-      <p>
-        Durch die Verleihung der <strong>„Goldenen Raute"</strong> des Bayerischen
-        Fußballverbandes und der <strong
-          >Sportplakette des Bundespräsidenten</strong
-        >
-        zu unserem 100-jährigen Gründungsfest sehen wir uns in unserer Vereinsentwicklung
-        bestätigt – und sind für die nächsten Generationen ein guter sportlicher und
-        familiärer Verein.
-      </p>
-    </div>
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Kapitel 03 · Heute"
+        title="Der moderne Verein"
+      />
+      <div
+        class="text-sparta-ink-soft max-w-3xl space-y-5 text-[17px] leading-relaxed"
+      >
+        <p>
+          Heute finden unsere knapp
+          <strong class="text-sparta-red font-bold">500 Mitglieder</strong> in fünf
+          Abteilungen — Fußball, Tischtennis, Tennis, Indiaca und Gesundheitssport
+          mit den Schwerpunkten Koronarsport, Wirbelsäule, Osteoporose und Gymnastik
+          — ihre sportliche und kulturelle Heimat.
+        </p>
+        <p>
+          Unser großes Aushängeschild ist die Tischtennisabteilung, die seit
+          über
+          <strong class="text-sparta-red font-bold">vier Jahrzehnten</strong>
+          in der Bayernliga ein fester Bestandteil ist und bereits am Tor zur Regionalliga
+          anklopfte. Zahlreiche Bayerische Meistertitel sowie ein amtierender deutscher
+          Meister und Nationalspieler in der Klasse für Menschen mit Behinderung —
+          der an der Qualifikation für die Olympischen Spiele in Tokio teilnahm —
+          zeugen von der Qualität dieser Abteilung.
+        </p>
+        <p>
+          Im Juniorenbereich der Fußballer arbeitet ein vorzügliches
+          Trainerteam: Fast
+          <strong class="text-sparta-red font-bold">95 Prozent</strong> unserer Trainerinnen
+          und Trainer verfügen über eine qualifizierte Ausbildung beim Bayerischen
+          Fußball-Verband oder DFB, überwiegend C-Lizenz, teils auch A-Lizenz. Integration
+          und Inklusion sind wichtige Bestandteile unserer Vereinsphilosophie, verknüpft
+          im christlichen Gedanken mit der DJK-Familie.
+        </p>
+        <p>
+          Das Vereinsgelände wurde zuletzt grundlegend erneuert: Beide
+          Fußballplätze wurden saniert, eine Beregnungsanlage installiert, die
+          Trainingsbeleuchtung auf energiesparende LED-Technik umgestellt und
+          eine umfassende Kabinensanierung durchgeführt.
+        </p>
+        <p>
+          Zum
+          <strong class="text-sparta-red font-bold"
+            >100-jährigen Gründungsfest 2018</strong
+          >
+          wurden uns die
+          <strong class="text-sparta-red font-bold">„Goldene Raute"</strong>
+          des Bayerischen Fußballverbandes und die
+          <strong class="text-sparta-red font-bold"
+            >Sportplakette des Bundespräsidenten</strong
+          > verliehen — Anerkennungen, die uns in unserer Vereinsentwicklung bestätigen.
+          Für die nächsten Generationen sind und bleiben wir ein guter sportlicher
+          und familiärer Verein.
+        </p>
+      </div>
+    </section>
   </main>
 </Layout>

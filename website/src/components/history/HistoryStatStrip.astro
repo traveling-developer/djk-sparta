@@ -1,0 +1,31 @@
+---
+interface Stat {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  stats: Stat[];
+}
+
+const { stats } = Astro.props;
+---
+
+<section
+  class="bg-sparta-paper border-sparta-ink/15 border-y px-6 py-10 md:px-14 md:py-12"
+>
+  <div class="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
+    {
+      stats.map((s) => (
+        <div>
+          <div class="font-display text-sparta-ink text-[clamp(36px,5vw,56px)] leading-none font-bold tracking-[-1px]">
+            {s.value}
+          </div>
+          <div class="text-sparta-mute mt-3 font-mono text-[10px] tracking-[2px] uppercase">
+            {s.label}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

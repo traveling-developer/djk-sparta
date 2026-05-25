@@ -3,6 +3,7 @@ import FirstBoardMember from "./contact/FirstBoardMember.astro";
 import SecondBoardMember from "./contact/SecondBoardMember.astro";
 import Treasurer from "./contact/Treasurer.astro";
 import GoogleMap from "./GoogleMap.astro";
+import { club } from "../lib/club";
 ---
 
 <section
@@ -20,11 +21,12 @@ import GoogleMap from "./GoogleMap.astro";
       <address
         class="[&_a]:hover:text-sparta-red mb-7 font-mono text-[13px] leading-[1.9] not-italic [&_a]:no-underline"
       >
-        DJK Sparta Noris Nürnberg e.V.<br />
-        Wacholderweg 60<br />
-        90441 Nürnberg · Weiherhaus<br /><br />
-        <a href="tel:+4991148059 55">+49 911 480 59 55</a><br />
-        <a href="mailto:info@djkspartanoris.de">info@djkspartanoris.de</a>
+        {club.name}<br />
+        {club.address.street}<br />
+        {club.address.postalCode} {club.address.city} · {club.address.district}<br
+        /><br />
+        <a href={club.contact.phoneTel}>{club.contact.phone}</a><br />
+        <a href={club.contact.emailMailto}>{club.contact.email}</a>
       </address>
 
       <div class="border-t border-white/12 pt-5">

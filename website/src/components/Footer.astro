@@ -1,4 +1,6 @@
 ---
+import { club } from "../lib/club";
+
 const verein = [
   { label: "Mitglied werden", href: "/member" },
   { label: "Vereinsgeschichte", href: "/history" },
@@ -6,6 +8,8 @@ const verein = [
   { label: "Impressum", href: "/legal-notice" },
   { label: "Datenschutz", href: "/data-privacy" },
 ];
+
+const currentYear = new Date().getFullYear();
 
 const abteilungen = [
   { label: "Fußball Herren", href: "/soccer-adults" },
@@ -27,7 +31,8 @@ const abteilungen = [
     </div>
     <p class="wordmark-tagline text-white">
       Traditionsverein im Nürnberger Süden.<br />
-      Fünf Abteilungen, über 490 Mitglieder, seit 1918.
+      {club.departmentCount} Abteilungen, {club.memberCountDisplay} Mitglieder, seit
+      {club.foundedYear}.
     </p>
   </div>
 
@@ -48,10 +53,10 @@ const abteilungen = [
         <span class="footer-brand-name">DJK Sparta Noris</span>
       </div>
       <address class="footer-address">
-        Wacholderweg 60<br />
-        90441 Nürnberg · Weiherhaus<br />
-        <a href="tel:+4991148059 55">+49 911 480 59 55</a><br />
-        <a href="mailto:info@djkspartanoris.de">info@djkspartanoris.de</a>
+        {club.address.street}<br />
+        {club.address.postalCode} {club.address.city} · {club.address.district}<br />
+        <a href={club.contact.phoneTel}>{club.contact.phone}</a><br />
+        <a href={club.contact.emailMailto}>{club.contact.email}</a>
       </address>
       <div class="footer-social">
         <a
@@ -108,7 +113,7 @@ const abteilungen = [
   <div
     class="flex flex-wrap justify-between gap-2 border-t border-white/10 px-14 py-4.5 font-mono text-[11px] tracking-[0.5px] text-white/70 max-[900px]:flex-col max-[900px]:gap-1 max-[900px]:px-6 max-[900px]:py-4"
   >
-    <span>© 1918-2026 · DJK Sparta Noris Nürnberg e.V.</span>
+    <span>© {club.foundedYear}-{currentYear} · {club.name}</span>
     <span>Sport · Freundschaft · Tradition · Glaube</span>
   </div>
 </footer>

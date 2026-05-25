@@ -1,6 +1,7 @@
 ---
 import { Picture } from "astro:assets";
 import spartanerImage from "../assets/spartaner.webp";
+import { club } from "../lib/club";
 ---
 
 <section class="bg-sparta-paper">
@@ -52,10 +53,10 @@ import spartanerImage from "../assets/spartaner.webp";
       <div class="md:pl-25">
         {
           [
-            ["1918", "Gegründet im Nürnberger Süden"],
-            ["5", "Abteilungen unter einem Dach"],
-            ["490+", "Aktive Mitglieder"],
-            ["18", "Mannschaften im Spielbetrieb"],
+            [String(club.foundedYear), "Gegründet im Nürnberger Süden"],
+            [String(club.departmentCount), "Abteilungen unter einem Dach"],
+            [club.memberCountDisplay, "Aktive Mitglieder"],
+            [String(club.teamCount), "Mannschaften im Spielbetrieb"],
           ].map(([num, label]) => (
             <div class="border-sparta-line flex items-baseline justify-between border-t py-3.5">
               <span class="font-display text-sparta-ink text-[32px] font-bold">

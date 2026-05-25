@@ -1,4 +1,6 @@
 ---
+import { club } from "../lib/club";
+
 const pathname = Astro.url.pathname;
 
 const verein = [
@@ -29,7 +31,7 @@ const abteilungen = [
     />
     <div class="brand-text">
       <div class="brand-name">DJK Sparta Noris</div>
-      <div class="brand-sub">Nürnberg · seit 1918</div>
+      <div class="brand-sub">Nürnberg · seit {club.foundedYear}</div>
     </div>
   </a>
 

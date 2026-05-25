@@ -30,3 +30,5 @@ public/*.jpg
 public/*.png
 public/*.jpeg
 public/*.webp
+
+tmp/**

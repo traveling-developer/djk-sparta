@@ -7,6 +7,11 @@ interface Team {
   rank: string;
   goalDifference: string;
   link: string;
+  played: number;
+  w: number;
+  d: number;
+  l: number;
+  pts: number;
 }
 
 const url =
@@ -75,10 +80,15 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
 
       teams.push({
         name,
-        league: infosFromSubPage.league!,
-        rank: infosFromSubPage.rank!,
-        goalDifference: infosFromSubPage.goalDifference!,
-        link: infosFromSubPage.leagueLink!,
+        league: infosFromSubPage.league ?? "",
+        rank: infosFromSubPage.rank ?? "",
+        goalDifference: infosFromSubPage.goalDifference ?? "",
+        link: infosFromSubPage.leagueLink ?? "",
+        played: infosFromSubPage.spartaStats?.played ?? 0,
+        w: infosFromSubPage.spartaStats?.w ?? 0,
+        d: infosFromSubPage.spartaStats?.d ?? 0,
+        l: infosFromSubPage.spartaStats?.l ?? 0,
+        pts: infosFromSubPage.spartaStats?.pts ?? 0,
       });
     }
 
@@ -89,40 +99,83 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
   }
 }
 
-async function getInfosFromSubPage(link: string) {
+interface SubPageInfo {
+  league?: string;
+  leagueLink?: string;
+  rank?: string;
+  goalDifference?: string;
+  spartaStats?: {
+    played: number;
+    w: number;
+    d: number;
+    l: number;
+    pts: number;
+  };
+}
+
+async function getInfosFromSubPage(link: string): Promise<SubPageInfo> {
   try {
     const { data } = await axios.get(link, config);
     const $ = cheerio.load(data);
 
-    let league;
-    let leagueLink;
-    let rank;
-    let goalDifference;
+    let league: string | undefined;
+    let leagueLink: string | undefined;
+    let rank: string | undefined;
+    let goalDifference: string | undefined;
 
     for (const element of $(".bfv-game-info-entry")) {
-      if (
-        $(element).find(".bfv-game-info-entry__title").text().trim() === "Liga"
-      ) {
+      const title = $(element)
+        .find(".bfv-game-info-entry__title")
+        .text()
+        .trim();
+      if (title === "Liga") {
         league = $(element).find("a").text().trim();
         leagueLink = $(element).find("a").attr("href") || link;
       }
-      if (
-        $(element).find(".bfv-game-info-entry__title").text().trim() ===
-        "tabellenplatz"
-      ) {
+      if (title === "tabellenplatz") {
         rank = $(element).find(".bfv-game-info-entry__text ").text().trim();
       }
-      if (
-        $(element).find(".bfv-game-info-entry__title").text().trim() ===
-        "torverhältnis"
-      ) {
+      if (title === "torverhältnis") {
         goalDifference = $(element)
           .find(".bfv-game-info-entry__text ")
           .text()
           .trim();
       }
     }
-    return { league, rank, goalDifference, leagueLink };
+
+    let spartaStats: SubPageInfo["spartaStats"];
+    for (const row of $(".bfv-table-entry--data")) {
+      const $row = $(row);
+      const teamCell = $row.find(".bfv-table-entry__cell--team");
+      const teamName = (teamCell.find("a").text() || teamCell.text()).trim();
+      if (!/sparta/i.test(teamName)) continue;
+
+      spartaStats = {
+        played: parseInt(
+          $row.find(".bfv-table-entry__cell--matches").text().trim(),
+          10,
+        ),
+        w: parseInt(
+          $row.find(".bfv-table-entry__cell--wins").text().trim(),
+          10,
+        ),
+        d: parseInt(
+          $row.find(".bfv-table-entry__cell--draws").text().trim(),
+          10,
+        ),
+        l: parseInt(
+          $row.find(".bfv-table-entry__cell--loses").text().trim(),
+          10,
+        ),
+        pts: parseInt(
+          $row.find(".bfv-table-entry__cell--score").text().trim(),
+          10,
+        ),
+      };
+      break;
+    }
+
+    return { league, rank, goalDifference, leagueLink, spartaStats };
   } catch (error) {
     console.error("Error downloading teams:", error);
     return {};

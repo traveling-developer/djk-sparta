@@ -25,10 +25,13 @@ const apiKey = import.meta.env.GOOGLE_MAPS_API;
     Google Maps anzuzeigen.
 
     <button
-      class="btn bg-sparta-red hover:bg-sparta-red-deep mt-5 text-white"
       type="button"
-      data-cc="show-preferencesModal">Cookie-Einstellungen öffnen</button
+      data-cc="show-preferencesModal"
+      class="font-display bg-sparta-red hover:text-sparta-red mt-5 inline-flex items-center gap-4 px-6 py-4.5 text-sm font-bold tracking-[2px] text-white uppercase transition-colors hover:bg-white"
     >
+      <span>Cookie-Einstellungen öffnen</span>
+      <span aria-hidden="true">→</span>
+    </button>
   </div>
 </div>
 

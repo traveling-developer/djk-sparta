@@ -7,11 +7,11 @@ interface Team {
   rank: string;
   goalDifference: string;
   link: string;
-  played: number;
-  w: number;
-  d: number;
-  l: number;
-  pts: number;
+  played?: number;
+  w?: number;
+  d?: number;
+  l?: number;
+  pts?: number | string;
 }
 
 const url =
@@ -43,6 +43,10 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
       const linkToDetailsPage = $(element).find("a").attr("href") || "";
       const infosFromSubPage = await getInfosFromSubPage(linkToDetailsPage);
 
+      if (infosFromSubPage.league?.startsWith("HKM_")) {
+        continue;
+      }
+
       if (juniors == true) {
         if (!name.includes("Junioren")) {
           continue;
@@ -70,6 +74,7 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
             }
             infosFromSubPage.rank = "n.a.";
             infosFromSubPage.goalDifference = "n.a.";
+            infosFromSubPage.spartaStats = { pts: "n.a." };
           }
         }
       } else {
@@ -84,11 +89,11 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
         rank: infosFromSubPage.rank ?? "",
         goalDifference: infosFromSubPage.goalDifference ?? "",
         link: infosFromSubPage.leagueLink ?? "",
-        played: infosFromSubPage.spartaStats?.played ?? 0,
-        w: infosFromSubPage.spartaStats?.w ?? 0,
-        d: infosFromSubPage.spartaStats?.d ?? 0,
-        l: infosFromSubPage.spartaStats?.l ?? 0,
-        pts: infosFromSubPage.spartaStats?.pts ?? 0,
+        played: infosFromSubPage.spartaStats?.played,
+        w: infosFromSubPage.spartaStats?.w,
+        d: infosFromSubPage.spartaStats?.d,
+        l: infosFromSubPage.spartaStats?.l,
+        pts: infosFromSubPage.spartaStats?.pts,
       });
     }
 
@@ -105,11 +110,11 @@ interface SubPageInfo {
   rank?: string;
   goalDifference?: string;
   spartaStats?: {
-    played: number;
-    w: number;
-    d: number;
-    l: number;
-    pts: number;
+    played?: number;
+    w?: number;
+    d?: number;
+    l?: number;
+    pts?: number | string;
   };
 }
 

@@ -5,12 +5,45 @@ import DepartmentSectionHeader from "../components/department/DepartmentSectionH
 import TrainingAndFixturesSection from "../components/soccer/TrainingAndFixturesSection.astro";
 import CoachesGrid from "../components/department/CoachesGrid.astro";
 import DepartmentCTA from "../components/department/DepartmentCTA.astro";
-import SoccerJuniorsTeamsGrid from "../components/soccer/SoccerJuniorsTeamsGrid.astro";
+import TeamsGrid from "../components/soccer/TeamsGrid.astro";
 
 import { getTeams } from "../lib/soccer/teams";
 import { club } from "../lib/club";
+import { germanNumberWord } from "../lib/convenience";
 
-const teams = await getTeams(true);
+const rawTeams = await getTeams(true);
+
+const dynamicTeams = rawTeams.map((t) => ({
+  name: t.name,
+  league: t.league,
+  place: t.rank,
+  played: t.played,
+  w: t.w,
+  d: t.d,
+  l: t.l,
+  pts: t.pts,
+  link: t.link,
+  linkLabel: "BFV-Spielplan",
+}));
+
+const staticTeams = [
+  {
+    name: "G-Junioren",
+    league: "Ohne Spielbetrieb",
+    place: "n.a.",
+    pts: "n.a.",
+  },
+  {
+    name: "Bambinis",
+    league: "Ohne Spielbetrieb",
+    place: "n.a.",
+    pts: "n.a.",
+  },
+];
+
+const teams = [...dynamicTeams, ...staticTeams];
+
+const teamCountWord = germanNumberWord(teams.length);
 
 const week = [
   // Mo
@@ -52,6 +85,11 @@ const coaches = [
     role: "Jugendleiter",
     mobile: "0152 0711 5488",
   },
+  {
+    name: "Aylin Karaca",
+    role: "Jugendleiterin",
+    mobile: "-",
+  },
 ];
 ---
 
@@ -71,8 +109,11 @@ const coaches = [
     />
 
     <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
-      <DepartmentSectionHeader eyebrow="Mannschaften" title="Unser Nachwuchs" />
-      <SoccerJuniorsTeamsGrid teams={teams} />
+      <DepartmentSectionHeader
+        eyebrow="Mannschaften"
+        title={`${teamCountWord} Teams · unser Nachwuchs`}
+      />
+      <TeamsGrid teams={teams} />
     </section>
 
     <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">

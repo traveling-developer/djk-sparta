@@ -1,0 +1,66 @@
+---
+import Layout from "../layouts/Layout.astro";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+
+const documents = [
+  {
+    eyebrow: "Jugendarbeit",
+    title: "Fußball-Jugendkonzept",
+    description:
+      "Unsere Leitlinien für die Nachwuchsarbeit: sportliche Ausbildung, Werte und Zusammenarbeit mit Eltern.",
+    href: "/Jugendkonzept-Fussball.pdf",
+  },
+  {
+    eyebrow: "Kinder- & Jugendschutz",
+    title: "Selbstverpflichtung Prävention",
+    description:
+      "Unsere vereinsweite Selbstverpflichtung zur Prävention sexualisierter Gewalt, für ein sicheres Miteinander.",
+    href: "/Selbstverpflichtung-Praevention.pdf",
+  },
+];
+---
+
+<Layout title="Transparenz">
+  <main>
+    <DepartmentHero
+      title="Schwarz"
+      accent="auf weiß."
+      lead="Vertrauen entsteht durch Klarheit. Hier findest du unsere Konzepte und Selbstverpflichtungen zum Nachlesen und Herunterladen."
+    />
+
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader eyebrow="Dokumente" title="Zum Download" />
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {
+          documents.map((doc) => (
+            <a
+              href={doc.href}
+              target="_blank"
+              rel="noopener"
+              class="text-sparta-ink border-sparta-line group hover:border-sparta-ink flex flex-col overflow-hidden border bg-white no-underline transition-colors"
+            >
+              <div class="flex flex-1 flex-col p-8">
+                <div class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase">
+                  {doc.eyebrow}
+                </div>
+                <h3 class="font-display m-0 text-[clamp(28px,3vw,36px)] leading-[1.05] font-bold tracking-[-0.01em] uppercase">
+                  {doc.title}
+                </h3>
+                <p class="text-sparta-ink-soft mt-4 text-[15px] leading-[1.6]">
+                  {doc.description}
+                </p>
+
+                <div class="font-display text-sparta-red border-sparta-line mt-8 flex items-center justify-between gap-2 border-t pt-5 text-[11px] font-bold tracking-[2px] uppercase group-hover:opacity-70">
+                  <span>PDF herunterladen</span>
+                  <span aria-hidden="true">↓</span>
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</Layout>

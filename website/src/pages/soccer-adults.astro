@@ -6,6 +6,7 @@ import CoachesGrid from "../components/department/CoachesGrid.astro";
 import DepartmentCTA from "../components/department/DepartmentCTA.astro";
 import TeamsGrid from "../components/soccer/TeamsGrid.astro";
 import TrainingAndFixturesSection from "../components/soccer/TrainingAndFixturesSection.astro";
+import { getMatches } from "../lib/soccer/matches";
 
 const breadcrumb = [
   { label: "Home", href: "/" },
@@ -116,48 +117,14 @@ const leagueRows = [
   { position: 10, team: "SV Buch", played: 19, w: 3, d: 2, l: 14, pts: 11 },
 ];
 
-const fixtures = [
-  {
-    date: "SA 19.04",
-    time: "15:00",
-    home: "Sparta I",
-    away: "TSV Altenberg",
-    isHome: true,
-    venue: "Wacholderplatz",
-  },
-  {
-    date: "SO 20.04",
-    time: "10:30",
-    home: "Sparta II",
-    away: "FC Stein II",
-    isHome: true,
-    venue: "Platz 2",
-  },
-  {
-    date: "SA 26.04",
-    time: "14:00",
-    home: "SV Eibach",
-    away: "Sparta I",
-    isHome: false,
-    venue: "Eibach Arena",
-  },
-  {
-    date: "SA 03.05",
-    time: "15:00",
-    home: "Sparta I",
-    away: "FC Burgfarrnbach",
-    isHome: true,
-    venue: "Wacholderplatz",
-  },
-  {
-    date: "SO 04.05",
-    time: "11:00",
-    home: "SpVgg Mögeldorf II",
-    away: "Sparta II",
-    isHome: false,
-    venue: "Mögeldorf",
-  },
-];
+const fixtures = getMatches()
+  .slice(0, 5)
+  .map((m) => ({
+    date: m.date,
+    time: m.time,
+    home: m.homeTeam,
+    away: m.guestTeam,
+  }));
 
 const week = [
   [],

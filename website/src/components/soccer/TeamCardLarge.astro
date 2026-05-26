@@ -1,33 +1,47 @@
 ---
 interface Props {
-  index: number;
-  variant?: "primary" | "default";
   name: string;
   league: string;
-  coach: string;
-  place: string;
-  played: number;
-  w: number;
-  d: number;
-  l: number;
-  pts: number;
-  imageLabel?: string;
+  place?: string;
+  played?: number;
+  w?: number;
+  d?: number;
+  l?: number;
+  pts?: number | string;
+  link?: string;
+  linkLabel?: string;
 }
 
-const { name, league, place, played, w, d, l, pts } = Astro.props;
+const {
+  name,
+  league,
+  place,
+  played,
+  w,
+  d,
+  l,
+  pts,
+  link,
+  linkLabel = "Mehr erfahren",
+} = Astro.props;
 
-const detailStats: [string, number][] = [
-  ["Sp", played],
-  ["S", w],
-  ["U", d],
-  ["N", l],
+const dash = "—";
+const fmt = (n: number | undefined) => (n === undefined ? dash : n);
+
+const detailStats: [string, string | number][] = [
+  ["Sp", fmt(played)],
+  ["S", fmt(w)],
+  ["U", fmt(d)],
+  ["N", fmt(l)],
 ];
+
+const isExternal = link ? /^https?:\/\//.test(link) : false;
 ---
 
 <article
   class="text-sparta-ink border-sparta-line flex flex-col overflow-hidden border bg-white"
 >
-  <div class="p-6">
+  <div class="flex flex-1 flex-col p-6">
     <h3 class="font-display m-0 text-[28px] leading-none font-bold uppercase">
       {name}
     </h3>
@@ -38,7 +52,7 @@ const detailStats: [string, number][] = [
         <div
           class="font-display text-[clamp(48px,7vw,72px)] leading-none font-bold tracking-[-2px]"
         >
-          {place}
+          {place ?? dash}
         </div>
         <div
           class="mt-2 font-mono text-[10px] tracking-[2px] uppercase opacity-55"
@@ -46,11 +60,11 @@ const detailStats: [string, number][] = [
           Tabellenplatz
         </div>
       </div>
-      <div class={`border-l pl-5 border-sparta-line`}>
+      <div class="border-sparta-line border-l pl-5">
         <div
           class="font-display text-sparta-red text-[clamp(48px,7vw,72px)] leading-none font-bold tracking-[-2px]"
         >
-          {pts}
+          {pts ?? dash}
         </div>
         <div
           class="mt-2 font-mono text-[10px] tracking-[2px] uppercase opacity-55"
@@ -60,7 +74,7 @@ const detailStats: [string, number][] = [
       </div>
     </div>
 
-    <div class={`mt-5 grid grid-cols-4 gap-2 border-t pt-4 border-sparta-line`}>
+    <div class="border-sparta-line mt-5 grid grid-cols-4 gap-2 border-t pt-4">
       {
         detailStats.map(([k, v]) => (
           <div>
@@ -74,5 +88,19 @@ const detailStats: [string, number][] = [
         ))
       }
     </div>
+
+    {
+      link && (
+        <a
+          href={link}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+          class="font-display text-sparta-red border-sparta-line mt-5 flex items-center justify-between gap-2 border-t pt-5 text-[11px] font-bold tracking-[2px] uppercase no-underline hover:opacity-70"
+        >
+          <span>{linkLabel}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      )
+    }
   </div>
 </article>

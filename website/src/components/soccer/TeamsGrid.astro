@@ -4,14 +4,14 @@ import TeamCardLarge from "./TeamCardLarge.astro";
 interface Team {
   name: string;
   league: string;
-  coach: string;
-  place: string;
-  played: number;
-  w: number;
-  d: number;
-  l: number;
-  pts: number;
-  imageLabel?: string;
+  place?: string;
+  played?: number;
+  w?: number;
+  d?: number;
+  l?: number;
+  pts?: number | string;
+  link?: string;
+  linkLabel?: string;
 }
 
 interface Props {
@@ -22,13 +22,5 @@ const { teams } = Astro.props;
 ---
 
 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-  {
-    teams.map((team, i) => (
-      <TeamCardLarge
-        index={i}
-        variant={i === 0 ? "primary" : "default"}
-        {...team}
-      />
-    ))
-  }
+  {teams.map((team) => <TeamCardLarge {...team} />)}
 </div>

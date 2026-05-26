@@ -1,12 +1,14 @@
 ---
+import { club } from "../lib/club";
+
 const {
-  latitude = 49.416459843204485,
-  longitude = 11.068967769662304,
+  latitude = club.coordinates.latitude,
+  longitude = club.coordinates.longitude,
   zoom = 15,
-  title = "DJK Sparta Noris Nürnberg e.V.",
+  title = club.name,
   hasInfoWindow = true,
   displayInfoWindowOnClick = false,
-  infoWindowContent = "DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg",
+  infoWindowContent = `${club.name}<br/>${club.address.street}<br/>${club.address.postalCode} ${club.address.city}`,
   infoWindowHeader = "",
   headerDisabled = true,
 } = Astro.props;

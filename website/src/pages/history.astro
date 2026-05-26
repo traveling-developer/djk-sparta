@@ -3,24 +3,25 @@ import Layout from "../layouts/Layout.astro";
 import DepartmentHero from "../components/department/DepartmentHero.astro";
 import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
 import HistoryStatStrip from "../components/history/HistoryStatStrip.astro";
+import { club } from "../lib/club";
 
 const stats = [
-  { value: "1918", label: "Gegründet" },
-  { value: "1954", label: "Fusion zu DJK Sparta Noris" },
-  { value: "5", label: "Abteilungen" },
-  { value: "~500", label: "Mitglieder" },
+  { value: String(club.foundedYear), label: "Gegründet" },
+  { value: String(club.fusionYear), label: "Fusion zu DJK Sparta Noris" },
+  { value: String(club.departmentCount), label: "Abteilungen" },
+  { value: club.memberCountDisplay, label: "Mitglieder" },
 ];
 ---
 
 <Layout
   title="Vereinsgeschichte"
-  description="Die Geschichte des DJK Sparta Noris Nürnberg — Tradition und Entwicklung des Sportvereins seit der Gründung 1918."
+  description={`Die Geschichte des DJK Sparta Noris Nürnberg — Tradition und Entwicklung des Sportvereins seit der Gründung ${club.foundedYear}.`}
 >
   <main>
     <DepartmentHero
       title="Sparta "
-      accent="Seit 1918."
-      lead="Vom FC Sparta zum heutigen Mehrspartenverein. Über ein Jahrhundert Vereinsleben — geprägt von Meistertiteln, einer Zwangspause, einer Wiedergeburt und rund 500 Mitgliedern, die hier ihre sportliche Heimat finden."
+      accent={`Seit ${club.foundedYear}.`}
+      lead={`Vom FC Sparta zum heutigen Mehrspartenverein. Über ein Jahrhundert Vereinsleben — geprägt von Meistertiteln, einer Zwangspause, einer Wiedergeburt und ${club.memberCountDisplay} Mitgliedern, die hier ihre sportliche Heimat finden.`}
     />
 
     <HistoryStatStrip stats={stats} />
@@ -36,8 +37,9 @@ const stats = [
         <p>
           Die DJK Sparta Noris Nürnberg e.V. ist ein modern geführter
           Mehrspartenverein im Süden von Nürnberg. Gegründet
-          <strong class="text-sparta-red font-bold">1918</strong> schloss sich der
-          damalige FC Sparta dem Sportverband der „Deutschen Jugendkraft" (DJK) an,
+          <strong class="text-sparta-red font-bold">{club.foundedYear}</strong> schloss
+          sich der damalige FC Sparta dem Sportverband der „Deutschen Jugendkraft"
+          (DJK) an,
           der von der katholischen Kirche im Jahre
           <strong class="text-sparta-red font-bold">1920</strong> im unterfränkischen
           Würzburg gegründet worden war.
@@ -75,9 +77,9 @@ const stats = [
           <strong class="text-sparta-red font-bold">1935</strong> beendeten diese
           ruhmreichen Zeiten zunächst. Nach dem Zweiten Weltkrieg lebte die DJK-Sportgemeinschaft
           wieder auf, und im Jahre
-          <strong class="text-sparta-red font-bold">1954</strong> fusionierten die
-          wiedergegründeten Vereine DJK Sparta und DJK Noris zur heutigen DJK Sparta
-          Noris Nürnberg e.V.
+          <strong class="text-sparta-red font-bold">{club.fusionYear}</strong> fusionierten
+          die wiedergegründeten Vereine DJK Sparta und DJK Noris zur heutigen DJK
+          Sparta Noris Nürnberg e.V.
         </p>
         <p>
           In den folgenden Jahrzehnten beheimatete der Verein weitere
@@ -96,9 +98,10 @@ const stats = [
         class="text-sparta-ink-soft max-w-3xl space-y-5 text-[17px] leading-relaxed"
       >
         <p>
-          Heute finden unsere knapp
-          <strong class="text-sparta-red font-bold">500 Mitglieder</strong> in fünf
-          Abteilungen — Fußball, Tischtennis, Tennis, Indiaca und Gesundheitssport
+          Heute finden unsere
+          <strong class="text-sparta-red font-bold"
+            >{club.memberCountDisplay} Mitglieder</strong
+          > in fünf Abteilungen — Fußball, Tischtennis, Tennis, Indiaca und Gesundheitssport
           mit den Schwerpunkten Koronarsport, Wirbelsäule, Osteoporose und Gymnastik
           — ihre sportliche und kulturelle Heimat.
         </p>

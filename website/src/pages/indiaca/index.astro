@@ -5,6 +5,7 @@ import DepartmentSectionHeader from "../../components/department/DepartmentSecti
 import DepartmentCTA from "../../components/department/DepartmentCTA.astro";
 import CoachesGrid from "../../components/department/CoachesGrid.astro";
 import GoogleMap from "../../components/GoogleMap.astro";
+import { club } from "../../lib/club";
 
 interface Slot {
   day: string;
@@ -33,7 +34,7 @@ const offers: Offer[] = [
         note: "ab April · wetterabhängig",
       },
     ],
-    location: "Sparta-Sportgelände, Wacholderweg 60",
+    location: `Sparta-Sportgelände, ${club.address.street}`,
   },
 ];
 

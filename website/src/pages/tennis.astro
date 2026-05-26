@@ -7,6 +7,7 @@ import CoachesGrid from "../components/department/CoachesGrid.astro";
 import DepartmentCTA from "../components/department/DepartmentCTA.astro";
 import Location from "../components/department/Location.astro";
 import TennisTeamsGrid from "../components/tennis/TennisTeamsGrid.astro";
+import { club } from "../lib/club";
 
 const week = [
   [],
@@ -92,15 +93,17 @@ const coaches = [
     <Location
       titleTop="Wacholder"
       titleAccent="Plätze."
-      latitude={49.416459843204485}
-      longitude={11.068967769662304}
-      mapTitle="DJK Sparta Noris Nürnberg e.V."
-      infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
+      latitude={club.coordinates.latitude}
+      longitude={club.coordinates.longitude}
+      mapTitle={club.name}
+      infoWindowContent={`${club.name}<br/>${club.address.street}<br/>${club.address.postalCode} ${club.address.city}`}
     >
       <Fragment slot="address">
         Sparta-Tennisanlage<br />
-        Wacholderweg 60<br />
-        90441 Nürnberg · Weiherhaus
+        {club.address.street}<br />
+        {club.address.postalCode}{" "}{club.address.city} · {
+          club.address.district
+        }
       </Fragment>
     </Location>
 
@@ -112,7 +115,7 @@ const coaches = [
       actions={[
         {
           label: "Schreib uns",
-          href: "mailto:info@djkspartanoris.de",
+          href: club.contact.emailMailto,
           variant: "ink",
         },
         { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },

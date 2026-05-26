@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { club } from "../lib/club";
 ---
 
 <Layout title="Datenschutz">
@@ -146,13 +147,13 @@ import Layout from "../layouts/Layout.astro";
           Website ist:
         </p>
         <p>
-          DJK Sparta Noris Nürnberg e.V.<br />
-          Wacholderweg 60<br />
-          90441 Nürnberg
+          {club.name}<br />
+          {club.address.street}<br />
+          {club.address.postalCode} {club.address.city}
         </p>
         <p>
-          Telefon: +49 (0) 911 480 5955<br />
-          E-Mail: info(at)djkspartanoris.de
+          Telefon: {club.contact.phone}<br />
+          E-Mail: {club.contact.email.replace("@", "(at)")}
         </p>
         <p>
           Verantwortliche Stelle ist die natürliche oder juristische Person, die

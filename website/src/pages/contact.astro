@@ -11,6 +11,7 @@ import ContactHero from "../components/ContactHero.astro";
 import GoogleMap from "../components/GoogleMap.astro";
 import ThirdBoardMember from "../components/contact/ThirdBoardMember.astro";
 import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import { club } from "../lib/club";
 ---
 
 <Layout title="Kontakt">
@@ -48,11 +49,12 @@ import DepartmentSectionHeader from "../components/department/DepartmentSectionH
           <address
             class="[&_a]:hover:text-sparta-red mb-7 font-mono text-[13px] leading-[1.9] not-italic [&_a]:no-underline"
           >
-            DJK Sparta Noris Nürnberg e.V.<br />
-            Wacholderweg 60<br />
-            90441 Nürnberg · Weiherhaus<br /><br />
-            <a href="tel:+499114805955">+49 911 480 59 55</a><br />
-            <a href="mailto:info@djkspartanoris.de">info@djkspartanoris.de</a>
+            {club.name}<br />
+            {club.address.street}<br />
+            {club.address.postalCode} {club.address.city} · {club.address.district}<br
+            /><br />
+            <a href={club.contact.phoneTel}>{club.contact.phone}</a><br />
+            <a href={club.contact.emailMailto}>{club.contact.email}</a>
           </address>
 
           <div class="border-t border-white/12 pt-5">

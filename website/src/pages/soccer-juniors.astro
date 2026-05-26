@@ -8,6 +8,7 @@ import DepartmentCTA from "../components/department/DepartmentCTA.astro";
 import SoccerJuniorsTeamsGrid from "../components/soccer/SoccerJuniorsTeamsGrid.astro";
 
 import { getTeams } from "../lib/soccer/teams";
+import { club } from "../lib/club";
 
 const teams = await getTeams(true);
 
@@ -92,7 +93,7 @@ const coaches = [
       actions={[
         {
           label: "Schreib uns",
-          href: "mailto:info@djkspartanoris.de",
+          href: club.contact.emailMailto,
           variant: "ink",
         },
         { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },

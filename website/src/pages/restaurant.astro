@@ -5,6 +5,7 @@ import DepartmentSectionHeader from "../components/department/DepartmentSectionH
 import CoachesGrid from "../components/department/CoachesGrid.astro";
 import Location from "../components/department/Location.astro";
 import DepartmentCTA from "../components/department/DepartmentCTA.astro";
+import { club } from "../lib/club";
 
 const hosts = [
   {
@@ -39,15 +40,17 @@ const hosts = [
       titleTop="Wacholder"
       titleAccent="Stube."
       hintLabel="Öffnungszeiten"
-      latitude={49.416459843204485}
-      longitude={11.068967769662304}
+      latitude={club.coordinates.latitude}
+      longitude={club.coordinates.longitude}
       mapTitle="Sportgaststätte"
-      infoWindowContent="Sportgaststätte<br/>Wacholderweg 60<br/>90441 Nürnberg"
+      infoWindowContent={`Sportgaststätte<br/>${club.address.street}<br/>${club.address.postalCode} ${club.address.city}`}
     >
       <Fragment slot="address">
         Sportgaststätte DJK Sparta<br />
-        Wacholderweg 60<br />
-        90441 Nürnberg · Weiherhaus
+        {club.address.street}<br />
+        {club.address.postalCode}{" "}{club.address.city} · {
+          club.address.district
+        }
       </Fragment>
       <Fragment slot="hint">
         Mo · geschlossen<br />

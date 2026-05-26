@@ -1,4 +1,6 @@
 ---
+import { club } from "../../lib/club";
+
 interface Team {
   name: string;
   league: string;
@@ -48,7 +50,7 @@ const { teams } = Astro.props;
             mach mit.
           </p>
           <a
-            href="mailto:info@djkspartanoris.de"
+            href={club.contact.emailMailto}
             class="bg-sparta-red font-display hover:text-sparta-red inline-flex items-center gap-3 px-5 py-3 text-[12px] font-bold tracking-[2px] text-white uppercase no-underline transition-colors hover:bg-white"
           >
             <span>Schreib uns</span>

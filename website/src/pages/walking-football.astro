@@ -5,6 +5,7 @@ import DepartmentSectionHeader from "../components/department/DepartmentSectionH
 import DepartmentCTA from "../components/department/DepartmentCTA.astro";
 import CoachesGrid from "../components/department/CoachesGrid.astro";
 import Location from "../components/department/Location.astro";
+import { club } from "../lib/club";
 
 const rules = [
   {
@@ -30,6 +31,7 @@ const contacts = [
     role: "Ansprechpartner",
     mobile: "0179 1223062",
     email: "hggrell@web.de",
+    // todo: change mail
   },
 ];
 ---
@@ -126,7 +128,8 @@ const contacts = [
             Sportanlage DJK Sparta Noris
           </div>
           <div class="text-sparta-ink-soft mt-2 font-mono text-[13px]">
-            Wacholderweg 60 · 90441 Nürnberg
+            {club.address.street} · {club.address.postalCode}{" "}
+            {club.address.city}
           </div>
         </article>
       </div>
@@ -135,15 +138,16 @@ const contacts = [
     <Location
       titleTop="Wacholder"
       titleAccent="Weg."
-      latitude={49.416459843204485}
-      longitude={11.068967769662304}
-      mapTitle="DJK Sparta Noris Nürnberg e.V."
-      infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
+      latitude={club.coordinates.latitude}
+      longitude={club.coordinates.longitude}
+      mapTitle={club.name}
+      infoWindowContent={`${club.name}<br/>${club.address.street}<br/>${club.address.postalCode} ${club.address.city}`}
     >
       <Fragment slot="address">
         Sportanlage DJK Sparta Noris<br />
-        Wacholderweg 60<br />
-        90441 Nürnberg
+        {club.address.street}<br />
+        {club.address.postalCode}{" "}
+        {club.address.city}
       </Fragment>
     </Location>
 

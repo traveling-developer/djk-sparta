@@ -1,9 +1,10 @@
 ---
 import ContactCard from "../ContactCard.astro";
+import { club } from "../../lib/club";
 ---
 
 <ContactCard
     title="Dieter Wolfsberger (1. Vorstand)"
     mail="dw@djkspartanoris.de"
-    phone="0911 480 59 55"
+    phone={club.contact.phone}
 />

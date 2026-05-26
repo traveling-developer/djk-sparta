@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import DepartmentHero from "../components/department/DepartmentHero.astro";
 import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
 import DepartmentCTA from "../components/department/DepartmentCTA.astro";
+import { club } from "../lib/club";
 
 interface Step {
   number: string;
@@ -26,7 +27,7 @@ const steps: Step[] = [
     number: "03",
     title: "Abgeben oder mailen",
     body: "Bring den Antrag in der Geschäftsstelle vorbei oder mail ihn an ",
-    email: "info@djkspartanoris.de",
+    email: club.contact.email,
   },
 ];
 ---
@@ -89,7 +90,7 @@ const steps: Step[] = [
         },
         {
           label: "Fragen? Schreib uns",
-          href: "mailto:info@djkspartanoris.de",
+          href: club.contact.emailMailto,
           variant: "outline",
         },
       ]}

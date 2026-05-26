@@ -1,48 +1,110 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
 import { club } from "../lib/club";
 ---
 
 <Layout title="Impressum">
   <main>
-    <div class="my-5 flex flex-col items-center text-center">
-      <h1 class="mb-5 text-3xl font-semibold">Impressum</h1>
-      <div class="mx-5 text-justify sm:mx-10 lg:mx-15 xl:w-4/5 2xl:w-9/12">
-        <p class="mb-4">
-          {club.name}<br />
-          {club.address.street}<br />
-          {club.address.postalCode} {club.address.city}
-        </p>
+    <DepartmentHero
+      title="Klein"
+      accent="Gedruckt."
+      lead="Angaben gemäß § 5 TMG, Vertretung, Register und verantwortliche Stelle."
+    />
 
-        <p class="mb-4">
-          Vereinsregister: VR 1023<br />
-          Registergericht: Amtsgericht Nürnberg<br />
-          Steuer-Nr.: 241/107/80113
-        </p>
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader eyebrow="§ 5 TMG" title="Pflichtangaben" />
 
-        <p class="mb-4">
-          <strong>Vertreten durch:</strong><br />
-          Dieter Wolfsberger (1. Vorstand)<br />
-          Thomas Uebler (2. Vorstand)
-        </p>
+      <dl
+        class="grid max-w-4xl grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2"
+      >
+        <div>
+          <dt
+            class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase"
+          >
+            Anbieter
+          </dt>
+          <dd
+            class="text-sparta-ink-soft font-mono text-[13.5px] leading-[1.85]"
+          >
+            {club.name}<br />
+            {club.address.street}<br />
+            {club.address.postalCode} {club.address.city}
+          </dd>
+        </div>
 
-        <h2 class="mt-4 text-xl">Kontakt</h2>
-        <p>
-          Telefon: {club.contact.phone}<br />
-          E-Mail: {club.contact.email.replace("@", "(at)")}
-        </p>
+        <div>
+          <dt
+            class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase"
+          >
+            Vertreten durch
+          </dt>
+          <dd
+            class="text-sparta-ink-soft font-mono text-[13.5px] leading-[1.85]"
+          >
+            Dieter Wolfsberger · 1. Vorstand<br />
+            Thomas Uebler · 2. Vorstand
+          </dd>
+        </div>
 
-        <h2 class="mt-4 text-xl">Redaktionell verantwortlich</h2>
-        <p>Dieter Wolfsberger (1. Vorstand)</p>
+        <div>
+          <dt
+            class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase"
+          >
+            Register
+          </dt>
+          <dd
+            class="text-sparta-ink-soft font-mono text-[13.5px] leading-[1.85]"
+          >
+            Vereinsregister VR 1023<br />
+            Amtsgericht Nürnberg<br />
+            Steuer-Nr. 241/107/80113
+          </dd>
+        </div>
 
-        <h2 class="mt-4 text-xl">
-          Verbraucherstreitbeilegung / Universalschlichtungsstelle
-        </h2>
-        <p>
-          Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren
-          vor einer Verbraucherschlichtungsstelle teilzunehmen.
-        </p>
-      </div>
-    </div>
+        <div>
+          <dt
+            class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase"
+          >
+            Kontakt
+          </dt>
+          <dd
+            class="text-sparta-ink-soft [&_a]:hover:text-sparta-red font-mono text-[13.5px] leading-[1.85] [&_a]:no-underline"
+          >
+            <a href={club.contact.phoneTel}>{club.contact.phone}</a><br />
+            <a href={club.contact.emailMailto}
+              >{club.contact.email.replace("@", "(at)")}</a
+            >
+          </dd>
+        </div>
+
+        <div>
+          <dt
+            class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase"
+          >
+            Redaktionell verantwortlich
+          </dt>
+          <dd
+            class="text-sparta-ink-soft font-mono text-[13.5px] leading-[1.85]"
+          >
+            Dieter Wolfsberger · 1. Vorstand
+          </dd>
+        </div>
+
+        <div>
+          <dt
+            class="text-sparta-red mb-3 text-[11px] font-semibold tracking-[2px] uppercase"
+          >
+            Verbraucherstreitbeilegung
+          </dt>
+          <dd class="text-sparta-ink-soft max-w-100 text-[14px] leading-[1.65]">
+            Wir sind nicht bereit oder verpflichtet, an
+            Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
+            teilzunehmen.
+          </dd>
+        </div>
+      </dl>
+    </section>
   </main>
 </Layout>

@@ -1,5 +1,8 @@
 import axios, { type AxiosRequestConfig } from "axios";
 import * as cheerio from "cheerio";
+import { SOCCER_CLUB_URL } from "../../../../shared/soccer/constants";
+import { headers } from "../../../../shared/http";
+import { readGameInfo } from "../../../../shared/soccer/bfv";
 
 interface Team {
   name: string;
@@ -14,17 +17,8 @@ interface Team {
   pts?: number | string;
 }
 
-const url =
-  "https://www.bfv.de/vereine/djk-sparta-noris-nuernberg/00ES8GNKEO00001DVV0AG08LVUPGND5I";
-const config: AxiosRequestConfig = {
-  headers: {
-    "User-Agent":
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-      "AppleWebKit/537.36 (KHTML, like Gecko) " +
-      "Chrome/112.0.0.0 Safari/537.36",
-    Accept: "text/html",
-  },
-};
+const url = SOCCER_CLUB_URL;
+const config: AxiosRequestConfig = { headers };
 
 export async function getTeams(juniors: boolean): Promise<Team[]> {
   try {
@@ -125,8 +119,6 @@ async function getInfosFromSubPage(link: string): Promise<SubPageInfo> {
 
     let league: string | undefined;
     let leagueLink: string | undefined;
-    let rank: string | undefined;
-    let goalDifference: string | undefined;
 
     for (const element of $(".bfv-game-info-entry")) {
       const title = $(element)
@@ -136,17 +128,12 @@ async function getInfosFromSubPage(link: string): Promise<SubPageInfo> {
       if (title === "Liga") {
         league = $(element).find("a").text().trim();
         leagueLink = $(element).find("a").attr("href") || link;
-      }
-      if (title === "tabellenplatz") {
-        rank = $(element).find(".bfv-game-info-entry__text ").text().trim();
-      }
-      if (title === "torverhältnis") {
-        goalDifference = $(element)
-          .find(".bfv-game-info-entry__text ")
-          .text()
-          .trim();
+        break;
       }
     }
+
+    const rank = readGameInfo($, "tabellenplatz");
+    const goalDifference = readGameInfo($, "torverhältnis");
 
     let spartaStats: SubPageInfo["spartaStats"];
     for (const row of $(".bfv-table-entry--data")) {

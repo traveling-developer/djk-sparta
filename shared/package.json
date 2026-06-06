@@ -1,0 +1,10 @@
+{
+  "name": "@djk-sparta/shared",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "comment": "cheerio ist nur eine Typ-Abhängigkeit (import type) — zur Laufzeit erased; die echte cheerio-Instanz wird vom jeweiligen Paket injiziert.",
+  "devDependencies": {
+    "cheerio": "^1.1.0"
+  }
+}

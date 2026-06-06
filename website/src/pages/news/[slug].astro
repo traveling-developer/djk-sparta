@@ -2,8 +2,6 @@
 import Layout from "../../layouts/Layout.astro";
 import { news } from "../../lib/news";
 import { createSlug } from "../../lib/convenience";
-import typeWriterImage from "../../assets/typewriter.webp";
-import SectionHeader from "../../components/SectionHeader.astro";
 import { Picture } from "astro:assets";
 import { PortableText } from "astro-portabletext";
 import PortableTextLink from "../../components/news/PortableTextLink.astro";
@@ -17,99 +15,114 @@ export async function getStaticPaths() {
   }));
 }
 
-const article = Astro.props;
+type Article = (typeof news)[number] & { imageUrl?: string };
 
-// Inline-Bilder sind im Schema vorerst deaktiviert; bei Reaktivierung
-// PortableTextImage wieder unter type: { image: ... } einhängen.
-const ptComponents = {
-  mark: { link: PortableTextLink },
+const article = Astro.props as Article;
+
+const categoryLabel: Record<string, string> = {
+  general: "Allgemein",
+  soccer: "Fußball",
+  "health-sport": "Gesundheitssport",
+  indiaca: "Indiaca",
+  tennis: "Tennis",
+  "table-tennis": "Tischtennis",
 };
+
+function formatDate(iso: string | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return d.toLocaleDateString("de-DE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
+
+const category = categoryLabel[article.category ?? ""] ?? article.category;
 ---
 
 <Layout title={article.title!} description={article.title!}>
-  <main>
-    <SectionHeader title="News" imageMetadata={typeWriterImage} />
+  <main class="bg-sparta-paper px-6 py-14 md:px-14 md:py-10">
+    <!-- Article -->
+    <article class="mx-auto max-w-180">
+      <a
+        href="/#news"
+        class="font-display text-sparta-mute hover:text-sparta-red mb-8 inline-flex items-center gap-2 text-[11px] font-bold tracking-[2px] uppercase no-underline hover:opacity-100"
+      >
+        <span aria-hidden="true">←</span> Zurück zu den Meldungen
+      </a>
 
-    <div class="my-5 flex flex-col items-center text-center">
-      <h2 class="mt-5 mb-8 p-0.5 text-xl font-semibold sm:text-2xl">
-        {article.category === "table-tennis" && "🏓 "}
-        {article.category === "soccer" && "⚽ "}
-        {article.category === "general" && "🤝 "}
-        {article.category === "health-sport" && "🧘‍♀️ "}
-        {article.category === "indiaca" && "🪶 "}
-        {article.category === "tennis" && "🎾 "}{article.title}
-      </h2>
-      <div class="mx-5 sm:w-2/3 lg:w-1/2 xl:w-1/2 2xl:w-2/5">
-        <div class="article-body text-justify">
-          <PortableText
-            value={article.content ?? []}
-            components={ptComponents}
-          />
-        </div>
-        {
-          (article as any).imageUrl && (
-            <div class="mt-5">
-              <Picture
-                src={(article as any).imageUrl}
-                alt="Ein passendes Bild zu diesem Artikel"
-                inferSize={true}
-                widths={[400, 800, 1200]}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 50vw"
-                formats={["webp"]}
-                class="w-full rounded-lg"
-              />
-            </div>
-          )
-        }
-        <div class="mt-5 text-left text-sm">
-          Published at: {article.releaseDate}
-        </div>
+      <div class="news-meta">
+        {category && <span class="news-cat">{category}</span>}
+        {article.releaseDate && (
+          <span class="news-date">· {formatDate(article.releaseDate)}</span>
+        )}
       </div>
-    </div>
+
+      <h1 class="article-title">{article.title}</h1>
+
+      {
+        article.imageUrl && (
+          <div class="border-sparta-line mb-9 overflow-hidden border">
+            <Picture
+              src={article.imageUrl}
+              alt="Ein passendes Bild zu diesem Artikel"
+              inferSize={true}
+              widths={[400, 800, 1200]}
+              sizes="(max-width: 720px) 100vw, 720px"
+              formats={["webp"]}
+              class="block w-full"
+            />
+          </div>
+        )
+      }
+
+      <div class="article-body">
+        {article.content}
+      </div>
+
+      <div class="border-sparta-line mt-12 border-t pt-8">
+        <a
+          href="/#news"
+          class="font-display text-sparta-mute hover:text-sparta-red inline-flex items-center gap-2 text-[11px] font-bold tracking-[2px] uppercase no-underline hover:opacity-100"
+        >
+          <span aria-hidden="true">←</span> Zurück zu den Meldungen
+        </a>
+      </div>
+    </article>
   </main>
 </Layout>
 
 <style>
-  /* Portable Text erzeugt <p>-Absätze statt pre-line; Abstand zwischen Absätzen. */
-  .article-body :global(p) {
-    margin: 0 0 1.2em;
-  }
-  .article-body :global(p:last-child) {
-    margin-bottom: 0;
-  }
-  .article-body :global(h2),
-  .article-body :global(h3),
-  .article-body :global(h4) {
-    text-align: left;
+  .news-meta {
+    display: flex;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     font-weight: 600;
-    line-height: 1.3;
-    margin: 1.4em 0 0.5em;
+    margin-bottom: 12px;
   }
-  .article-body :global(h2) {
-    font-size: 1.25rem;
+  .news-cat {
+    color: #d81e28;
   }
-  .article-body :global(h3) {
-    font-size: 1.125rem;
+  .news-date {
+    color: #6a6a70;
   }
-  .article-body :global(h4) {
-    font-size: 1rem;
+
+  .article-title {
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0 0 28px;
+    color: #0c0c0e;
   }
-  .article-body :global(ul),
-  .article-body :global(ol) {
-    text-align: left;
-    margin: 0 0 1.2em;
-    padding-left: 1.5em;
-  }
-  .article-body :global(ul) {
-    list-style: disc;
-  }
-  .article-body :global(ol) {
-    list-style: decimal;
-  }
-  .article-body :global(blockquote) {
-    border-left: 3px solid #d81e28;
-    margin: 0 0 1.2em;
-    padding-left: 1em;
-    font-style: italic;
+
+  .article-body {
+    font-size: 16px;
+    color: #1a1a1d;
+    line-height: 1.7;
+    white-space: pre-line;
   }
 </style>

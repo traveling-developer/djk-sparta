@@ -16,7 +16,7 @@ import SectionHeader from "./SectionHeader.astro";
         .slice(0, 4)
         .map((news) => (
           <NewsCard
-            body={news.content?.split(" ").slice(0, 15).join(" ") + " ..."}
+            body={news.excerpt?.split(" ").slice(0, 15).join(" ") + " ..."}
             title={news.title}
             link={"/news/" + createSlug(news.title!)}
             category={news.category}

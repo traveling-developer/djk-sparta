@@ -1,0 +1,27 @@
+---
+const { node } = Astro.props;
+const href: string = node?.markDef?.href ?? "#";
+
+// Interne Links (mailto/tel/Anker/relativ) im selben Tab, externe in neuem Tab.
+const isExternal = /^https?:\/\//.test(href);
+---
+
+{
+  isExternal ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-sparta-red font-medium underline underline-offset-2 hover:opacity-100 hover:no-underline"
+    >
+      <slot />
+    </a>
+  ) : (
+    <a
+      href={href}
+      class="text-sparta-red font-medium underline underline-offset-2 hover:opacity-100 hover:no-underline"
+    >
+      <slot />
+    </a>
+  )
+}

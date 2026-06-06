@@ -13,7 +13,7 @@ export default defineType({
     }),
     defineField({
       name: 'content',
-      type: 'text',
+      type: 'blockContent',
       title: 'Inhalt',
       validation: (rule) => rule.required(),
     }),

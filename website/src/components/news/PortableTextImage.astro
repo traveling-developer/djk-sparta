@@ -1,0 +1,13 @@
+---
+// Rendert einen Bild-Block im Portable Text. Die URL wird per GROQ
+// (asset->url) aufgelöst, siehe NEWS-Query in src/lib/news.ts.
+const { node } = Astro.props;
+const url: string | undefined = node?.url;
+const alt: string = node?.alt ?? "Bild im Artikel";
+---
+
+{
+  url && (
+    <img src={url} alt={alt} loading="lazy" class="my-5 w-full rounded-lg" />
+  )
+}

@@ -12,7 +12,35 @@
  * ---------------------------------------------------------------------------------
  */
 
+export declare const internalGroqTypeReferenceTo: unique symbol;
+
 // Source: schema.json
+export type BlockContent = Array<{
+  children?: Array<{
+    marks?: Array<string>;
+    text?: string;
+    _type: "span";
+    _key: string;
+  }>;
+  style?: "normal" | "h2" | "h3" | "h4" | "blockquote";
+  listItem?: "bullet" | "number";
+  markDefs?: Array<{
+    href?: string;
+    _type: "link";
+    _key: string;
+  }>;
+  level?: number;
+  _type: "block";
+  _key: string;
+}>;
+
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
 export type News = {
   _id: string;
   _type: "news";
@@ -20,14 +48,9 @@ export type News = {
   _updatedAt: string;
   _rev: string;
   title?: string;
-  content?: string;
+  content?: BlockContent;
   image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -99,6 +122,7 @@ export type SanityImageMetadata = {
   palette?: SanityImagePalette;
   lqip?: string;
   blurHash?: string;
+  thumbHash?: string;
   hasAlpha?: boolean;
   isOpaque?: boolean;
 };
@@ -168,26 +192,21 @@ export type Slug = {
   source?: string;
 };
 
-export type AllSanitySchemaTypes = News | SanityImageCrop | SanityImageHotspot | SoccerTeam | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint | Slug;
-export declare const internalGroqTypeReferenceTo: unique symbol;
+export type AllSanitySchemaTypes = BlockContent | SanityImageAssetReference | News | SanityImageCrop | SanityImageHotspot | SoccerTeam | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint | Slug;
+
 // Source: ../website/src/lib/news.ts
 // Variable: LATEST_NEWS
-// Query: *[_type == "news"] | order(releaseDate desc) [0...6]
-export type LATEST_NEWSResult = Array<{
+// Query: *[_type == "news"] | order(releaseDate desc) [0...6] {  ...,  "imageUrl": image.asset->url,  "excerpt": pt::text(content)}
+export type LATEST_NEWS_RESULT = Array<{
   _id: string;
   _type: "news";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title?: string;
-  content?: string;
+  content?: BlockContent;
   image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -195,49 +214,47 @@ export type LATEST_NEWSResult = Array<{
   };
   category?: "general" | "health-sport" | "indiaca" | "soccer" | "table-tennis" | "tennis";
   releaseDate?: string;
+  imageUrl: string | null;
+  excerpt: string;
 }>;
+
+// Source: ../website/src/lib/news.ts
 // Variable: LATEST_TABLE_TENNIS_NEWS
-// Query: *[_type == "news" && category == "table-tennis"] | order(releaseDate desc) [0...6]
-export type LATEST_TABLE_TENNIS_NEWSResult = Array<{
+// Query: *[_type == "news" && category == "table-tennis"] | order(releaseDate desc) [0...6] {  ...,  "imageUrl": image.asset->url,  "excerpt": pt::text(content)}
+export type LATEST_TABLE_TENNIS_NEWS_RESULT = Array<{
   _id: string;
   _type: "news";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title?: string;
-  content?: string;
+  content?: BlockContent;
   image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
   };
-  category?: "general" | "health-sport" | "indiaca" | "soccer" | "table-tennis" | "tennis";
+  category: "table-tennis";
   releaseDate?: string;
+  imageUrl: string | null;
+  excerpt: string;
 }>;
+
+// Source: ../website/src/lib/news.ts
 // Variable: NEWS
-// Query: *[_type == "news"] | order(releaseDate desc)
-export type NEWSResult = Array<{
+// Query: *[_type == "news"] | order(releaseDate desc) {  ...,  "imageUrl": image.asset->url}
+export type NEWS_RESULT = Array<{
   _id: string;
   _type: "news";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
   title?: string;
-  content?: string;
+  content?: BlockContent;
   image?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -245,12 +262,13 @@ export type NEWSResult = Array<{
   };
   category?: "general" | "health-sport" | "indiaca" | "soccer" | "table-tennis" | "tennis";
   releaseDate?: string;
+  imageUrl: string | null;
 }>;
 
 // Source: ../website/src/lib/soccer.ts
 // Variable: SOCCER_TEAMS
 // Query: *[_type == "soccerTeam"]
-export type SOCCER_TEAMSResult = Array<{
+export type SOCCER_TEAMS_RESULT = Array<{
   _id: string;
   _type: "soccerTeam";
   _createdAt: string;
@@ -267,9 +285,10 @@ export type SOCCER_TEAMSResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"news\"] | order(releaseDate desc) [0...6]": LATEST_NEWSResult;
-    "*[_type == \"news\" && category == \"table-tennis\"] | order(releaseDate desc) [0...6]": LATEST_TABLE_TENNIS_NEWSResult;
-    "*[_type == \"news\"] | order(releaseDate desc)": NEWSResult;
-    "*[_type == \"soccerTeam\"]": SOCCER_TEAMSResult;
+    "*[_type == \"news\"] | order(releaseDate desc) [0...6] {\n  ...,\n  \"imageUrl\": image.asset->url,\n  \"excerpt\": pt::text(content)\n}": LATEST_NEWS_RESULT;
+    "*[_type == \"news\" && category == \"table-tennis\"] | order(releaseDate desc) [0...6] {\n  ...,\n  \"imageUrl\": image.asset->url,\n  \"excerpt\": pt::text(content)\n}": LATEST_TABLE_TENNIS_NEWS_RESULT;
+    "*[_type == \"news\"] | order(releaseDate desc) {\n  ...,\n  \"imageUrl\": image.asset->url\n}": NEWS_RESULT;
+    "*[_type == \"soccerTeam\"]": SOCCER_TEAMS_RESULT;
   }
 }
+

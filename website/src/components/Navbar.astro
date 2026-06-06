@@ -1,189 +1,330 @@
-<div class="navbar bg-spartaGray sticky top-0 z-50 shadow-sm shadow-black">
-  <div class="navbar-start">
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn btn-ghost md:hidden">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="#fff"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h8m-8 6h16"></path>
-        </svg>
-      </div>
-      <ul
-        tabindex="0"
-        class="menu menu-sm dropdown-content rounded-box bg-spartaGray z-1 mt-3 w-52 p-2 text-white shadow"
-      >
-        <li>
-          <a href="/" class="">Home</a>
-        </li>
-        <li>
-          <div class="parent">Verein</div>
-          <ul class="p-2">
-            <li>
-              <a href="/contact" class="">Ansprechpartner</a>
-            </li>
-            <li>
-              <a href="/history" class="">Vereinsgeschichte</a>
-            </li>
-            <li>
-              <a href="/restaurant" class="">Sportgaststätte</a>
-            </li>
-            <li>
-              <a href="/more-info" class="">Infos</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <div class="parent">Abteilungen</div>
-          <ul class="p-2">
-            <li>
-              <a href="/soccer-adults" class="">Fußball - Herren</a>
-            </li>
-            <li>
-              <a href="/soccer-juniors" class="">Fußball - Junioren</a>
-            </li>
-            <li>
-              <a href="/health-sport" class="">Gesundheitssport</a>
-            </li>
+---
+const pathname = Astro.url.pathname;
 
-            <li>
-              <a href="/indiaca" class="">Indiaca</a>
-            </li>
-            <li>
-              <a href="/tennis" class="">Tennis</a>
-            </li>
-            <li>
-              <a href="/table-tennis" class="">Tischtennis</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="/member" class="">Mitglied werden</a>
-        </li>
-      </ul>
+const verein = [
+  { label: "Ansprechpartner", href: "/contact" },
+  { label: "Vereinsgeschichte", href: "/history" },
+  { label: "Sportgaststätte", href: "/restaurant" },
+];
+
+const abteilungen = [
+  { label: "Fußball - Herren", href: "/soccer-adults" },
+  { label: "Fußball - Junioren", href: "/soccer-juniors" },
+  { label: "Gesundheitssport", href: "/health-sport" },
+  { label: "Indiaca", href: "/indiaca" },
+  { label: "Tennis", href: "/tennis" },
+  { label: "Tischtennis", href: "/table-tennis" },
+];
+---
+
+<header
+  class="border-sparta-line bg-sparta-paper/92 sticky top-0 z-50 flex items-center justify-between gap-6 border-b px-6 py-3.5 backdrop-blur-md md:px-14 md:py-2"
+>
+  <a href="/" class="brand" aria-label="DJK Sparta Noris — Startseite">
+    <img
+      src="/sparta_rw.svg"
+      alt=""
+      class="block h-16 w-16 shrink-0 rounded-full"
+      aria-hidden="true"
+    />
+    <div class="brand-text">
+      <div class="brand-name">DJK Sparta Noris</div>
+      <div class="brand-sub">Nürnberg · seit 1918</div>
     </div>
-  </div>
-  <div class="navbar-center hidden md:flex">
-    <img
-      src="/sparta_rw.svg"
-      alt="Sparta Logo"
-      class="border-spartaRed mr-5 h-16 w-16 rounded-full border-2"
-    />
+  </a>
 
-    <ul class="menu menu-horizontal text-white">
-      <li>
-        <a href="/" class="">Home</a>
-      </li>
+  <nav
+    class="hidden flex-1 items-center justify-center gap-7 md:flex"
+    aria-label="Hauptnavigation"
+  >
+    <div
+      class="nav-group relative after:absolute after:-left-4 after:-right-4 after:top-full after:hidden after:h-4 after:content-[''] hover:after:block [&:has(:focus-visible)]:after:block"
+    >
+      <button class="nav-label" type="button">Verein</button>
+      <div class="nav-dropdown" role="menu">
+        {
+          verein.map((l) => (
+            <a
+              href={l.href}
+              role="menuitem"
+              class={pathname === l.href ? "active" : ""}
+            >
+              {l.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
 
-      <li class="dropdown dropdown-hover">
-        <div class="parent" role="button" tabindex="0">Verein</div>
-        <ul
-          tabindex="0"
-          class="dropdown-content menu rounded-box bg-spartaGray z-[51] p-2 shadow"
-        >
-          <li>
-            <a href="/contact" class="">Ansprechpartner</a>
-          </li>
-          <li>
-            <a href="/history" class="">Vereinsgeschichte</a>
-          </li>
-          <li>
-            <a href="/restaurant" class="">Sportgaststätte</a>
-          </li>
-          <li>
-            <a href="/more-info" class="">Infos</a>
-          </li>
-        </ul>
-      </li>
+    <div
+      class="nav-group relative after:absolute after:-left-4 after:-right-4 after:top-full after:hidden after:h-4 after:content-[''] hover:after:block [&:has(:focus-visible)]:after:block"
+    >
+      <button class="nav-label" type="button">Abteilungen</button>
+      <div class="nav-dropdown" role="menu">
+        {
+          abteilungen.map((l) => (
+            <a
+              href={l.href}
+              role="menuitem"
+              class={pathname === l.href ? "active" : ""}
+            >
+              {l.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
 
-      <li class="dropdown dropdown-hover">
-        <div class="parent" role="button" tabindex="0">Abteilungen</div>
-        <ul
-          tabindex="0"
-          class="dropdown-content menu rounded-box bg-spartaGray z-[51] w-44 p-2 shadow"
-        >
-          <li>
-            <a href="/soccer-adults" class="">Fußball - Herren</a>
-          </li>
-          <li>
-            <a href="/soccer-juniors" class="">Fußball - Junioren</a>
-          </li>
-          <li>
-            <a href="/health-sport" class="aciveSpartaRed">Gesundheitssport</a>
-          </li>
+    <a href="/#news" class="nav-link">News</a>
+    <a
+      href="/contact"
+      class={`nav-link${pathname === "/contact" ? " active" : ""}`}>Kontakt</a
+    >
+  </nav>
 
-          <li>
-            <a href="/indiaca" class="">Indiaca</a>
-          </li>
-          <li>
-            <a href="/tennis" class="">Tennis</a>
-          </li>
-          <li>
-            <a href="/table-tennis" class="">Tischtennis</a>
-          </li>
-        </ul>
-      </li>
+  <a
+    href="/member"
+    class="bg-sparta-red hover:bg-sparta-red-deep hidden shrink-0 whitespace-nowrap px-[18px] py-[10px] text-[11px] font-bold uppercase tracking-[1.5px] text-white no-underline transition-colors duration-150 hover:opacity-100 lg:inline-block"
+    >Mitglied werden →</a
+  >
 
-      <li>
-        <a href="/member" class="">Mitglied werden</a>
-      </li>
-    </ul>
-  </div>
-  <div class="navbar-end">
-    <img
-      src="/sparta_rw.svg"
-      alt="Sparta Logo"
-      class="border-spartaRed h-14 w-14 rounded-full border-2 md:hidden"
-    />
+  <button
+    id="menu-btn"
+    class="flex h-9 w-9 shrink-0 cursor-pointer flex-col justify-center gap-[5px] border-none bg-none p-1 md:hidden [&>span]:block [&>span]:h-0.5 [&>span]:origin-center [&>span]:bg-sparta-ink [&>span]:transition-[transform,opacity] [&>span]:duration-[250ms]"
+    type="button"
+    aria-label="Menü"
+    aria-expanded="false"
+    aria-controls="mobile-menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
+<div
+  id="mobile-menu"
+  class="bg-sparta-paper fixed inset-0 top-[71px] z-[49] block translate-x-full overflow-y-auto transition-transform duration-300 ease-in-out [&.is-open]:translate-x-0 md:hidden"
+  aria-hidden="true"
+>
+  <div class="mobile-inner">
+    <div class="mobile-section-label">Verein</div>
+    {
+      verein.map((l) => (
+        <a href={l.href} class="mobile-link">
+          {l.label}
+        </a>
+      ))
+    }
+
+    <div class="mobile-section-label">Abteilungen</div>
+    {
+      abteilungen.map((l) => (
+        <a href={l.href} class="mobile-link">
+          {l.label}
+        </a>
+      ))
+    }
+
+    <div class="mobile-section-label">Mehr</div>
+    <a href="/#news" class="mobile-link">News</a>
+    <a href="/contact" class="mobile-link">Kontakt</a>
+    <a href="/member" class="mobile-cta">Mitglied werden →</a>
   </div>
 </div>
 
+<script>
+  const btn = document.getElementById("menu-btn");
+  const menu = document.getElementById("mobile-menu");
+
+  btn?.addEventListener("click", () => {
+    const isOpen = menu?.classList.toggle("is-open");
+    btn.setAttribute("aria-expanded", String(!!isOpen));
+    menu?.setAttribute("aria-hidden", String(!isOpen));
+    document.body.style.overflow = isOpen ? "hidden" : "";
+  });
+
+  document.addEventListener("click", (e) => {
+    if (
+      menu?.classList.contains("is-open") &&
+      !menu.contains(e.target as Node) &&
+      e.target !== btn
+    ) {
+      menu.classList.remove("is-open");
+      btn?.setAttribute("aria-expanded", "false");
+      menu.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+  });
+</script>
+
 <style>
-  @reference "../styles/global.css";
-
-  ul a:active {
-    @apply text-spartaRed;
-  }
-  ul a:hover {
-    @apply text-spartaRed;
-  }
-  .parent:active {
-    @apply bg-spartaGray;
-  }
-  .parent:focus {
-    @apply bg-spartaGray text-spartaRed!;
-  }
-  .parent:hover {
-    @apply text-spartaRed!;
-  }
-  .dropdown-content {
-    @apply m-0;
+  /* Brand */
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #0c0c0e;
+    flex-shrink: 0;
   }
 
-  .dropdown-hover > div::after {
+  .brand-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    flex-shrink: 0;
     display: block;
-    margin-top: -0.5rem;
-    height: 0.5rem;
-    width: 0.5rem;
-    transform: rotate(45deg);
-    transition-property: transform, margin-top;
-    transition-duration: 0.3s;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    content: "";
-    transform-origin: 75% 75%;
-    box-shadow: 2px 2px;
-    pointer-events: none;
   }
 
-  .dropdown-hover:hover > div::after {
-    transform: rotate(225deg);
+  .brand-name {
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .brand-sub {
+    font-size: 10px;
+    color: #6a6a70;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .nav-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: #0c0c0e;
+    text-decoration: none;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+    transition:
+      border-color 0.15s,
+      color 0.15s;
+  }
+  .nav-link:hover,
+  .nav-link.active {
+    color: #d81e28;
+    border-bottom-color: #d81e28;
+    opacity: 1;
+  }
+
+  .nav-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #0c0c0e;
+    background: none;
+    border: none;
+    padding: 0 0 3px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .nav-label::after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.2s;
+  }
+  .nav-group:hover .nav-label,
+  .nav-group:has(:focus-visible) .nav-label {
+    color: #d81e28;
+    border-bottom-color: #d81e28;
+    opacity: 1;
+  }
+  .nav-group:hover .nav-label::after,
+  .nav-group:has(:focus-visible) .nav-label::after {
+    transform: rotate(225deg) translateY(-2px);
+  }
+
+  .nav-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 16px);
+    left: -16px;
+    background: #fafaf8;
+    border: 1px solid #e4e2dd;
+    min-width: 220px;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  }
+  .nav-group:hover .nav-dropdown,
+  .nav-group:has(:focus-visible) .nav-dropdown {
+    display: block;
+  }
+
+  .nav-dropdown a {
+    display: block;
+    padding: 11px 18px;
+    font-size: 13px;
+    color: #0c0c0e;
+    text-decoration: none;
+    border-bottom: 1px solid #e4e2dd;
+    transition:
+      background 0.1s,
+      color 0.1s;
+  }
+  .nav-dropdown a:last-child {
+    border-bottom: none;
+  }
+  .nav-dropdown a:hover,
+  .nav-dropdown a.active {
+    background: #f1f0ec;
+    color: #d81e28;
+    opacity: 1;
+  }
+
+  .mobile-inner {
+    padding: 24px 32px 48px;
+  }
+
+  .mobile-section-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6a6a70;
+    font-weight: 600;
+    padding: 20px 0 8px;
+    border-top: 1px solid #e4e2dd;
+    margin-top: 8px;
+  }
+  .mobile-section-label:first-child {
+    border-top: none;
     margin-top: 0;
   }
+
+  .mobile-link {
+    display: block;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #0c0c0e;
+    text-decoration: none;
+    border-bottom: 1px solid #e4e2dd;
+  }
+
+  .mobile-cta {
+    display: block;
+    margin-top: 24px;
+    padding: 14px 22px;
+    background: #d81e28;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+  }
+
 </style>

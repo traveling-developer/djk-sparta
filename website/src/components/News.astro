@@ -75,7 +75,7 @@ const third = news.slice(3, 5);
             <a href={`/news/${createSlug(featured.title!)}`}>{featured.title}</a>
           </h3>
           <p class="news-featured-body">
-            {featured.content?.split(" ").slice(0, 70).join(" ")}…
+            {featured.excerpt.split(" ").slice(0, 70).join(" ")}…
           </p>
         </article>
       )}
@@ -92,7 +92,7 @@ const third = news.slice(3, 5);
               <a href={`/news/${createSlug(n.title!)}`}>{n.title}</a>
             </h3>
             <p class="news-secondary-body">
-              {n.content?.split(" ").slice(0, 18).join(" ")}…
+              {n.excerpt.split(" ").slice(0, 18).join(" ")}…
             </p>
           </article>
         ))}
@@ -110,7 +110,7 @@ const third = news.slice(3, 5);
               <a href={`/news/${createSlug(n.title!)}`}>{n.title}</a>
             </h3>
             <p class="news-secondary-body">
-              {n.content?.split(" ").slice(0, 18).join(" ")}…
+              {n.excerpt.split(" ").slice(0, 18).join(" ")}…
             </p>
           </article>
         ))}
@@ -232,7 +232,6 @@ const third = news.slice(3, 5);
 
   .news-secondary-body {
     font-size: 13px;
-    color: #6A6A70;
     line-height: 1.5;
     margin: 0;
   }

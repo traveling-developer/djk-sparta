@@ -78,7 +78,12 @@ const category = categoryLabel[article.category ?? ""] ?? article.category;
       }
 
       <div class="article-body">
-        {article.content}
+        {article.content && (
+          <PortableText
+            value={article.content}
+            components={{ mark: { link: PortableTextLink } }}
+          />
+        )}
       </div>
 
       <div class="border-sparta-line mt-12 border-t pt-8">
@@ -123,6 +128,52 @@ const category = categoryLabel[article.category ?? ""] ?? article.category;
     font-size: 16px;
     color: #1a1a1d;
     line-height: 1.7;
-    white-space: pre-line;
+  }
+
+  /* Portable-Text-Output (von astro-portabletext gerendert, daher :global) */
+  .article-body :global(p) {
+    margin: 0 0 1.1em;
+  }
+  .article-body :global(h2),
+  .article-body :global(h3),
+  .article-body :global(h4) {
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #0c0c0e;
+    margin: 1.6em 0 0.5em;
+  }
+  .article-body :global(h2) {
+    font-size: 26px;
+  }
+  .article-body :global(h3) {
+    font-size: 21px;
+  }
+  .article-body :global(h4) {
+    font-size: 17px;
+  }
+  .article-body :global(blockquote) {
+    border-left: 3px solid #d81e28;
+    margin: 1.4em 0;
+    padding-left: 18px;
+    color: #6a6a70;
+    font-style: italic;
+  }
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin: 0 0 1.1em;
+    padding-left: 1.4em;
+  }
+  .article-body :global(ul) {
+    list-style: disc;
+  }
+  .article-body :global(ol) {
+    list-style: decimal;
+  }
+  .article-body :global(li) {
+    margin-bottom: 0.35em;
+  }
+  .article-body :global(> :last-child) {
+    margin-bottom: 0;
   }
 </style>

@@ -188,9 +188,18 @@ const third = news.slice(3, 5);
     margin: 0 0 14px;
     color: #0C0C0E;
   }
+  .news-featured {
+    position: relative;
+  }
   .news-featured-title a {
     color: inherit;
     text-decoration: none;
+  }
+  /* Stretched Link: macht die ganze Karte klickbar */
+  .news-featured-title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
   }
   .news-featured-title a:hover {
     color: #D81E28;
@@ -206,6 +215,7 @@ const third = news.slice(3, 5);
 
   /* Secondary */
   .news-secondary-item {
+    position: relative;
     padding-bottom: 24px;
     margin-bottom: 24px;
   }
@@ -224,6 +234,12 @@ const third = news.slice(3, 5);
   .news-secondary-title a {
     color: inherit;
     text-decoration: none;
+  }
+  /* Stretched Link: macht die ganze Karte klickbar */
+  .news-secondary-title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
   }
   .news-secondary-title a:hover {
     color: #D81E28;

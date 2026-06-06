@@ -1,44 +1,177 @@
 ---
-import Header from "../components/Header.astro";
 import Layout from "../layouts/Layout.astro";
-import SectionHeader from "../components/SectionHeader.astro";
-import ContactCard from "../components/ContactCard.astro";
+import DepartmentHero from "../components/department/DepartmentHero.astro";
+import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
+import DepartmentCTA from "../components/department/DepartmentCTA.astro";
+import CoachesGrid from "../components/department/CoachesGrid.astro";
+import Location from "../components/department/Location.astro";
 
-import soccerImage from "../assets/soccer.webp";
-import contactImage from "../assets/contact.webp";
+const rules = [
+  {
+    title: "Laufen verboten",
+    description:
+      "Sobald ein Spieler rennt, gibt es Freistoß für die andere Mannschaft.",
+  },
+  {
+    title: "Sicherheit zuerst",
+    description:
+      "Kein Körperkontakt, keine Grätschen und keine Kopfbälle — ideal zur Vermeidung von Verletzungen.",
+  },
+  {
+    title: "Inklusiv",
+    description:
+      "Perfekt für Senioren (Ü50/Ü60), Wiedereinsteiger nach Verletzungen oder Menschen mit körperlichen Einschränkungen.",
+  },
+];
+
+const contacts = [
+  {
+    name: "Hans-Georg Grell",
+    role: "Ansprechpartner",
+    mobile: "0179 1223062",
+    email: "hggrell@web.de",
+  },
+];
 ---
 
-<Layout title="Walking Football">
+<Layout
+  title="Walking Football"
+  description="Walking Football bei DJK Sparta Noris Nürnberg: Die altersgerechte, gesundheitsfördernde Variante des Fußballsports — ohne Rennen, ohne Körperkontakt, mit viel Spaß."
+>
   <main>
-    <Header title="Walking Football" imageMetadata={soccerImage} />
+    <DepartmentHero
+      title="Walking"
+      accent="Football."
+      lead="Du hast den Fußball im Blut, aber deine Gelenke sagen „langsam“? Walking Football ist die altersgerechte und gesundheitsfördernde Variante des geliebten Fußballsports — Technik, Übersicht und Spaß an der Bewegung stehen im Vordergrund."
+    />
 
-    <div class="hero mt-5 mb-10">
-      <div class="hero-content flex-col text-center">
-        <p class="text-xl italic">
-          Kicken im Gehen! Wer spielt, gewinnt an Lebensfreude - egal in welchem
-          Tempo!
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Was ist Walking Football?"
+        title="Fußball — entspannt im Gehen"
+      />
+
+      <div class="grid max-w-3xl grid-cols-1 gap-5">
+        <p class="text-sparta-ink-soft m-0 text-[17px] leading-[1.6]">
+          Du vermisst das Kicken in der Gemeinschaft, möchtest aber auf Sprints
+          und harten Körperkontakt verzichten? Dann haben wir genau das Richtige
+          für dich!
         </p>
-        <div
-          class="card via-spartaRed bg-gradient-to-b from-[#8b0000] to-[#ff6666] text-white shadow-md shadow-gray-400 sm:w-[28rem]"
-        >
-          <div class="card-body items-center text-center">
-            <h2 class="card-title text-2xl">Termin zum Vormerken</h2>
-            <p class="text-lg font-semibold">Samstag, 06.06.2026</p>
-            <p class="text-sm opacity-90">
-              Sportanlage Wacholderweg 60<br />
-              90441 Nürnberg
-            </p>
-          </div>
-        </div>
+        <p class="text-sparta-ink-soft m-0 text-[17px] leading-[1.6]">
+          Hier steht nicht die Schnelligkeit, sondern die Technik, die Übersicht
+          und vor allem der Spaß an der Bewegung im Vordergrund. Egal, ob du
+          früher aktiv im Verein gespielt hast oder einfach Lust auf Bewegung an
+          der frischen Luft hast — bei uns ist jeder willkommen. Die
+          Geselligkeit nach dem Training gehört natürlich genauso dazu wie das
+          Spiel auf dem Platz!
+        </p>
       </div>
-    </div>
+    </section>
+
+    <section class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        variant="dark"
+        eyebrow="Regeln"
+        title="Was macht Walking Football so besonders?"
+      />
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {
+          rules.map((rule) => (
+            <article class="flex flex-col overflow-hidden border border-white/12 bg-white/8 p-6 text-white">
+              <h3 class="font-display m-0 text-[26px] leading-[1.05] font-bold tracking-[-0.01em] uppercase">
+                {rule.title}
+              </h3>
+              <p class="mt-5 border-t border-white/12 pt-5 text-[15px] leading-[1.55] text-white/85">
+                {rule.description}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Auftakt"
+        title="Komm vorbei und mach mit!"
+      />
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <article
+          class="border-sparta-line text-sparta-ink flex flex-col border bg-white p-6"
+        >
+          <div
+            class="text-sparta-mute font-mono text-[11px] tracking-[2px] uppercase"
+          >
+            Wann
+          </div>
+          <div
+            class="font-display mt-2 text-[26px] leading-[1.05] font-bold tracking-[-0.01em] uppercase"
+          >
+            Samstag · 06.06.2026
+          </div>
+        </article>
+        <article
+          class="border-sparta-line text-sparta-ink flex flex-col border bg-white p-6"
+        >
+          <div
+            class="text-sparta-mute font-mono text-[11px] tracking-[2px] uppercase"
+          >
+            Wo
+          </div>
+          <div
+            class="font-display mt-2 text-[26px] leading-[1.05] font-bold tracking-[-0.01em] uppercase"
+          >
+            Sportanlage DJK Sparta Noris
+          </div>
+          <div class="text-sparta-ink-soft mt-2 font-mono text-[13px]">
+            Wacholderweg 60 · 90441 Nürnberg
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <Location
+      titleTop="Wacholder"
+      titleAccent="Weg."
+      latitude={49.416459843204485}
+      longitude={11.068967769662304}
+      mapTitle="DJK Sparta Noris Nürnberg e.V."
+      infoWindowContent="DJK Sparta Noris Nürnberg e.V.<br/>Wacholderweg 60<br/>90441 Nürnberg"
+    >
+      <Fragment slot="address">
+        Sportanlage DJK Sparta Noris<br />
+        Wacholderweg 60<br />
+        90441 Nürnberg
+      </Fragment>
+    </Location>
+
+    <section class="bg-sparta-paper px-6 py-16 md:px-14 md:py-22.5">
+      <DepartmentSectionHeader
+        eyebrow="Ansprechpartner"
+        title="Fragen oder anmelden?"
+      />
+      <CoachesGrid people={contacts} />
+    </section>
+
+    <DepartmentCTA
+      eyebrow="Bock auf Bewegung?"
+      title="Schnür"
+      accent="die Schuhe."
+      lead="Wir freuen uns darauf, dich auf dem Platz zu sehen — ganz entspannt im Gehen."
+      actions={[
+        {
+          label: "Per Mail melden",
+          href: "mailto:hggrell@web.de",
+          variant: "ink",
+        },
+        {
+          label: "Anrufen",
+          href: "tel:+491791223062",
+          variant: "outline",
+        },
+      ]}
+    />
   </main>
-
-  <div>
-    <SectionHeader title="Kontakt & Anmeldung" imageMetadata={contactImage} />
-
-    <div class="mt-5 mb-10 flex flex-wrap justify-center gap-6">
-      <ContactCard title="Hans-Georg Grell" mobile="0179 1223062" />
-    </div>
-  </div>
 </Layout>

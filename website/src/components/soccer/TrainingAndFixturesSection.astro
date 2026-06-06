@@ -1,0 +1,71 @@
+---
+import TrainingList from "../department/TrainingList.astro";
+import Fixtures from "./Fixtures.astro";
+
+interface Session {
+  team: string;
+  time: string;
+  red?: boolean;
+}
+
+interface Fixture {
+  date: string;
+  time: string;
+  home: string;
+  away: string;
+  isHome: boolean;
+  venue: string;
+}
+
+interface Props {
+  trainingsEyebrow?: string;
+  trainingsTitle?: string;
+  fixturesEyebrow?: string;
+  fixturesTitle?: string;
+  week: Session[][];
+  fixtures: Fixture[];
+}
+
+const {
+  trainingsEyebrow = "Trainingszeiten · Wacholderplatz",
+  trainingsTitle = "Trainingswoche",
+  fixturesEyebrow = "Nächste Spiele",
+  fixturesTitle = "Termine",
+  week,
+  fixtures,
+} = Astro.props;
+---
+
+<section
+  id="termine-training"
+  class="bg-sparta-ink px-6 py-16 text-white md:px-14 md:py-22.5"
+>
+  <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12">
+    <div>
+      <div
+        class="text-sparta-red mb-2.5 text-[11px] font-bold tracking-[3px] uppercase"
+      >
+        {trainingsEyebrow}
+      </div>
+      <h2
+        class="font-display m-0 mb-7 text-[clamp(36px,4.5vw,56px)] leading-none font-bold tracking-[-1px] uppercase"
+      >
+        {trainingsTitle}
+      </h2>
+      <TrainingList week={week} />
+    </div>
+    <div>
+      <div
+        class="text-sparta-red mb-2.5 text-[11px] font-bold tracking-[3px] uppercase"
+      >
+        {fixturesEyebrow}
+      </div>
+      <h2
+        class="font-display m-0 mb-7 text-[clamp(36px,4.5vw,56px)] leading-none font-bold tracking-[-1px] uppercase"
+      >
+        {fixturesTitle}
+      </h2>
+      <Fixtures fixtures={fixtures} />
+    </div>
+  </div>
+</section>

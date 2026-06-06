@@ -1,0 +1,71 @@
+---
+interface Action {
+  label: string;
+  href: string;
+  variant?: "ink" | "outline";
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  accent: string;
+  lead: string;
+  watermark?: string;
+  actions?: Action[];
+}
+
+const { eyebrow, title, accent, lead, watermark, actions = [] } = Astro.props;
+---
+
+<section
+  class="bg-sparta-red relative overflow-hidden px-6 py-20 text-white md:px-14 md:py-[110px]"
+>
+  {
+    watermark && (
+      <div
+        aria-hidden="true"
+        class="font-display pointer-events-none absolute -top-20 -right-15 text-[clamp(220px,40vw,480px)] leading-[0.8] font-bold opacity-[0.09]"
+      >
+        {watermark}
+      </div>
+    )
+  }
+  <div
+    class="relative grid grid-cols-1 items-center gap-10 md:grid-cols-[1.3fr_1fr] md:gap-15"
+  >
+    <div>
+      <div class="mb-4.5 text-[11px] font-bold tracking-[3px] uppercase">
+        {eyebrow}
+      </div>
+      <h2
+        class="font-display m-0 mb-6 text-[clamp(56px,8vw,96px)] leading-[0.9] font-bold tracking-[-2px] uppercase"
+      >
+        {title}<br /><span class="italic">{accent}</span>
+      </h2>
+      <p class="m-0 max-w-130 text-[17px] leading-[1.55] opacity-95">
+        {lead}
+      </p>
+    </div>
+    {
+      actions.length > 0 && (
+        <div class="flex flex-col gap-3">
+          {actions.map((a) => {
+            const cls =
+              a.variant === "outline"
+                ? "border-2 border-white text-white hover:bg-white hover:text-sparta-red"
+                : "bg-sparta-ink text-white hover:bg-black";
+            return (
+              <a
+                href={a.href}
+                class={`font-display flex items-center justify-between gap-4 px-6 py-4.5 text-sm font-bold tracking-[2px] uppercase no-underline transition-colors ${cls}`}
+              >
+                <span>{a.label}</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            );
+          })}
+        </div>
+      )
+    }
+  </div>
+</section>

@@ -1,0 +1,43 @@
+---
+import { Picture } from "astro:assets";
+import spartanerImage from "../../assets/spartaner.webp";
+
+interface Props {
+  title: string;
+  accent: string;
+  lead: string;
+}
+
+const { title, accent, lead } = Astro.props;
+---
+
+<section
+  class="bg-sparta-paper border-sparta-ink px-6 pt-5 pb-15 md:px-14 md:pt-10"
+>
+  <div
+    class="grid grid-cols-1 items-end gap-10 md:grid-cols-[1.4fr_1fr] md:gap-14"
+  >
+    <div>
+      <h1
+        class="font-display m-0 text-[clamp(72px,12vw,200px)] leading-[0.85] font-bold tracking-[-4px] uppercase"
+      >
+        {title}<br /><span class="text-sparta-red italic">{accent}</span>
+      </h1>
+      <p class="text-sparta-ink-soft mt-7 max-w-135 text-[17px] leading-[1.55]">
+        {lead}
+      </p>
+    </div>
+    <div
+      class="mx-auto hidden max-w-40 self-center md:block md:max-w-45 lg:max-w-55 2xl:max-w-60"
+    >
+      <Picture
+        src={spartanerImage}
+        formats={["webp"]}
+        alt="DJK Sparta Noris"
+        widths={[300, 600]}
+        sizes="300px"
+        class="block h-auto w-full"
+      />
+    </div>
+  </div>
+</section>

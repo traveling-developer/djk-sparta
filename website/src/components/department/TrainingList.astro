@@ -1,0 +1,52 @@
+---
+interface Session {
+  team: string;
+  time: string;
+  red?: boolean;
+}
+
+interface Props {
+  week: Session[][];
+}
+
+const { week } = Astro.props;
+const dayLabels = [
+  "Montag",
+  "Dienstag",
+  "Mittwoch",
+  "Donnerstag",
+  "Freitag",
+  "Sa",
+  "So",
+];
+
+const activeDays = week
+  .map((sessions, i) => ({
+    label: dayLabels[i],
+    isWeekend: i >= 5,
+    sessions,
+  }))
+  .filter((d) => d.sessions.length > 0);
+---
+
+<div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+  {
+    activeDays.map(({ label, isWeekend, sessions }) => (
+      <div class="border border-white/10 bg-white/3 p-4">
+        <div
+          class={`font-display mb-3 text-xl font-bold uppercase ${isWeekend ? "text-sparta-red" : "text-white"}`}
+        >
+          {label}
+        </div>
+        {sessions.map((s) => (
+          <div class="bg-sparta-red mb-2 px-3 py-2 text-white last:mb-0">
+            <div class="font-display text-lg font-bold tracking-[0.5px] uppercase">
+              {s.team}
+            </div>
+            <div class="mt-0.5 font-mono text-sm opacity-85">{s.time}</div>
+          </div>
+        ))}
+      </div>
+    ))
+  }
+</div>

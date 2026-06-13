@@ -46,7 +46,7 @@ const teams = [...dynamicTeams, ...staticTeams];
 
 const teamCountWord = germanNumberWord(teams.length);
 
-const fixtures = getMatches()
+const fixtures = (await getMatches())
   .slice(0, 5)
   .map((m) => ({
     date: m.date,

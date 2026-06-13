@@ -1,291 +1,225 @@
+import axios, { type AxiosRequestConfig } from "axios";
+import * as cheerio from "cheerio";
+
 interface Match {
   date: string;
   time: string;
   homeTeam: string;
   guestTeam: string;
+  start: Date;
 }
 
-export function getMatches(): Match[] {
-  const matches = [
-    {
-      date: "Do. 26.09.25",
-      time: "19:00",
-      homeTeam: "SC Germania Nbg. III",
-      guestTeam: "DJK Sparta Noris",
-    },
+const CLUB_URL =
+  "https://www.bfv.de/vereine/djk-sparta-noris-nuernberg/00ES8GNKEO00001DVV0AG08LVUPGND5I";
 
-    {
-      date: "Sa. 14.09.25",
-      time: "13:00",
-      homeTeam: "Tuspo Heroldsberg II",
-      guestTeam: "DJK Sparta Noris",
-    },
-    {
-      date: "Sa. 21.09.25",
-      time: "12:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "SV Laufamholz II",
-    },
+const config: AxiosRequestConfig = {
+  headers: {
+    "User-Agent":
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+      "AppleWebKit/537.36 (KHTML, like Gecko) " +
+      "Chrome/112.0.0.0 Safari/537.36",
+    Accept: "text/html",
+  },
+};
 
-    {
-      date: "Do. 03.10.25",
-      time: "12:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "ASN Pfeil-Phönix II (B9)",
-    },
-    {
-      date: "Sa. 05.10.25",
-      time: "13:00",
-      homeTeam: "TV Glaishammer II (B9)",
-      guestTeam: "DJK Sparta Noris",
-    },
-    {
-      date: "Sa. 12.10.25",
-      time: "13:00",
-      homeTeam: "ASV Buchenbühl II (B9)",
-      guestTeam: "DJK Sparta Noris",
-    },
-    {
-      date: "Sa. 19.10.25",
-      time: "12:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "SpVgg Mögeldorf 2000 IV",
-    },
-    {
-      date: "Sa. 26.10.25",
-      time: "12:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "SC Germania Nbg. III",
-    },
-    {
-      date: "Sa. 02.11.25",
-      time: "13:00",
-      homeTeam: "FC Bayern Kickers U23 III",
-      guestTeam: "DJK Sparta Noris",
-    },
-    {
-      date: "Sa. 09.11.25",
-      time: "12:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "DJK BFC Nürnberg II",
-    },
-    {
-      date: "Sa. 16.11.25",
-      time: "13:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "TSV Maccabi Nürnberg II",
-    },
-    {
-      date: "Sa. 15.03.26",
-      time: "12:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "SV Wacker Nürnberg II",
-    },
-    {
-      date: "Sa. 22.03.26",
-      time: "12:00",
-      homeTeam: "SpVgg Zabo Eintracht II",
-      guestTeam: "DJK Sparta Noris",
-    },
-    {
-      date: "Sa. 29.03.26",
-      time: "12:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "Tuspo Heroldsberg II",
-    },
-    {
-      date: "Sa. 12.04.26",
-      time: "13:00",
-      homeTeam: "SV Laufamholz II",
-      guestTeam: "DJK Sparta Noris",
-    },
-    {
-      date: "Sa. 26.04.26",
-      time: "12:45",
-      homeTeam: "ASN Pfeil-Phönix II (B9)",
-      guestTeam: "DJK Sparta Noris",
-    },
-    {
-      date: "Sa. 03.05.26",
-      time: "12:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "TV Glaishammer II (B9)",
-    },
-    {
-      date: "Sa. 10.05.26",
-      time: "12:00",
-      homeTeam: "DJK Sparta Noris",
-      guestTeam: "ASV Buchenbühl II (B9)",
-    },
-    {
-      date: "Sa. 17.05.26",
-      time: "15:00",
-      homeTeam: "SpVgg Mögeldorf 2000 IV",
-      guestTeam: "DJK Sparta Noris",
-    },
-    {
-      date: "Sa. 28.09.25",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "ASV Fürth IV Armenia",
-    },
-    {
-      date: "Do. 03.10.25",
-      time: "09:30",
-      homeTeam: "FC Blau-Schwarz 88",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 05.10.25",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "SC Germania Nbg. IIa (9er)",
-    },
-    {
-      date: "Sa. 12.10.25",
-      time: "09:30",
-      homeTeam: "ASV Zirndorf PM Wildner (9er)",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 19.10.25",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "Zabo United",
-    },
-    {
-      date: "Sa. 26.10.25",
-      time: "10:00",
-      homeTeam: "Pegnitzkicker Nbg. Stadtverwaltung (9er)",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 02.11.25",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "ATV 1873 Frankonia Nbg. Dritte",
-    },
-    {
-      date: "Do. 07.11.25",
-      time: "19:00",
-      homeTeam: "Kriemhild-Funker (9er)",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 16.11.25",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "FSV Stadeln 1b Westphal",
-    },
-    {
-      date: "Sa. 23.11.25",
-      time: "10:00",
-      homeTeam: "FC Stein II (9er)",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 30.11.25",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "Tuspo Nürnberg Altstadt Kicker (9er)",
-    },
-    {
-      date: "Sa. 07.12.25",
-      time: "09:00",
-      homeTeam: "SpVgg Nürnberg AH/PM",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Do. 13.03.26",
-      time: "19:00",
-      homeTeam: "ASV Fürth IV Armenia",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 22.03.26",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "FC Blau-Schwarz 88",
-    },
-    {
-      date: "Sa. 29.03.26",
-      time: "09:00",
-      homeTeam: "SC Germania Nbg. IIa (9er)",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 12.04.26",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "ASV Zirndorf PM Wildner (9er)",
-    },
-    {
-      date: "Do. 17.04.26",
-      time: "19:00",
-      homeTeam: "Zabo United",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 26.04.26",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "Pegnitzkicker Nbg. Stadtverwaltung (9er)",
-    },
-    {
-      date: "Sa. 03.05.26",
-      time: "09:30",
-      homeTeam: "ATV 1873 Frankonia Nbg. Dritte",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 10.05.26",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "Kriemhild-Funker (9er)",
-    },
-    {
-      date: "Sa. 17.05.26",
-      time: "09:30",
-      homeTeam: "FSV Stadeln 1b Westphal",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 07.06.26",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "FC Stein II (9er)",
-    },
-    {
-      date: "Sa. 14.06.26",
-      time: "08:45",
-      homeTeam: "Tuspo Nürnberg Altstadt Kicker (9er)",
-      guestTeam: "DJK Sparta Noris Bonifaz",
-    },
-    {
-      date: "Sa. 21.06.26",
-      time: "09:00",
-      homeTeam: "DJK Sparta Noris Bonifaz",
-      guestTeam: "SpVgg Nürnberg AH/PM",
-    },
-  ];
+export async function getMatches(): Promise<Match[]> {
+  try {
+    const detailLinks = await getAdultTeamLinks();
 
-  return matches
-    .filter((match) => {
-      return convertToDate(match.date, match.time) > new Date();
-    })
-    .sort((a, b) => {
-      return (
-        convertToDate(a.date, a.time).getTime() -
-        convertToDate(b.date, b.time).getTime()
-      );
-    });
+    const icsUrls = (
+      await Promise.all(detailLinks.map((link) => getIcsUrl(link)))
+    ).filter((url): url is string => Boolean(url));
+
+    const matchLists = await Promise.all(
+      icsUrls.map((url) => getMatchesFromIcs(url)),
+    );
+
+    const now = new Date();
+
+    return matchLists
+      .flat()
+      .filter((match) => match.start > now)
+      .sort((a, b) => a.start.getTime() - b.start.getTime());
+  } catch (error) {
+    console.error("Error downloading soccer matches:", error);
+    return [];
+  }
 }
 
-export function convertToDate(date: string, time: string) {
-  const sanitizedInput = date.replace(/^[A-Za-z.]+\s/, "");
+async function getAdultTeamLinks(): Promise<string[]> {
+  const { data } = await axios.get(CLUB_URL, config);
+  const $ = cheerio.load(data);
 
-  const [day, month, year] = sanitizedInput.split(".");
-  const formattedDate = `20${year}-${month}-${day}T${time}:00`;
+  const links: string[] = [];
 
-  return new Date(formattedDate);
+  for (const element of $(".bfv-composition-entry")) {
+    const category = $(element)
+      .find(".bfv-composition-entry__category")
+      .text()
+      .trim();
+
+    if (category.includes("Junioren")) {
+      continue;
+    }
+
+    const link = $(element).find("a").attr("href");
+
+    if (link) {
+      links.push(link);
+    }
+  }
+  return links;
+}
+
+async function getIcsUrl(detailLink: string): Promise<string | undefined> {
+  try {
+    const { data } = await axios.get(detailLink, config);
+    const $ = cheerio.load(data);
+
+    for (const el of $("a")) {
+      const href = $(el).attr("href") ?? "";
+      if (href.includes("/rest/icsexport/Spielplan")) {
+        return href;
+      }
+    }
+    return undefined;
+  } catch (error) {
+    console.error("Error reading team detail page:", detailLink, error);
+    return undefined;
+  }
+}
+
+async function getMatchesFromIcs(icsUrl: string): Promise<Match[]> {
+  try {
+    const { data } = await axios.get<string>(icsUrl, config);
+    return parseIcs(data);
+  } catch (error) {
+    console.error("Error downloading ICS:", icsUrl, error);
+    return [];
+  }
+}
+
+function parseIcs(ics: string): Match[] {
+  const lines = unfoldIcsLines(ics);
+
+  const matches: Match[] = [];
+  let summary: string | undefined;
+  let dtStart: string | undefined;
+
+  for (const line of lines) {
+    if (line === "BEGIN:VEVENT") {
+      summary = undefined;
+      dtStart = undefined;
+    } else if (line.startsWith("SUMMARY:")) {
+      summary = unescapeIcs(line.slice("SUMMARY:".length));
+    } else if (line.startsWith("DTSTART")) {
+      dtStart = line.slice(line.indexOf(":") + 1);
+    } else if (line === "END:VEVENT") {
+      const match = buildMatch(summary, dtStart);
+      if (match) {
+        matches.push(match);
+      }
+    }
+  }
+  return matches;
+}
+
+function buildMatch(
+  summary: string | undefined,
+  dtStart: string | undefined,
+): Match | undefined {
+  if (!summary || !dtStart) return undefined;
+
+  const start = parseIcsDate(dtStart);
+  if (!start || Number.isNaN(start.getTime())) return undefined;
+
+  const matchup = summary.split(",")[0]?.trim();
+  if (!matchup) return undefined;
+
+  const teams = splitTeams(matchup);
+  if (!teams) return undefined;
+
+  const { date, time } = formatBerlin(start);
+  return { date, time, homeTeam: teams.home, guestTeam: teams.away, start };
+}
+
+function splitTeams(
+  matchup: string,
+): { home: string; away: string } | undefined {
+  const SPARTA = "DJK Sparta";
+  const idx = matchup.indexOf(SPARTA);
+
+  const clean = (s: string) => s.replace(/\s+/g, " ").trim();
+
+  if (idx > 0) {
+    return {
+      home: clean(matchup.slice(0, idx).replace(/-\s*$/, "")),
+      away: clean(matchup.slice(idx)),
+    };
+  }
+
+  const sep = matchup.indexOf("-");
+  if (sep === -1) return undefined;
+  return {
+    home: clean(matchup.slice(0, sep)),
+    away: clean(matchup.slice(sep + 1)),
+  };
+}
+
+function unfoldIcsLines(ics: string): string[] {
+  const rawLines = ics.split(/\r?\n/);
+  const lines: string[] = [];
+  for (const raw of rawLines) {
+    if ((raw.startsWith(" ") || raw.startsWith("\t")) && lines.length > 0) {
+      lines[lines.length - 1] += raw.slice(1);
+    } else {
+      lines.push(raw);
+    }
+  }
+  return lines;
+}
+
+function unescapeIcs(value: string): string {
+  return value
+    .replace(/\\n/gi, "\n")
+    .replace(/\\,/g, ",")
+    .replace(/\\;/g, ";")
+    .replace(/\\\\/g, "\\");
+}
+
+function parseIcsDate(value: string): Date | undefined {
+  const dateOnly = value.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (dateOnly) {
+    const [, y, mo, d] = dateOnly;
+    return new Date(`${y}-${mo}-${d}T00:00:00`);
+  }
+
+  const m = value.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(Z)?$/);
+  if (!m) return undefined;
+  const [, y, mo, d, h, mi, s, z] = m;
+  if (z) {
+    return new Date(Date.UTC(+y, +mo - 1, +d, +h, +mi, +s));
+  }
+  return new Date(+y, +mo - 1, +d, +h, +mi, +s);
+}
+
+export function formatBerlin(date: Date): { date: string; time: string } {
+  const parts = new Intl.DateTimeFormat("de-DE", {
+    timeZone: "Europe/Berlin",
+    weekday: "short",
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+
+  const p = Object.fromEntries(parts.map((x) => [x.type, x.value]));
+  const weekday = (p.weekday ?? "").replace(/\.$/, "");
+
+  return {
+    date: `${weekday}. ${p.day}.${p.month}.${p.year}`,
+    time: `${p.hour}:${p.minute}`,
+  };
 }

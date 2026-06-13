@@ -89,6 +89,8 @@ const isExternal = link ? /^https?:\/\//.test(link) : false;
       }
     </div>
 
+    {!link && <div class="border-sparta-line mt-5 border-t" />}
+
     {
       link && (
         <a

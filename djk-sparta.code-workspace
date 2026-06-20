@@ -11,6 +11,14 @@
     {
       "name": "website",
       "path": "website"
+    },
+    {
+      "name": "instagram",
+      "path": "instagram-generator"
+    },
+    {
+      "name": "shared",
+      "path": "shared"
     }
   ],
   "settings": {

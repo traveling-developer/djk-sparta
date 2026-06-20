@@ -1,0 +1,27 @@
+{
+  "name": "instagram-generator",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "node --env-file=.env.local src/main.ts",
+    "dry-run": "node --env-file=.env.local src/main.ts --dry-run",
+    "draft": "node --env-file=.env.local src/main.ts --draft",
+    "preview": "node src/preview.ts",
+    "generate": "node src/main.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "prettier": "^3.6.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@sanity/client": "^7.6.0",
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "playwright": "^1.55.0"
+  }
+}

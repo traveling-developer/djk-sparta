@@ -10,6 +10,7 @@ import TeamsGrid from "../components/soccer/TeamsGrid.astro";
 import { getTeams } from "../lib/soccer/teams";
 import { club } from "../lib/club";
 import { germanNumberWord } from "../lib/convenience";
+import Sponsors, { SponsorsCategory } from "../components/Sponsors.astro";
 
 const rawTeams = await getTeams(true);
 
@@ -140,5 +141,7 @@ const coaches = [
         { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },
       ]}
     />
+
+    <Sponsors category={SponsorsCategory.soccer} />
   </main>
 </Layout>

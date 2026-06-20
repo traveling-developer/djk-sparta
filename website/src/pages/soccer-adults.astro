@@ -9,6 +9,7 @@ import TrainingAndFixturesSection from "../components/soccer/TrainingAndFixtures
 import { getMatches } from "../lib/soccer/matches";
 import { getTeams } from "../lib/soccer/teams";
 import { germanNumberWord } from "../lib/convenience";
+import Sponsors, { SponsorsCategory } from "../components/Sponsors.astro";
 
 const rawTeams = await getTeams(false);
 
@@ -46,14 +47,12 @@ const teams = [...dynamicTeams, ...staticTeams];
 
 const teamCountWord = germanNumberWord(teams.length);
 
-const fixtures = (await getMatches())
-  .slice(0, 5)
-  .map((m) => ({
-    date: m.date,
-    time: m.time,
-    home: m.homeTeam,
-    away: m.guestTeam,
-  }));
+const fixtures = (await getMatches()).slice(0, 5).map((m) => ({
+  date: m.date,
+  time: m.time,
+  home: m.homeTeam,
+  away: m.guestTeam,
+}));
 
 const week = [
   [],
@@ -151,5 +150,7 @@ const referees = [
         { label: "Zur Kontaktseite", href: "/contact", variant: "outline" },
       ]}
     />
+
+    <Sponsors category={SponsorsCategory.soccer} />
   </main>
 </Layout>

@@ -1,5 +1,6 @@
 ---
 import taxAndFriendsImage from "../assets/sponsors/TaxandFriends.svg";
+import fliesenschneidenImage from "../assets/sponsors/fliesenschneiden-logo.webp";
 
 export enum SponsorsCategory {
   all,
@@ -14,6 +15,8 @@ const isTableTennis =
   category === SponsorsCategory.tableTennis ||
   category === SponsorsCategory.all;
 const isIndiaca = category === SponsorsCategory.indiaca;
+const isSoccer =
+  category === SponsorsCategory.soccer || category === SponsorsCategory.all;
 
 type Sponsor = { name: string; link: string; image?: string; imageAlt: string };
 
@@ -30,6 +33,16 @@ const sponsors: Sponsor[] = [
           name: "Dr. Neubauer",
           link: "https://www.drneubauer.com",
           imageAlt: "Dr. Neubauer",
+        },
+      ]
+    : []),
+  ...(isSoccer
+    ? [
+        {
+          name: "fliesenschneiden.com",
+          link: "https://fliesenschneiden.com",
+          image: fliesenschneidenImage.src,
+          imageAlt: "Fliesenschneiden",
         },
       ]
     : []),
@@ -78,9 +91,7 @@ const sponsors: Sponsor[] = [
                   class="max-h-25 max-w-full object-contain"
                 />
               ) : (
-                <span
-                  class="font-display text-sparta-ink-soft text-center text-xl font-semibold uppercase tracking-[0.5px]"
-                >
+                <span class="font-display text-sparta-ink-soft text-center text-xl font-semibold tracking-[0.5px] uppercase">
                   {s.name}
                 </span>
               )}
@@ -137,8 +148,6 @@ const sponsors: Sponsor[] = [
     background: #f1f0ec;
     opacity: 1;
   }
-
-
 
   @media (max-width: 700px) {
     .sponsors-grid {

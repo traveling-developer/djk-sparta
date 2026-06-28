@@ -6,6 +6,7 @@
 // braucht diese Datei kein eigenes node_modules und funktioniert sowohl unter
 // Nodes nativem TS (instagram-generator) als auch unter Vite (website).
 import type { CheerioAPI } from "cheerio";
+import { berlinYmd } from "./format.ts";
 
 // Ein rohes, neutrales Spiel — Filterung/Formatierung macht der Consumer.
 export interface BfvMatch {
@@ -15,6 +16,7 @@ export interface BfvMatch {
   league: string; // Detailseite "Liga" (leer bei Junioren)
   ageClass: string; // Detailseite "Altersklasse" (leer bei Erwachsenen)
   isJunior: boolean;
+  location: string; // ICS-"LOCATION" (Spielort, leer bei verlegten Altterminen)
 }
 
 // Vom Consumer injizierte Abhängigkeiten (eigene Header-/Retry-Policy).
@@ -117,17 +119,21 @@ function parseIcs(ics: string, source: TeamSource): BfvMatch[] {
   const matches: BfvMatch[] = [];
   let summary: string | undefined;
   let dtStart: string | undefined;
+  let location: string | undefined;
 
   for (const line of lines) {
     if (line === "BEGIN:VEVENT") {
       summary = undefined;
       dtStart = undefined;
+      location = undefined;
     } else if (line.startsWith("SUMMARY:")) {
       summary = unescapeIcs(line.slice("SUMMARY:".length));
     } else if (line.startsWith("DTSTART")) {
       dtStart = line.slice(line.indexOf(":") + 1);
+    } else if (line.startsWith("LOCATION:")) {
+      location = unescapeIcs(line.slice("LOCATION:".length)).trim();
     } else if (line === "END:VEVENT") {
-      const match = buildMatch(summary, dtStart, source);
+      const match = buildMatch(summary, dtStart, location, source);
       if (match) matches.push(match);
     }
   }
@@ -137,6 +143,7 @@ function parseIcs(ics: string, source: TeamSource): BfvMatch[] {
 function buildMatch(
   summary: string | undefined,
   dtStart: string | undefined,
+  location: string | undefined,
   source: TeamSource,
 ): BfvMatch | undefined {
   if (!summary || !dtStart) return undefined;
@@ -162,6 +169,7 @@ function buildMatch(
     league: source.league,
     ageClass: source.ageClass,
     isJunior: source.isJunior,
+    location: location ?? "",
   };
 }
 
@@ -245,9 +253,31 @@ export async function scrapeBfvMatches(
       sources.map((source) => getMatchesFromIcs(deps, source)),
     );
 
-    return matchLists.flat();
+    return collapseReschedules(matchLists.flat());
   } catch (error) {
     console.error("Error downloading soccer matches:", error);
     return [];
   }
+}
+
+// Der BFV-Feed listet verlegte Spiele doppelt: Der alte Termin bleibt (ohne
+// Spielort) stehen und das verlegte Spiel kommt als zusätzlicher VEVENT mit
+// neuer UID, neuer Anstoßzeit und gesetztem Spielort dazu. Auch Vereinsduelle
+// tauchen auf zwei Spielplänen auf. Daher pro Paarung+Tag auf einen Eintrag
+// kollabieren: der mit Spielort gewinnt, bei Gleichstand der spätere Anstoß.
+function collapseReschedules(matches: BfvMatch[]): BfvMatch[] {
+  const byKey = new Map<string, BfvMatch>();
+  for (const match of matches) {
+    const key = `${match.home}|${match.guest}|${berlinYmd(match.start)}`;
+    const current = byKey.get(key);
+    if (!current || isBetter(match, current)) byKey.set(key, match);
+  }
+  return [...byKey.values()];
+}
+
+function isBetter(candidate: BfvMatch, current: BfvMatch): boolean {
+  const candidateHasLocation = candidate.location !== "";
+  const currentHasLocation = current.location !== "";
+  if (candidateHasLocation !== currentHasLocation) return candidateHasLocation;
+  return candidate.start.getTime() > current.start.getTime();
 }

@@ -1,18 +1,14 @@
 // Datums-/Zeitformatierung in Europe/Berlin — von beiden Consumern genutzt.
 
 // "YYYY-MM-DD" eines Datums in Europe/Berlin (für Tagesvergleiche).
+// en-CA liefert bereits das ISO-Format YYYY-MM-DD.
 export function berlinYmd(date: Date): string {
-  const p = Object.fromEntries(
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Europe/Berlin",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    })
-      .formatToParts(date)
-      .map((x) => [x.type, x.value]),
-  );
-  return `${p.year}-${p.month}-${p.day}`;
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Berlin",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 }
 
 // Kurzes deutsches Datum + Uhrzeit. `year` hängt das 2-stellige Jahr an

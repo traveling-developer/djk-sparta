@@ -51,8 +51,8 @@ import { club } from "../lib/club";
           >
             {club.name}<br />
             {club.address.street}<br />
-            {club.address.postalCode} {club.address.city} · {club.address.district}<br
-            /><br />
+            {club.address.postalCode}
+            {club.address.city} · {club.address.district}<br /><br />
             <a href={club.contact.phoneTel}>{club.contact.phone}</a><br />
             <a href={club.contact.emailMailto}>{club.contact.email}</a>
           </address>
@@ -63,9 +63,7 @@ import { club } from "../lib/club";
             >
               Geschäftsstelle
             </div>
-            <div class="text-sm">
-              Di &amp; Fr · 8 - 12 Uhr · oder nach Vereinbarung
-            </div>
+            <div class="text-sm">Fr · 8 - 12 Uhr · oder nach Vereinbarung</div>
           </div>
         </div>
 

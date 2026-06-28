@@ -56,7 +56,7 @@ const fixtures = (await getMatches()).slice(0, 5).map((m) => ({
 
 const week = [
   [],
-  [{ team: "Herren I", time: "18:45-20:30" }],
+  [{ team: "Herren I", time: "18:30-20:30" }],
   [{ team: "PM Bonifaz", time: "18:30-20:30" }],
   [
     { team: "Herren I", time: "18:45-20:30" },
@@ -83,6 +83,11 @@ const coaches = [
     role: "Alt Herren - 2. Abteilungsleiter",
     mobile: "01728733059",
   },
+  {
+    name: "Klaus Weiss",
+    role: "PM Bonifaz",
+    mobile: "01728128157",
+  },
 ];
 
 const referees = [
@@ -100,7 +105,7 @@ const referees = [
     <DepartmentHero
       title="Fußball"
       accent="Herren."
-      lead={`${teamCountWord} Mannschaften, ein Wappen. Von der Landesliga bis zur Altherrenrunde — Leidenschaft für das runde Leder auf Sparta-Art.`}
+      lead={`${teamCountWord} Mannschaften, ein Wappen. Nicht die höchste Liga, aber das größte Herz — Leidenschaft für das runde Leder auf Sparta-Art.`}
     />
 
     <TrainingAndFixturesSection week={week} fixtures={fixtures} />

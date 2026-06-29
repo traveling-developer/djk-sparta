@@ -50,6 +50,6 @@ export function igResult(data: ResultData, fmt: Fmt = "post45"): string {
       </div>
     </div>
 
-    ${igFooter("#fff")}`,
+    ${igFooter()}`,
   );
 }

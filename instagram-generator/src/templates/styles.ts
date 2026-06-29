@@ -23,6 +23,8 @@ export const STYLES = `
   /* Story (9:16) ist schmaler im Verhältnis — weniger Außenrand,
      damit z.B. die Match-Day-Detailzellen nicht umbrechen */
   .ig-frame.fmt-story { --pad: calc(56px * var(--s)); }
+  /* Instagram-Story-Safe-Area */
+  .fmt-story .ig-header { padding-top: calc(168px * var(--s)); }
 
   /* --- Motive --- */
   .ig-diagonal {
@@ -130,22 +132,17 @@ export const STYLES = `
   .ig-footer-handle {
     display: flex;
     align-items: center;
-    gap: calc(14px * var(--s));
     font-family: "Oswald", sans-serif;
     font-weight: 600;
-    font-size: calc(24px * var(--s));
+    font-size: calc(30px * var(--s));
     letter-spacing: 1px;
     text-transform: uppercase;
-  }
-  .ig-footer-accent {
-    width: calc(12px * var(--s));
-    height: calc(12px * var(--s));
-    background: var(--red);
+    color: var(--red);
   }
   .ig-footer-site {
     font-family: ui-monospace, Menlo, monospace;
-    font-size: calc(20px * var(--s));
-    color: rgba(255, 255, 255, 0.8);
+    font-size: calc(30px * var(--s));
+    color: #fff;
     letter-spacing: 1px;
   }
   .ig-kicker {
@@ -260,14 +257,14 @@ export const STYLES = `
     padding: calc(16px * var(--s)) calc(28px * var(--s));
   }
 
-  /* Story (9:16): Inhalt größer skalieren, damit der Hochkant-Raum
-     genutzt wird; Detail-Zellen als gestapelte Zeilen statt Spalten */
   .fmt-story .ig-badge {
-    font-size: calc(28px * var(--s));
-    padding: calc(13px * var(--s)) calc(24px * var(--s));
+    font-size: calc(34px * var(--s));
+    padding: calc(15px * var(--s)) calc(28px * var(--s));
   }
-  /* Story behält mehr Abstand nach oben (mehr Hochkant-Raum) */
-  .fmt-story .md-main { padding-top: calc(310px * var(--s)); }
+  .fmt-story .ig-logo-title { font-size: calc(39px * var(--s)); }
+  .fmt-story .ig-logo-sub { font-size: calc(24px * var(--s)); }
+  .fmt-story .ig-footer-handle { font-size: calc(39px * var(--s)); }
+  .fmt-story .md-main { padding-top: calc(198px * var(--s)); }
   .fmt-story .md-kicker {
     font-size: calc(32px * var(--s));
     margin-bottom: calc(36px * var(--s));
@@ -294,7 +291,7 @@ export const STYLES = `
      Vereine stärker zum Score versetzt */
   .fmt-story .result-main {
     justify-content: flex-start;
-    padding-top: calc(310px * var(--s));
+    padding-top: calc(198px * var(--s)); /* −112px gegen Safe-Area-Header */
   }
   .fmt-story .result-team { font-size: calc(60px * var(--s)); }
   .fmt-story .result-team.home { transform: translateY(calc(-40px * var(--s))); }
@@ -303,6 +300,8 @@ export const STYLES = `
   /* --- Template: Ergebnis --- */
   /* Logo-Subtitle steht auf dem roten Result-Grund (rot-auf-rot) → schwarz */
   .ig-frame:has(.result-main) .ig-logo-sub { color: var(--ink); }
+  /* Roter Hashtag wäre auf dem roten Result-Grund unsichtbar → weiß */
+  .ig-frame:has(.result-main) .ig-footer-handle { color: #fff; }
   /* Inhalt oben unter die Diagonale schieben — gleiche Höhe wie Match Day */
   .result-main {
     justify-content: flex-start;
@@ -492,10 +491,13 @@ export const STYLES = `
     color: #fff;
     max-width: calc(800px * var(--s));
   }
-  /* Story (9:16): mehr Hochkant-Raum oben, analog Match Day */
-  .fmt-story .web-main { padding-top: calc(345px * var(--s)); }
+  /* Story (9:16): mehr Hochkant-Raum oben, analog Match Day;
+     −112px gegen Safe-Area-Header */
+  .fmt-story .web-main { padding-top: calc(233px * var(--s)); }
   /* Mehr Luft zwischen Titel und Browser-Mockup */
   .fmt-story .web-headline { margin-bottom: calc(64px * var(--s)); }
+  /* Fließtext in der Story größer (mehr Hochkant-Raum) */
+  .fmt-story .web-body { font-size: calc(40px * var(--s)); }
 
   /* --- Template: Nachwuchs gesucht (Ankündigung, heller Hintergrund) --- */
   /* Logo & Footer auf Papier-Grund invertieren (dunkle Schrift/Linien) */
@@ -558,8 +560,8 @@ export const STYLES = `
     margin-top: calc(10px * var(--s));
     font-weight: 600;
   }
-  /* Story (9:16): mehr Hochkant-Raum oben */
-  .fmt-story .youth-main { padding-top: calc(330px * var(--s)); }
+  /* Story (9:16): mehr Hochkant-Raum oben; −112px gegen Safe-Area-Header */
+  .fmt-story .youth-main { padding-top: calc(218px * var(--s)); }
 
   /* --- Template: Tabelle --- */
   .table-kicker { margin-bottom: calc(12px * var(--s)); }

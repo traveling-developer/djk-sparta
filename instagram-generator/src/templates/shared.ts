@@ -77,13 +77,12 @@ export function igHeader(right = ""): string {
   return `<div class="ig-header">${igLogo()}${right}</div>`;
 }
 
-// Footer bar: handle + website, divider line
-export function igFooter(accent?: string): string {
+// Footer bar: Marken-Claim + website, divider line.
+export function igFooter(): string {
   return `
     <div class="ig-footer">
       <div class="ig-footer-handle">
-        <div class="ig-footer-accent"${accent ? ` style="background: ${accent};"` : ""}></div>
-        <span>@djk_sparta_noris_nbg</span>
+        <span>#WirSindSparta</span>
       </div>
       <span class="ig-footer-site">djkspartanoris.de</span>
     </div>`;

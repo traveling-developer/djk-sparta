@@ -95,6 +95,17 @@ export const sampleJobs: PostJob[] = [
     },
   },
   {
+    kind: "website",
+    placement: "story",
+    data: {
+      badge: "Neu",
+      kicker: "Frisch gelauncht",
+      headline: ["Neue", "Website", "ist online."],
+      url: "djkspartanoris.de",
+      hero: ["Wir sind", "Sparta."],
+    },
+  },
+  {
     kind: "youth",
     data: {
       sport: "Tischtennis",

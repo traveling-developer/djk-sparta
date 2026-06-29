@@ -45,6 +45,10 @@ export async function getTeams(juniors: boolean): Promise<Team[]> {
         if (!name.includes("Junioren")) {
           continue;
         } else {
+          // TEMPORARY: We currently have no A-Junioren — filter them out.
+          if (name.includes("A-Junioren")) {
+            continue;
+          }
           if (name == "E-Junioren") {
             const newLocal = $(element)
               .find(".bfv-composition-entry__team-name")

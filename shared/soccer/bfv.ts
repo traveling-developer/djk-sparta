@@ -19,6 +19,22 @@ export interface BfvMatch {
   location: string; // ICS-"LOCATION" (Spielort, leer bei verlegten Altterminen)
 }
 
+// Ein rohes Ergebnis. Die Score-Ziffern sind BFV-font-obfuskiert (siehe
+// scrapeBfvResults) — Dekodierung macht der Consumer, damit shared keine
+// Font-Parsing-Runtime-Dependency braucht.
+export interface BfvScoreToken {
+  raw: string; // roher (obfuskierter) Text der Ziffer(n), z.B. ""
+  fontUrl: string; // per-Response-Font, der raw → echte Ziffer mappt
+}
+export interface BfvResult {
+  home: string;
+  guest: string;
+  date: string; // "DD.MM.YYYY" (Berlin-Kalendertag, wie angezeigt)
+  league: string; // Wettbewerb aus dem Vereinsprofil ("__region"), ggf. leer
+  homeScore: BfvScoreToken;
+  guestScore: BfvScoreToken;
+}
+
 // Vom Consumer injizierte Abhängigkeiten (eigene Header-/Retry-Policy).
 export interface ScrapeDeps {
   get: (url: string) => Promise<string>; // liefert den Response-Body
@@ -280,4 +296,80 @@ function isBetter(candidate: BfvMatch, current: BfvMatch): boolean {
   const currentHasLocation = current.location !== "";
   if (candidateHasLocation !== currentHasLocation) return candidateHasLocation;
   return candidate.start.getTime() > current.start.getTime();
+}
+
+// ── Ergebnisse ─────────────────────────────────────────────────────────────
+// Ergebnisse stehen NICHT im ICS-Feed, nur auf der BFV-Website. Und die
+// Score-Ziffern sind font-obfuskiert: jede Ziffer steht als Private-Use-
+// Codepoint (z.B. "&#xE675;") mit einer per-Response-`data-font-url`, deren
+// Custom-Font den Codepoint erst auf die echte Ziffer mappt. Hier liefern wir
+// nur die rohen Tokens + Font-URL; die Dekodierung macht der Consumer.
+
+function clubLetzteUrl(clubUrl: string): string | undefined {
+  const clubId = clubUrl.match(/\/vereine\/[^/]+\/([^/?#]+)/)?.[1];
+  if (!clubId) return undefined;
+  return `${new URL(clubUrl).origin}/partial/vereinsprofil/spielplan/${clubId}/letzte`;
+}
+
+// Scrapt die letzten Ergebnisse des Vereins direkt aus dem Vereinsprofil-Tab
+// "Letzte Spiele" (`/partial/vereinsprofil/spielplan/{clubId}/letzte`). Das
+// deckt alle Teams ab — auch solche, die (z.B. in der Sommerpause) noch keinen
+// eigenen Mannschafts-Link haben. Der Wettbewerb steht je Zeile im
+// "__region"-Feld (z.B. "Helmut Brunner Freizeit Herren Liga"). Score-Ziffern
+// bleiben obfuskiert (siehe BfvScoreToken) — Dekodierung macht der Consumer.
+export async function scrapeBfvResults(
+  deps: ScrapeDeps,
+  opts: ScrapeOptions,
+): Promise<BfvResult[]> {
+  const clean = (s: string) => s.replace(/\s+/g, " ").trim();
+
+  const url = clubLetzteUrl(opts.clubUrl);
+  if (!url) {
+    console.error("Could not derive club letzte URL from:", opts.clubUrl);
+    return [];
+  }
+
+  try {
+    const $ = deps.load(await deps.get(url));
+    const results: BfvResult[] = [];
+
+    for (const el of $(".bfv-spieltag-eintrag__match")) {
+      const $el = $(el);
+
+      const dateText = $el.find(".bfv-matchday-date-time").text();
+      const date = dateText.match(/\d{2}\.\d{2}\.\d{4}/)?.[0];
+      if (!date) continue;
+
+      const home = clean(
+        $el.find(".bfv-matchdata-result__team-name--team0").first().text(),
+      );
+      const guest = clean(
+        $el.find(".bfv-matchdata-result__team-name--team1").first().text(),
+      );
+      if (!home || !guest) continue;
+
+      const g0 = $el.find(".bfv-matchdata-result__goals--team0").first();
+      const g1 = $el.find(".bfv-matchdata-result__goals--team1").first();
+      if (!g0.length || !g1.length) continue;
+
+      // Nicht gespielt / abgesetzt: Platzhalter "-" oder leer, kein Font.
+      const raw0 = g0.text().trim();
+      const raw1 = g1.text().trim();
+      if (!raw0 || !raw1 || raw0 === "-" || raw1 === "-") continue;
+
+      results.push({
+        home,
+        guest,
+        date,
+        league: clean($el.find(".bfv-spieltag-eintrag__region").text()),
+        homeScore: { raw: raw0, fontUrl: g0.attr("data-font-url") ?? "" },
+        guestScore: { raw: raw1, fontUrl: g1.attr("data-font-url") ?? "" },
+      });
+    }
+
+    return results;
+  } catch (error) {
+    console.error("Error downloading soccer results:", url, error);
+    return [];
+  }
 }

@@ -31,7 +31,7 @@ function twoLines(club: string): string {
   return `${clean.slice(0, best)}\n${clean.slice(best + 1)}`;
 }
 
-function displayName(club: string): string {
+export function displayName(club: string): string {
   return club.includes(CLUB) ? ourName(club) : twoLines(club);
 }
 

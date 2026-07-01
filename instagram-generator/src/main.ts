@@ -7,14 +7,8 @@ import {
   SCHEDULE_LEAD_SECONDS,
   SCHEDULE_STAGGER_SECONDS,
 } from "./config.ts";
-import { todayIso } from "./dates.ts";
-import {
-  getYesterdayResults,
-  getTodayAnnouncements,
-} from "./scrape/matchResults.ts";
 import { getUpcomingSoccerAnnouncements } from "./scrape/soccerMatches.ts";
-import { getLeagueTables } from "./scrape/leagueTable.ts";
-import { getFreshNews, newsToReport } from "./sanityRead.ts";
+import { getYesterdaySoccerResults } from "./scrape/soccerResults.ts";
 import { renderJob } from "./render/renderer.ts";
 import { captionFor } from "./captions.ts";
 import { uploadImage, createPost } from "./zernio.ts";
@@ -30,24 +24,9 @@ async function collectJobs(): Promise<PostJob[]> {
     jobs.push({ kind: "matchday", data: matchDay, placement: "story" });
   }
 
-  // for (const matchDay of await getTodayAnnouncements()) {
-  //   jobs.push({ kind: "matchday", data: matchDay });
-  // }
-
-  // for (const result of await getYesterdayResults()) {
-  //   jobs.push({ kind: "result", data: result });
-  // }
-
-  // for (const news of await getFreshNews(todayIso())) {
-  //   jobs.push({ kind: "report", data: newsToReport(news) });
-  // }
-
-  // // Tabelle nur posten, wenn es gestern auch Ergebnisse gab
-  // if (jobs.some((job) => job.kind === "result")) {
-  //   for (const table of await getLeagueTables()) {
-  //     jobs.push({ kind: "table", data: table });
-  //   }
-  // }
+  for (const result of await getYesterdaySoccerResults()) {
+    jobs.push({ kind: "result", data: result, placement: "story" });
+  }
 
   return jobs;
 }

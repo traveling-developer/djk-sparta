@@ -293,6 +293,10 @@ export const STYLES = `
     justify-content: flex-start;
     padding-top: calc(198px * var(--s)); /* −112px gegen Safe-Area-Header */
   }
+  .fmt-story .result-kicker {
+    font-size: calc(32px * var(--s));
+    margin-bottom: calc(140px * var(--s));
+  }
   .fmt-story .result-team { font-size: calc(60px * var(--s)); }
   .fmt-story .result-team.home { transform: translateY(calc(-40px * var(--s))); }
   .fmt-story .result-team.guest { transform: translateY(calc(40px * var(--s))); }
@@ -307,22 +311,24 @@ export const STYLES = `
     justify-content: flex-start;
     padding-top: calc(230px * var(--s));
   }
-  .result-kicker { color: #fff; opacity: 0.9; margin-bottom: calc(20px * var(--s)); }
+  .result-kicker { color: #fff; margin-bottom: calc(20px * var(--s)); }
   .result-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    justify-content: space-between;
     gap: calc(20px * var(--s));
     margin-bottom: calc(58px * var(--s));
   }
   .result-team {
-    flex: 1;
+    min-width: 0;
     text-align: center;
     font-family: "Oswald", sans-serif;
     font-weight: 700;
+    /* Lange Namen werden im Renderer per Auto-Fit (inline font-size) verkleinert */
     font-size: calc(46px * var(--s));
     text-transform: uppercase;
     line-height: 0.95;
+    white-space: nowrap;
   }
   /* Vereine leicht versetzt zum Ergebnis: Heim über, Gast unter der Score-Achse
      (Darstellung identisch zu Match Day) */
@@ -353,10 +359,9 @@ export const STYLES = `
     letter-spacing: 1px;
   }
   .result-date {
-    font-size: calc(24px * var(--s));
+    font-size: calc(28px * var(--s));
     letter-spacing: 2px;
     text-transform: uppercase;
-    opacity: 0.85;
     margin-top: 12px;
   }
 

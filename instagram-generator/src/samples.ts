@@ -49,14 +49,30 @@ export const sampleJobs: PostJob[] = [
   },
   {
     kind: "result",
+    placement: "story",
     data: {
       sport: "Tischtennis",
+      venue: "Heimspiel",
       league: "Landesliga Ostnordost",
       home: "Sparta\nNoris I",
-      guest: "ASV\nBurglengenfeld",
+      guest: "Post SV\nNürnberg",
       score: "5:5",
       label: "Hart umkämpftes Remis",
-      dateLine: "Heimspiel · 11.04.2026",
+      dateLine: "11.04.2026",
+    },
+  },
+  {
+    kind: "result",
+    placement: "story",
+    data: {
+      sport: "Fußball",
+      venue: "Auswärtsspiel",
+      league: "BK-Gr 7 N/F",
+      home: "Sparta\nNoris Bonifaz",
+      guest: "Tuspo Nürnberg\nAltstadt",
+      score: "3:1",
+      label: "Verdienter Auswärtssieg",
+      dateLine: "14.06.2026",
     },
   },
   {
@@ -82,16 +98,6 @@ export const sampleJobs: PostJob[] = [
         { rank: 6, club: "TSV Katzwang", points: "31:17" },
         { rank: 7, club: "SpVgg Mögeldorf", points: "27:21" },
       ],
-    },
-  },
-  {
-    kind: "website",
-    data: {
-      badge: "Neu",
-      kicker: "Frisch gelauncht",
-      headline: ["Neue", "Website", "ist online."],
-      url: "djkspartanoris.de",
-      hero: ["Wir sind", "Sparta."],
     },
   },
   {

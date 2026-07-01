@@ -97,12 +97,18 @@ export async function getYesterdayResults(
 
     results.push({
       sport: "Tischtennis",
+      venue:
+        weAreHome && weAreGuest
+          ? "Vereinsduell"
+          : weAreHome
+            ? "Heimspiel"
+            : "Auswärtsspiel",
       league: row.league,
       home: displayName(row.home),
       guest: displayName(row.guest),
       score: row.score,
       label: weAreHome && weAreGuest ? "Vereinsduell" : label(ours, theirs),
-      dateLine: `${weAreHome ? "Heimspiel" : "Auswärtsspiel"} · ${date}`,
+      dateLine: date,
     });
   }
 

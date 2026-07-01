@@ -43,6 +43,20 @@ export async function renderJob(
   try {
     await page.setContent(html, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    // Auto-Fit: lange Vereinsnamen (z. B. "Burglengenfeld") auf die Spaltenbreite
+    // verkleinern, damit sie nicht umbrechen und die Score-Box mittig bleibt.
+    await page.evaluate(() => {
+      const MIN = 22;
+      document.querySelectorAll<HTMLElement>(".result-team").forEach((el) => {
+        let guard = 0;
+        while (el.scrollWidth > el.clientWidth && guard++ < 40) {
+          const cur = parseFloat(getComputedStyle(el).fontSize);
+          if (cur <= MIN) break;
+          const next = Math.max(cur * (el.clientWidth / el.scrollWidth) * 0.98, MIN);
+          el.style.fontSize = `${next}px`;
+        }
+      });
+    });
     const frame = page.locator("#root > *").first();
     return await frame.screenshot({ type: "png" });
   } finally {

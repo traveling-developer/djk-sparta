@@ -13,12 +13,13 @@ export interface MatchDayData {
 // Daten für das Ergebnis-Template (IGResult)
 export interface ResultData {
   sport: string; // "Tischtennis" — Label in der Diagonale
+  venue: string; // "Heimspiel" | "Auswärtsspiel" | "Vereinsduell" — steht im Kicker vor der Liga
   league: string; // "Landesliga Ostnordost"
   home: string; // "Sparta\nNoris I" — \n bricht die Zeile im Template
   guest: string;
   score: string; // "5:5"
   label: string; // "Sieg" | "Niederlage" | "Unentschieden" | freier Text
-  dateLine: string; // "Heimspiel · 11.04.2026"
+  dateLine: string; // "11.04.2026" — Datum in der Fußzeile
 }
 
 // Daten für das News-Teaser-Template (IGReport)

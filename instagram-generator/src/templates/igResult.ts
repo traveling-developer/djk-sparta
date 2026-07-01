@@ -22,7 +22,7 @@ function labelWithAccent(label: string): string {
 
 export function igResult(data: ResultData, fmt: Fmt = "post45"): string {
   const f = FMT[fmt];
-  const kicker = data.league;
+  const kicker = data.venue ? `${data.venue} · ${data.league}` : data.league;
   // Story: Inhalt rückt nach oben, die Diagonale sitzt in der freien Zone
   // zwischen Header und Kicker (Position & Größe identisch zu Match Day).
   const diagonalTop = fmt === "story" ? 0.21 : 0.24;
@@ -46,7 +46,7 @@ export function igResult(data: ResultData, fmt: Fmt = "post45"): string {
 
       <div class="result-bottom">
         <div class="result-label">${labelWithAccent(data.label)}</div>
-        <div class="result-date">${esc(data.dateLine)}</div>
+        <div class="result-date">am ${esc(data.dateLine)}</div>
       </div>
     </div>
 

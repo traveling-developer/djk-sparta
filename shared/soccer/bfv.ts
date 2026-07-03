@@ -58,6 +58,10 @@ interface TeamSource {
   isJunior: boolean;
 }
 
+function cleanText(s: string): string {
+  return s.replace(/\s+/g, " ").trim();
+}
+
 // Liest den Wert eines BFV-"Spielinfo"-Eintrags (z.B. "Liga", "Altersklasse",
 // "tabellenplatz", "torverhältnis") — von website/teams.ts mitgenutzt.
 export function readGameInfo($: CheerioAPI, title: string): string {
@@ -194,20 +198,19 @@ function splitTeams(
 ): { home: string; away: string } | undefined {
   const SPARTA = "DJK Sparta";
   const idx = matchup.indexOf(SPARTA);
-  const clean = (s: string) => s.replace(/\s+/g, " ").trim();
 
   if (idx > 0) {
     return {
-      home: clean(matchup.slice(0, idx).replace(/-\s*$/, "")),
-      away: clean(matchup.slice(idx)),
+      home: cleanText(matchup.slice(0, idx).replace(/-\s*$/, "")),
+      away: cleanText(matchup.slice(idx)),
     };
   }
 
   const sep = matchup.indexOf("-");
   if (sep === -1) return undefined;
   return {
-    home: clean(matchup.slice(0, sep)),
-    away: clean(matchup.slice(sep + 1)),
+    home: cleanText(matchup.slice(0, sep)),
+    away: cleanText(matchup.slice(sep + 1)),
   };
 }
 
@@ -248,12 +251,14 @@ function parseIcsDate(value: string): Date | undefined {
 
 // Scrapt alle BFV-Spiele des Vereins: Vereinsseite → Team-Links →
 // Detailseiten (ICS-URL + Liga/Altersklasse) → ICS parsen. Liefert rohe,
-// neutrale Spiele; "SPIELFREI"-Zeilen sind bereits herausgefiltert.
+// neutrale Spiele; "SPIELFREI"-Zeilen und abgesetzte Spiele (siehe
+// getCancelledMatchKeys) sind bereits herausgefiltert.
 export async function scrapeBfvMatches(
   deps: ScrapeDeps,
   opts: ScrapeOptions,
 ): Promise<BfvMatch[]> {
   try {
+    const cancelledPromise = getCancelledMatchKeys(deps, opts.clubUrl);
     const $ = deps.load(await deps.get(opts.clubUrl));
 
     let teamLinks = getTeamLinks($);
@@ -269,11 +274,75 @@ export async function scrapeBfvMatches(
       sources.map((source) => getMatchesFromIcs(deps, source)),
     );
 
-    return collapseReschedules(matchLists.flat());
+    const cancelled = await cancelledPromise;
+    const matches = matchLists
+      .flat()
+      .filter(
+        (m) => !cancelled.has(matchKey(m.home, m.guest, berlinYmd(m.start))),
+      );
+
+    return collapseReschedules(matches);
   } catch (error) {
     console.error("Error downloading soccer matches:", error);
     return [];
   }
+}
+
+function matchKey(home: string, guest: string, ymd: string): string {
+  return `${home}|${guest}|${ymd}`;
+}
+
+// Absetzungen stehen NICHT im ICS-Feed: ein abgesetztes Spiel bleibt dort als
+// ganz normaler VEVENT stehen (kein STATUS:CANCELLED, kein Marker in der
+// SUMMARY). Sichtbar ist die Absage nur auf der Website als "__warning"-Text
+// an der Spielzeile ("Abgesetzt", "Ausgefallen", "Verlegt", …) — jede dieser
+// Markierungen heißt: das Spiel findet so nicht statt. Daher scrapen wir den
+// Vereinsprofil-Tab "Nächste Spiele" (`…/spielplan/{clubId}/naechste`) und
+// liefern die Keys der markierten Spiele zum Herausfiltern der ICS-Treffer.
+// Achtung: der Tab zeigt nur die ~5 nächsten Vereinsspiele — weiter entfernte
+// Absetzungen sieht der Filter nicht (für die 2-Tage-Vorschau des
+// instagram-generators reicht das). Fehler sind best-effort: dann wird nichts
+// gefiltert, der Scrape läuft weiter.
+async function getCancelledMatchKeys(
+  deps: ScrapeDeps,
+  clubUrl: string,
+): Promise<Set<string>> {
+  const keys = new Set<string>();
+
+  const url = clubSpielplanUrl(clubUrl, "naechste");
+  if (!url) return keys;
+
+  try {
+    const $ = deps.load(await deps.get(url));
+
+    for (const el of $(".bfv-spieltag-eintrag__match")) {
+      const $el = $(el);
+
+      const warning = cleanText(
+        $el.find(".bfv-matchdata-result__warning-text").text(),
+      );
+      if (!warning) continue;
+
+      const [, d, mo, y] =
+        $el
+          .find(".bfv-matchday-date-time")
+          .text()
+          .match(/(\d{2})\.(\d{2})\.(\d{4})/) ?? [];
+      const home = cleanText(
+        $el.find(".bfv-matchdata-result__team-name--team0").first().text(),
+      );
+      const guest = cleanText(
+        $el.find(".bfv-matchdata-result__team-name--team1").first().text(),
+      );
+      if (!d || !home || !guest) continue;
+
+      keys.add(matchKey(home, guest, `${y}-${mo}-${d}`));
+    }
+  } catch (error) {
+    console.error("Error downloading club schedule:", url, error);
+  }
+
+  return keys;
 }
 
 // Der BFV-Feed listet verlegte Spiele doppelt: Der alte Termin bleibt (ohne
@@ -284,7 +353,7 @@ export async function scrapeBfvMatches(
 function collapseReschedules(matches: BfvMatch[]): BfvMatch[] {
   const byKey = new Map<string, BfvMatch>();
   for (const match of matches) {
-    const key = `${match.home}|${match.guest}|${berlinYmd(match.start)}`;
+    const key = matchKey(match.home, match.guest, berlinYmd(match.start));
     const current = byKey.get(key);
     if (!current || isBetter(match, current)) byKey.set(key, match);
   }
@@ -305,10 +374,13 @@ function isBetter(candidate: BfvMatch, current: BfvMatch): boolean {
 // Custom-Font den Codepoint erst auf die echte Ziffer mappt. Hier liefern wir
 // nur die rohen Tokens + Font-URL; die Dekodierung macht der Consumer.
 
-function clubLetzteUrl(clubUrl: string): string | undefined {
+function clubSpielplanUrl(
+  clubUrl: string,
+  tab: "letzte" | "naechste",
+): string | undefined {
   const clubId = clubUrl.match(/\/vereine\/[^/]+\/([^/?#]+)/)?.[1];
   if (!clubId) return undefined;
-  return `${new URL(clubUrl).origin}/partial/vereinsprofil/spielplan/${clubId}/letzte`;
+  return `${new URL(clubUrl).origin}/partial/vereinsprofil/spielplan/${clubId}/${tab}`;
 }
 
 // Scrapt die letzten Ergebnisse des Vereins direkt aus dem Vereinsprofil-Tab
@@ -321,9 +393,9 @@ export async function scrapeBfvResults(
   deps: ScrapeDeps,
   opts: ScrapeOptions,
 ): Promise<BfvResult[]> {
-  const clean = (s: string) => s.replace(/\s+/g, " ").trim();
+  const clean = cleanText;
 
-  const url = clubLetzteUrl(opts.clubUrl);
+  const url = clubSpielplanUrl(opts.clubUrl, "letzte");
   if (!url) {
     console.error("Could not derive club letzte URL from:", opts.clubUrl);
     return [];
@@ -364,6 +436,7 @@ export async function scrapeBfvResults(
         league: clean($el.find(".bfv-spieltag-eintrag__region").text()),
         homeScore: { raw: raw0, fontUrl: g0.attr("data-font-url") ?? "" },
         guestScore: { raw: raw1, fontUrl: g1.attr("data-font-url") ?? "" },
+        matchUrl: $el.find(".bfv-spieltag-eintrag__match-link").attr("href") ?? "",
       });
     }
 

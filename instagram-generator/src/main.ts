@@ -87,4 +87,9 @@ async function main() {
   }
 }
 
-main();
+// Fehler nicht als unbehandelte Promise-Rejection durchrutschen lassen:
+// klare Meldung + Exit-Code 1, damit der GitHub-Actions-Lauf rot wird.
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

@@ -2,7 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import { scrapeBfvResults } from "../../../shared/soccer/bfv.ts";
 import { SOCCER_CLUB_URL } from "../../../shared/soccer/constants.ts";
-import { headers } from "../../../shared/http.ts";
+import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
 import { yesterdayDe } from "../dates.ts";
 import { withRetry } from "../retry.ts";
 import { decodeScore } from "./bfvFontDecode.ts";
@@ -10,7 +10,7 @@ import { displayName } from "./names.ts";
 import type { ResultData } from "../types.ts";
 
 const CLUB = "Sparta";
-const cfg = { headers };
+const cfg = { headers, timeout: REQUEST_TIMEOUT_MS };
 
 const get = async (url: string): Promise<string> =>
   (await withRetry(() => axios.get<string>(url, cfg))).data;

@@ -5,8 +5,8 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { TEAM_PAGES, type TeamPage } from "../config.ts";
-import { headers } from "../../../shared/http.ts";
-import { deInDays, yesterdayDe } from "../dates.ts";
+import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
+import { deInDays, todayDe, yesterdayDe } from "../dates.ts";
 import { withRetry } from "../retry.ts";
 import { displayName } from "./names.ts";
 import type { MatchDayData, ResultData } from "../types.ts";
@@ -50,7 +50,10 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 async function fetchSchedule(
   url: string,
 ): Promise<Omit<MatchRow, "league" | "label">[]> {
-  const { data } = await axios.get<string>(url, { headers });
+  const { data } = await axios.get<string>(url, {
+    headers,
+    timeout: REQUEST_TIMEOUT_MS,
+  });
   const $ = cheerio.load(data);
 
   const rows: Omit<MatchRow, "league" | "label">[] = [];
@@ -77,11 +80,38 @@ async function fetchSchedule(
   return rows;
 }
 
+// "Sa., 20.09.2026" → "20260920" (vergleichbar); "" wenn kein Datum drin.
+function sortKey(date: string): string {
+  const match = date.match(DATE_PATTERN)?.[0];
+  return match ? match.split(".").reverse().join("") : "";
+}
+
+// Enthält eine Team-Seite nur noch Vergangenheit, ist der saisonale Link
+// veraltet — bei der Jugend wechseln die Gruppen-/Mannschafts-IDs schon zur
+// Rückrunde (ca. Januar). Ohne diese Warnung verschwände die Mannschaft
+// lautlos aus den Posts: die Seite antwortet ja weiter mit Spielplan-Zeilen,
+// der 0-Zeilen-Guard in `fetchSchedule` greift also nie.
+function warnIfStale(
+  teamLabel: string,
+  schedule: Omit<MatchRow, "league" | "label">[],
+): void {
+  const latest = schedule.reduce((a, b) =>
+    sortKey(a.date) >= sortKey(b.date) ? a : b,
+  );
+  if (sortKey(latest.date) >= sortKey(todayDe())) return;
+
+  console.warn(
+    `${teamLabel}: letztes Spiel am ${latest.date} — Link vermutlich veraltet ` +
+      `(Saison-/Rückrunden-IDs in shared/tableTennis/teams.ts prüfen)`,
+  );
+}
+
 // Spielplan-Zeilen aller Team-Seiten für ein Datum (dedupliziert — Vereinsduelle
 // tauchen auf zwei Team-Seiten derselben Liga auf).
 async function scrapeRows(filterDate: string): Promise<MatchRow[]> {
   const rows: MatchRow[] = [];
   const seen = new Set<string>();
+  let failed = 0;
 
   for (const [index, team] of TEAM_PAGES.entries()) {
     if (index > 0) await sleep(PAGE_PAUSE_MS);
@@ -94,6 +124,7 @@ async function scrapeRows(filterDate: string): Promise<MatchRow[]> {
         RETRY_BASE_MS,
       );
       console.log(`${teamLabel}: ${schedule.length} Spielplan-Zeilen`);
+      warnIfStale(teamLabel, schedule);
 
       for (const row of schedule) {
         if (!row.date.includes(filterDate)) continue;
@@ -111,8 +142,20 @@ async function scrapeRows(filterDate: string): Promise<MatchRow[]> {
         rows.push({ ...row, league: team.league, label: teamLabel });
       }
     } catch (error) {
+      failed++;
       console.error(`Error scraping team page ${team.url}:`, error);
     }
+  }
+
+  // Einzelne Ausfälle werden übersprungen (die übrigen Mannschaften sollen
+  // trotzdem posten) — fällt aber *jede* Seite aus, ist das kein spielfreier
+  // Tag, sondern ein Fehler: werfen, damit der Lauf rot wird statt still
+  // "Nothing to post today." zu melden.
+  if (failed > 0 && failed === TEAM_PAGES.length) {
+    throw new Error(
+      `Keine einzige der ${failed} Tischtennis-Team-Seiten abrufbar ` +
+        `(mytischtennis nicht erreichbar oder Rate-Limit).`,
+    );
   }
 
   return rows;

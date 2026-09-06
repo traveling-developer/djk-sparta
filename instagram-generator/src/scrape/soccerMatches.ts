@@ -2,14 +2,14 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import { scrapeBfvMatches, type BfvMatch } from "../../../shared/soccer/bfv.ts";
 import { SOCCER_CLUB_URL } from "../../../shared/soccer/constants.ts";
-import { headers } from "../../../shared/http.ts";
+import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
 import { berlinYmd, formatBerlin } from "../../../shared/soccer/format.ts";
 import { withRetry } from "../retry.ts";
 import { displayName } from "./names.ts";
 import type { MatchDayData } from "../types.ts";
 
 const CLUB = "Sparta";
-const cfg = { headers };
+const cfg = { headers, timeout: REQUEST_TIMEOUT_MS };
 
 const get = async (url: string): Promise<string> =>
   (await withRetry(() => axios.get<string>(url, cfg))).data;

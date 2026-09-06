@@ -10,7 +10,7 @@
 // TTF-Datei und lesen ihre Glyphnamen mit opentype.js.
 import axios from "axios";
 import opentype from "opentype.js";
-import { headers } from "../../../shared/http.ts";
+import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
 import { withRetry } from "../retry.ts";
 
 const NAME_TO_DIGIT: Record<string, string> = {
@@ -44,7 +44,12 @@ function toArrayBuffer(data: ArrayBuffer | Buffer): ArrayBuffer {
 
 async function loadFont(fontCssUrl: string): Promise<opentype.Font> {
   const css = (
-    await withRetry(() => axios.get<string>(absolute(fontCssUrl), { headers }))
+    await withRetry(() =>
+      axios.get<string>(absolute(fontCssUrl), {
+        headers,
+        timeout: REQUEST_TIMEOUT_MS,
+      }),
+    )
   ).data;
 
   // TTF bevorzugen, sonst beliebige Font-URL aus dem @font-face.
@@ -58,6 +63,7 @@ async function loadFont(fontCssUrl: string): Promise<opentype.Font> {
       axios.get<ArrayBuffer>(absolute(fontUrl), {
         headers,
         responseType: "arraybuffer",
+        timeout: REQUEST_TIMEOUT_MS,
       }),
     )
   ).data;

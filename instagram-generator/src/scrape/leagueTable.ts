@@ -4,6 +4,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { TEAM_PAGES } from "../config.ts";
+import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
 import { withRetry } from "../retry.ts";
 import type { TableData, TableRow } from "../types.ts";
 
@@ -33,7 +34,10 @@ export async function getLeagueTables(): Promise<TableData[]> {
 
     try {
       const { data } = await withRetry(() =>
-        axios.get<string>(tableUrl(team.url)),
+        axios.get<string>(tableUrl(team.url), {
+          headers,
+          timeout: REQUEST_TIMEOUT_MS,
+        }),
       );
       const $ = cheerio.load(data);
 

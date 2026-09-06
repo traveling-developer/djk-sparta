@@ -7,3 +7,7 @@ export const headers = {
     "Chrome/112.0.0.0 Safari/537.36",
   Accept: "text/html",
 };
+
+// axios hat per Default *kein* Timeout: ein hängender Request würde den
+// kompletten Lauf blockieren (GitHub Actions bricht erst nach Stunden ab).
+export const REQUEST_TIMEOUT_MS = 20_000;

@@ -210,7 +210,8 @@ export const STYLES = `
     font-weight: 700;
     font-size: calc(46px * var(--s));
     text-transform: uppercase;
-    line-height: 0.95;
+    /* 0.95 war zu eng: die Punkte von Ö/Ü ragten in die Zeile darüber */
+    line-height: 1.08;
   }
   .md-vs {
     font-family: "Oswald", sans-serif;

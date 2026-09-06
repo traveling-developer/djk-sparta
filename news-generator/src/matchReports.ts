@@ -3,15 +3,7 @@ import * as cheerio from "cheerio";
 import fs from "fs";
 import { pdfsFolderPath } from "./constants";
 import { MatchReport } from "./types";
-
-const firstTeam =
-  "https://www.mytischtennis.de/click-tt/ByTTV/25--26/ligen/Erwachsene_Verbandsoberliga_Nord_(Bayerischer_TTV)/gruppe/492343/mannschaft/2948996/Erwachsene_(4er)/spielerbilanzen/gesamt";
-const secondTeam =
-  "https://www.mytischtennis.de/click-tt/ByTTV/25--26/ligen/Erwachsene_Landesliga_Ostnordost_(Bayerischer_TTV)/gruppe/492047/mannschaft/2949395/Erwachsene_II_(4er)/spielerbilanzen/gesamt";
-const thirdTeam =
-  "https://www.mytischtennis.de/click-tt/ByTTV/25--26/ligen/Erwachsene_Landesliga_Ostnordost_(Bayerischer_TTV)/gruppe/492047/mannschaft/2949705/Erwachsene_III_(4er)/spielerbilanzen/gesamt";
-const fourthTeam =
-  "https://www.mytischtennis.de/click-tt/ByTTV/25--26/ligen/Erwachsene_Bezirksliga_Gruppe_2__S%C3%BCd--Ost_(Bayerischer_TTV_-_Mittelfranken-Nord)/gruppe/492063/mannschaft/2946875/Erwachsene_IV_(4er)/spielerbilanzen/gesamt";
+import { TEAM_PAGES } from "../../shared/tableTennis/teams";
 
 export async function downloadMatchReports(): Promise<MatchReport[]> {
   const yesterday = new Date(
@@ -24,8 +16,9 @@ export async function downloadMatchReports(): Promise<MatchReport[]> {
 
   const matchReports: MatchReport[] = [];
 
-  for (const element of [firstTeam, secondTeam, thirdTeam, fourthTeam]) {
-    matchReports.push(...(await downloadReportForTeam(yesterday, element)));
+  // Alle Mannschaften inkl. Jugend — Quelle: shared/tableTennis/teams.ts
+  for (const team of TEAM_PAGES) {
+    matchReports.push(...(await downloadReportForTeam(yesterday, team.url)));
   }
 
   return matchReports;

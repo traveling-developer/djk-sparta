@@ -1,23 +1,23 @@
-// Datums-Helfer — gleiche Logik wie news-generator/src/matchReports.ts.
+// Datums-Helfer — die Tagesgrenze liegt immer in Europe/Berlin, unabhängig von
+// der Server-Zeitzone (GitHub Actions läuft UTC).
 
-// "DD.MM.YYYY" für den Datumsfilter auf mytischtennis.de
-export function yesterdayDe(): string {
-  return new Date(
-    new Date().setDate(new Date().getDate() - 1),
-  ).toLocaleDateString("de", {
+// "DD.MM.YYYY" des Tages in `days` Tagen in Europe/Berlin — Format wie auf
+// mytischtennis.de (negative Werte für Vergangenheit).
+export function deInDays(days: number): string {
+  return new Intl.DateTimeFormat("de-DE", {
+    timeZone: "Europe/Berlin",
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-  });
+  }).format(new Date(Date.now() + days * 24 * 60 * 60 * 1000));
 }
 
-// "DD.MM.YYYY" für den Datumsfilter auf mytischtennis.de
+export function yesterdayDe(): string {
+  return deInDays(-1);
+}
+
 export function todayDe(): string {
-  return new Date().toLocaleDateString("de", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  return deInDays(0);
 }
 
 // "YYYY-MM-DD" für Sanity releaseDate

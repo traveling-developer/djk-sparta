@@ -5,6 +5,7 @@ import { SOCCER_CLUB_URL } from "../../../shared/soccer/constants.ts";
 import { headers } from "../../../shared/http.ts";
 import { berlinYmd, formatBerlin } from "../../../shared/soccer/format.ts";
 import { withRetry } from "../retry.ts";
+import { displayName } from "./names.ts";
 import type { MatchDayData } from "../types.ts";
 
 const CLUB = "Sparta";
@@ -12,28 +13,6 @@ const cfg = { headers };
 
 const get = async (url: string): Promise<string> =>
   (await withRetry(() => axios.get<string>(url, cfg))).data;
-
-function ourName(club: string): string {
-  const match = club.match(/Sparta Noris(?:\s+N(?:ü|ue)rnberg)?\s*(.*)$/i);
-  const suffix = match?.[1]?.trim();
-  return suffix ? `Sparta\nNoris ${suffix}` : "Sparta\nNoris";
-}
-
-function twoLines(club: string): string {
-  const clean = club.replace(/\s+/g, " ").trim();
-  if (clean.length <= 12 || !clean.includes(" ")) return clean;
-
-  const mid = Math.floor(clean.length / 2);
-  let best = clean.indexOf(" ");
-  for (let i = clean.indexOf(" "); i !== -1; i = clean.indexOf(" ", i + 1)) {
-    if (Math.abs(i - mid) < Math.abs(best - mid)) best = i;
-  }
-  return `${clean.slice(0, best)}\n${clean.slice(best + 1)}`;
-}
-
-export function displayName(club: string): string {
-  return club.includes(CLUB) ? ourName(club) : twoLines(club);
-}
 
 // "YYYY-MM-DD" des Tages in `days` Tagen in Europe/Berlin.
 function berlinYmdInDays(days: number): string {

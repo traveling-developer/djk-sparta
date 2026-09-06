@@ -3,9 +3,10 @@ import * as cheerio from "cheerio";
 import { scrapeBfvResults } from "../../../shared/soccer/bfv.ts";
 import { SOCCER_CLUB_URL } from "../../../shared/soccer/constants.ts";
 import { headers } from "../../../shared/http.ts";
+import { yesterdayDe } from "../dates.ts";
 import { withRetry } from "../retry.ts";
 import { decodeScore } from "./bfvFontDecode.ts";
-import { displayName } from "./soccerMatches.ts";
+import { displayName } from "./names.ts";
 import type { ResultData } from "../types.ts";
 
 const CLUB = "Sparta";
@@ -13,22 +14,6 @@ const cfg = { headers };
 
 const get = async (url: string): Promise<string> =>
   (await withRetry(() => axios.get<string>(url, cfg))).data;
-
-// "DD.MM.YYYY" von gestern in Europe/Berlin (Format wie auf der BFV-Seite).
-function berlinYesterdayDe(): string {
-  const d = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const p = Object.fromEntries(
-    new Intl.DateTimeFormat("de-DE", {
-      timeZone: "Europe/Berlin",
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    })
-      .formatToParts(d)
-      .map((x) => [x.type, x.value]),
-  );
-  return `${p.day}.${p.month}.${p.year}`;
-}
 
 function soccerLabel(ours: number, theirs: number): string {
   if (ours === theirs) return "Unentschieden";
@@ -44,7 +29,7 @@ function soccerLabel(ours: number, theirs: number): string {
 }
 
 export async function getYesterdaySoccerResults(
-  date = berlinYesterdayDe(),
+  date = yesterdayDe(),
 ): Promise<ResultData[]> {
   const raw = await scrapeBfvResults(
     { get, load: cheerio.load },

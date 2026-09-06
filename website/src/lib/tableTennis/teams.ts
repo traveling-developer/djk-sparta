@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import { CLUB_TEAMS_URL } from "../../../../shared/tableTennis/teams";
 
 interface Team {
   name: string;
@@ -9,12 +10,9 @@ interface Team {
   link: string;
 }
 
-const url =
-  "https://www.mytischtennis.de/click-tt/ByTTV/25--26/verein/207077/DJK_Sparta_Noris_N%C3%BCrnberg/mannschaften";
-
 export async function getTeams(): Promise<Team[]> {
   try {
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(CLUB_TEAMS_URL);
     const $ = cheerio.load(data);
 
     const teams: Team[] = [];

@@ -1,15 +1,26 @@
 // Tischtennis-Spiele von den mytischtennis.de-Team-Seiten.
 // Die Spielplan-Tabelle der Team-Seite enthält bereits alles:
 // td(0)=Datum "Sa., 20.09.2025", td(1)=Uhrzeit, td(3)=Heim, td(4)=Gast, td(5)=Ergebnis "6:4".
-// Gestrige Zeilen mit Ergebnis → Ergebnis-Post; heutige ohne Ergebnis → Spielankündigung.
+// Zeilen mit Ergebnis → Ergebnis-Post; künftige ohne Ergebnis → Spielankündigung.
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { TEAM_PAGES } from "../config.ts";
-import { yesterdayDe, todayDe } from "../dates.ts";
+import { TEAM_PAGES, type TeamPage } from "../config.ts";
+import { headers } from "../../../shared/http.ts";
+import { deInDays, yesterdayDe } from "../dates.ts";
 import { withRetry } from "../retry.ts";
+import { displayName } from "./names.ts";
 import type { MatchDayData, ResultData } from "../types.ts";
 
 const CLUB = "Sparta";
+
+// mytischtennis rate-limitet (HTTP 429) bei Abrufen in schneller Folge; der
+// beobachtete Cooldown liegt bei 15–20 s. Daher träges Backoff (5/10/20/40 s)
+// und eine Pause zwischen den Team-Seiten, damit die Abrufe kein Burst sind.
+const RETRIES = 5;
+const RETRY_BASE_MS = 5000;
+const PAGE_PAUSE_MS = 2000;
+
+const DATE_PATTERN = /\d{2}\.\d{2}\.\d{4}/;
 
 interface MatchRow {
   date: string; // "Sa., 20.09.2025"
@@ -17,16 +28,8 @@ interface MatchRow {
   home: string;
   guest: string;
   score: string; // "6:4" oder leer/Platzhalter, solange nicht gespielt
-  league: string;
-}
-
-// "DJK Sparta Noris Nürnberg II" → "Sparta\nNoris II" (Zeilenumbruch im Template)
-export function displayName(club: string): string {
-  const match = club.match(/Sparta Noris(?: Nürnberg)?\s*([IVX]*)$/);
-  if (match) {
-    return `Sparta\nNoris${match[1] ? " " + match[1] : ""}`;
-  }
-  return club;
+  league: string; // "Landesliga Ostnordost"
+  label: string; // Kicker-Label: Altersklasse bei Jugend, sonst Liga
 }
 
 function label(ours: number, theirs: number): string {
@@ -41,43 +44,83 @@ function label(ours: number, theirs: number): string {
   return "Niederlage";
 }
 
-// Alle Spielplan-Zeilen der Team-Seiten für ein Datum (dedupliziert —
-// Vereinsduelle tauchen auf zwei Team-Seiten auf).
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Alle Spielplan-Zeilen einer Team-Seite (ohne die Bilanz-Tabellen darunter).
+async function fetchSchedule(
+  url: string,
+): Promise<Omit<MatchRow, "league" | "label">[]> {
+  const { data } = await axios.get<string>(url, { headers });
+  const $ = cheerio.load(data);
+
+  const rows: Omit<MatchRow, "league" | "label">[] = [];
+  $("tbody tr").each((_, element) => {
+    const tds = $(element).find("td");
+    const date = tds.eq(0).text().trim();
+    if (!DATE_PATTERN.test(date)) return; // Einzel-/Doppel-/Gesamt-Bilanz
+
+    rows.push({
+      date,
+      time: tds.eq(1).text().trim(),
+      home: tds.eq(3).text().trim(),
+      guest: tds.eq(4).text().trim(),
+      score: tds.eq(5).text().trim(),
+    });
+  });
+
+  // Keine einzige Spielplan-Zeile heißt Rate-Limit-Interstitial oder veralteter
+  // Link — werfen, damit withRetry es erneut versucht, statt still nichts zu posten.
+  if (rows.length === 0) {
+    throw new Error("keine Spielplan-Zeilen gefunden");
+  }
+
+  return rows;
+}
+
+// Spielplan-Zeilen aller Team-Seiten für ein Datum (dedupliziert — Vereinsduelle
+// tauchen auf zwei Team-Seiten derselben Liga auf).
 async function scrapeRows(filterDate: string): Promise<MatchRow[]> {
   const rows: MatchRow[] = [];
   const seen = new Set<string>();
 
-  for (const team of TEAM_PAGES) {
+  for (const [index, team] of TEAM_PAGES.entries()) {
+    if (index > 0) await sleep(PAGE_PAUSE_MS);
+    const teamLabel = labelFor(team);
+
     try {
-      const { data } = await withRetry(() => axios.get<string>(team.url));
-      const $ = cheerio.load(data);
+      const schedule = await withRetry(
+        () => fetchSchedule(team.url),
+        RETRIES,
+        RETRY_BASE_MS,
+      );
+      console.log(`${teamLabel}: ${schedule.length} Spielplan-Zeilen`);
 
-      $("tbody tr").each((_, element) => {
-        const tds = $(element).find("td");
-        const date = tds.eq(0).text().trim();
-        if (!date.includes(filterDate)) return;
+      for (const row of schedule) {
+        if (!row.date.includes(filterDate)) continue;
+        // spielfrei/Freilose und versehentlich mitgelesene Fremdzeilen
+        if (!row.home || !row.guest) continue;
+        if (!row.home.includes(CLUB) && !row.guest.includes(CLUB)) continue;
 
-        const home = tds.eq(3).text().trim();
-        const guest = tds.eq(4).text().trim();
-        const key = `${date}|${home}|${guest}`;
-        if (seen.has(key)) return;
+        // Mannschaft I und die Jugend heißen beide "DJK Sparta Noris Nürnberg",
+        // deshalb steckt das Label im Key — sonst könnten sich zwei Spiele
+        // verschiedener Mannschaften gegenseitig verschlucken.
+        const key = `${teamLabel}|${row.date}|${row.home}|${row.guest}`;
+        if (seen.has(key)) continue;
         seen.add(key);
 
-        rows.push({
-          date,
-          time: tds.eq(1).text().trim(),
-          home,
-          guest,
-          score: tds.eq(5).text().trim(),
-          league: team.league,
-        });
-      });
+        rows.push({ ...row, league: team.league, label: teamLabel });
+      }
     } catch (error) {
       console.error(`Error scraping team page ${team.url}:`, error);
     }
   }
 
   return rows;
+}
+
+// Erwachsene: Liga als Kicker; Jugend: Altersklasse.
+function labelFor(team: TeamPage): string {
+  return team.ageClass ?? team.league;
 }
 
 export async function getYesterdayResults(
@@ -115,9 +158,9 @@ export async function getYesterdayResults(
   return results;
 }
 
-// Spielankündigungen für heute (Zeilen ohne eingetragenes Ergebnis).
-export async function getTodayAnnouncements(
-  date = todayDe(),
+// Spielankündigungen zwei Tage vorher (Zeilen ohne eingetragenes Ergebnis).
+export async function getUpcomingAnnouncements(
+  date = deInDays(2),
 ): Promise<MatchDayData[]> {
   const rows = await scrapeRows(date);
   const announcements: MatchDayData[] = [];
@@ -138,7 +181,7 @@ export async function getTodayAnnouncements(
 
     announcements.push({
       sport: "Tischtennis",
-      kicker: `${kind} · ${row.league}`,
+      kicker: `${kind} · ${row.label}`,
       home: displayName(row.home),
       guest: displayName(row.guest),
       details: [

@@ -1,28 +1,7 @@
-// Saison-spezifische Team-Seiten (mytischtennis.de) — jede Saison aktualisieren!
-// Muss mit news-generator/src/matchReports.ts in Sync gehalten werden.
-export interface TeamPage {
-  url: string;
-  league: string;
-}
-
-export const TEAM_PAGES: TeamPage[] = [
-  {
-    url: "https://www.mytischtennis.de/click-tt/ByTTV/25--26/ligen/Erwachsene_Verbandsoberliga_Nord_(Bayerischer_TTV)/gruppe/492343/mannschaft/2948996/Erwachsene_(4er)/spielerbilanzen/gesamt",
-    league: "Verbandsoberliga Nord",
-  },
-  {
-    url: "https://www.mytischtennis.de/click-tt/ByTTV/25--26/ligen/Erwachsene_Landesliga_Ostnordost_(Bayerischer_TTV)/gruppe/492047/mannschaft/2949395/Erwachsene_II_(4er)/spielerbilanzen/gesamt",
-    league: "Landesliga Ostnordost",
-  },
-  {
-    url: "https://www.mytischtennis.de/click-tt/ByTTV/25--26/ligen/Erwachsene_Landesliga_Ostnordost_(Bayerischer_TTV)/gruppe/492047/mannschaft/2949705/Erwachsene_III_(4er)/spielerbilanzen/gesamt",
-    league: "Landesliga Ostnordost",
-  },
-  {
-    url: "https://www.mytischtennis.de/click-tt/ByTTV/25--26/ligen/Erwachsene_Bezirksliga_Gruppe_2__S%C3%BCd--Ost_(Bayerischer_TTV_-_Mittelfranken-Nord)/gruppe/492063/mannschaft/2946875/Erwachsene_IV_(4er)/spielerbilanzen/gesamt",
-    league: "Bezirksliga Gruppe 2 Süd-Ost",
-  },
-];
+// Tischtennis-Mannschaften: shared/tableTennis/teams.ts ist die einzige Quelle
+// der Wahrheit (gemeinsam mit website und news-generator genutzt).
+export { TEAM_PAGES } from "../../shared/tableTennis/teams.ts";
+export type { TeamPage } from "../../shared/tableTennis/teams.ts";
 
 // Fußball: BFV-Vereinsseite liegt in shared/soccer/constants.ts, die HTTP-Header
 // in shared/http.ts (gemeinsam mit website genutzt).

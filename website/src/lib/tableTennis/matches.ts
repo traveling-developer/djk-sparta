@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import { CLUB_SCHEDULE_URL } from "../../../../shared/tableTennis/teams";
 
 interface Match {
   date: string;
@@ -9,12 +10,9 @@ interface Match {
   result: string;
 }
 
-const url =
-  "https://www.mytischtennis.de/click-tt/ByTTV/25--26/verein/207077/DJK_Sparta_Noris_N%C3%BCrnberg/spielplan";
-
 export async function getMatches() {
   try {
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(CLUB_SCHEDULE_URL);
 
     const $ = cheerio.load(data);
 

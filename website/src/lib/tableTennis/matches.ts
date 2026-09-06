@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { CLUB_SCHEDULE_URL } from "../../../../shared/tableTennis/teams";
+import { clubScheduleUrl } from "../../../../shared/tableTennis/teams";
 
 interface Match {
   date: string;
@@ -12,7 +12,14 @@ interface Match {
 
 export async function getMatches() {
   try {
-    const { data } = await axios.get(CLUB_SCHEDULE_URL);
+    // Aktueller Monat bis Ende des Folgemonats — der Standardfilter von
+    // click-TT umfasst nur eine Woche und ist dadurch oft leer.
+    const now = new Date();
+    const from = new Date(now.getFullYear(), now.getMonth(), 1);
+    const to = new Date(now.getFullYear(), now.getMonth() + 2, 0);
+    const url = clubScheduleUrl(from, to);
+
+    const { data } = await axios.get(url);
 
     const $ = cheerio.load(data);
 

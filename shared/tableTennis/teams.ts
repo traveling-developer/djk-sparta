@@ -15,6 +15,17 @@ const CLUB_BASE = `https://www.mytischtennis.de/click-tt/ByTTV/${SEASON}/verein/
 /** Spielplan aller Vereinsmannschaften (Website). */
 export const CLUB_SCHEDULE_URL = `${CLUB_BASE}/spielplan`;
 
+/**
+ * Spielplan mit Zeitraum-Filter. Ohne Parameter zeigt click-TT nur heute + 7
+ * Tage an — in spielfreien Wochen also gar nichts. `date_start`/`date_end`
+ * erwarten ISO-Daten (YYYY-MM-DD), beide Grenzen sind inklusiv.
+ */
+export function clubScheduleUrl(dateStart: Date, dateEnd: Date) {
+  const iso = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  return `${CLUB_SCHEDULE_URL}?date_start=${iso(dateStart)}&date_end=${iso(dateEnd)}`;
+}
+
 /** Mannschaftsübersicht inkl. Tabellenplatz (Website). */
 export const CLUB_TEAMS_URL = `${CLUB_BASE}/mannschaften`;
 

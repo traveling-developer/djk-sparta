@@ -7,7 +7,10 @@ import {
   SCHEDULE_LEAD_SECONDS,
   SCHEDULE_STAGGER_SECONDS,
 } from "./config.ts";
-import { getUpcomingAnnouncements } from "./scrape/matchResults.ts";
+import {
+  getUpcomingAnnouncements,
+  getYesterdayResults,
+} from "./scrape/matchResults.ts";
 import { getYesterdaySoccerResults } from "./scrape/soccerResults.ts";
 import { renderJob } from "./render/renderer.ts";
 import { captionFor } from "./captions.ts";
@@ -20,12 +23,16 @@ async function collectJobs(): Promise<PostJob[]> {
 
   const jobs: PostJob[] = [];
 
-  for (const matchDay of await getUpcomingAnnouncements()) {
-    jobs.push({ kind: "matchday", data: matchDay, placement: "story" });
+  for (const result of await getYesterdayResults()) {
+    jobs.push({ kind: "result", data: result, placement: "story" });
   }
 
   for (const result of await getYesterdaySoccerResults()) {
     jobs.push({ kind: "result", data: result, placement: "story" });
+  }
+
+  for (const matchDay of await getUpcomingAnnouncements()) {
+    jobs.push({ kind: "matchday", data: matchDay, placement: "story" });
   }
 
   return jobs;

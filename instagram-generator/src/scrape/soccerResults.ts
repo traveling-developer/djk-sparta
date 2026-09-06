@@ -6,10 +6,10 @@ import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
 import { yesterdayDe } from "../dates.ts";
 import { withRetry } from "../retry.ts";
 import { decodeScore } from "./bfvFontDecode.ts";
+import { isOurs, venueOf } from "./club.ts";
 import { displayName } from "./names.ts";
 import type { ResultData } from "../types.ts";
 
-const CLUB = "Sparta";
 const cfg = { headers, timeout: REQUEST_TIMEOUT_MS };
 
 const get = async (url: string): Promise<string> =>
@@ -56,17 +56,10 @@ export async function getYesterdaySoccerResults(
       continue;
     }
 
-    const weAreHome = r.home.includes(CLUB);
-    const weAreGuest = r.guest.includes(CLUB);
+    const weAreHome = isOurs(r.home);
+    const venue = venueOf(r.home, r.guest);
     const ours = Number(weAreHome ? homeGoals : guestGoals);
     const theirs = Number(weAreHome ? guestGoals : homeGoals);
-
-    const venue =
-      weAreHome && weAreGuest
-        ? "Vereinsduell"
-        : weAreHome
-          ? "Heimspiel"
-          : "Auswärtsspiel";
 
     results.push({
       sport: "Fußball",
@@ -76,7 +69,7 @@ export async function getYesterdaySoccerResults(
       guest: displayName(r.guest),
       score: `${homeGoals}:${guestGoals}`,
       label:
-        weAreHome && weAreGuest ? "Vereinsduell" : soccerLabel(ours, theirs),
+        venue === "Vereinsduell" ? "Vereinsduell" : soccerLabel(ours, theirs),
       dateLine: r.date,
     });
   }

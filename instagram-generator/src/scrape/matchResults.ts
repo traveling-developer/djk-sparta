@@ -8,10 +8,9 @@ import { TEAM_PAGES, type TeamPage } from "../config.ts";
 import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
 import { deInDays, todayDe, yesterdayDe } from "../dates.ts";
 import { withRetry } from "../retry.ts";
+import { isOurs, venueOf } from "./club.ts";
 import { displayName } from "./names.ts";
 import type { MatchDayData, ResultData } from "../types.ts";
-
-const CLUB = "Sparta";
 
 // mytischtennis rate-limitet (HTTP 429) bei Abrufen in schneller Folge; der
 // beobachtete Cooldown liegt bei 15–20 s. Daher träges Backoff (5/10/20/40 s)
@@ -130,7 +129,7 @@ async function scrapeRows(filterDate: string): Promise<MatchRow[]> {
         if (!row.date.includes(filterDate)) continue;
         // spielfrei/Freilose und versehentlich mitgelesene Fremdzeilen
         if (!row.home || !row.guest) continue;
-        if (!row.home.includes(CLUB) && !row.guest.includes(CLUB)) continue;
+        if (!isOurs(row.home) && !isOurs(row.guest)) continue;
 
         // Mannschaft I und die Jugend heißen beide "DJK Sparta Noris Nürnberg",
         // deshalb steckt das Label im Key — sonst könnten sich zwei Spiele
@@ -173,27 +172,33 @@ export async function getYesterdayResults(
   const results: ResultData[] = [];
 
   for (const row of rows) {
-    if (!/^\d+:\d+$/.test(row.score)) continue; // noch kein Ergebnis eingetragen
+    if (!/^\d+:\d+$/.test(row.score)) {
+      // Leer heißt "noch nicht gespielt" — der Normalfall, der stumm bleibt.
+      // Steht dagegen etwas Unerwartetes in der Spalte (kampflos, Wertung,
+      // Zusatzmarker), fiele das Spiel lautlos weg: deshalb loggen.
+      if (row.score) {
+        console.warn(
+          `${row.date} ${row.home} – ${row.guest}: Ergebnis "${row.score}" ` +
+            `nicht auswertbar, kein Post`,
+        );
+      }
+      continue;
+    }
 
     const [homeScore, guestScore] = row.score.split(":").map(Number);
-    const weAreHome = row.home.includes(CLUB);
-    const weAreGuest = row.guest.includes(CLUB);
+    const weAreHome = isOurs(row.home);
+    const venue = venueOf(row.home, row.guest);
     const ours = weAreHome ? homeScore : guestScore;
     const theirs = weAreHome ? guestScore : homeScore;
 
     results.push({
       sport: "Tischtennis",
-      venue:
-        weAreHome && weAreGuest
-          ? "Vereinsduell"
-          : weAreHome
-            ? "Heimspiel"
-            : "Auswärtsspiel",
+      venue,
       league: row.league,
       home: displayName(row.home),
       guest: displayName(row.guest),
       score: row.score,
-      label: weAreHome && weAreGuest ? "Vereinsduell" : label(ours, theirs),
+      label: venue === "Vereinsduell" ? "Vereinsduell" : label(ours, theirs),
       dateLine: date,
     });
   }
@@ -211,27 +216,20 @@ export async function getUpcomingAnnouncements(
   for (const row of rows) {
     if (/^\d+:\d+$/.test(row.score)) continue; // schon gespielt
 
-    const weAreHome = row.home.includes(CLUB);
-    const weAreGuest = row.guest.includes(CLUB);
-    const kind =
-      weAreHome && weAreGuest
-        ? "Vereinsduell"
-        : weAreHome
-          ? "Heimspiel"
-          : "Auswärtsspiel";
+    const venue = venueOf(row.home, row.guest);
     const time = row.time.match(/\d{1,2}:\d{2}/)?.[0];
     const shortDate = row.date.replace(/(\d{2}\.\d{2})\.\d{4}/, "$1."); // "Sa., 20.09."
 
     announcements.push({
       sport: "Tischtennis",
-      kicker: `${kind} · ${row.label}`,
+      kicker: `${venue} · ${row.label}`,
       home: displayName(row.home),
       guest: displayName(row.guest),
       details: [
         ["Datum", shortDate],
         ["Beginn", time ? `${time} Uhr` : "–"],
       ],
-      cta: weAreHome
+      cta: isOurs(row.home)
         ? "Kommt vorbei & feuert uns an!"
         : "Drückt uns die Daumen!",
     });

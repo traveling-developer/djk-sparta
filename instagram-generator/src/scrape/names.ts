@@ -1,7 +1,7 @@
 // Vereinsnamen für die Templates: eigene Mannschaften auf "Sparta\nNoris <Suffix>"
 // normalisieren, Gegner am mittigsten Leerzeichen umbrechen — einzeilige Namen
 // wie "ASV Burglengenfeld" sprengen sonst die VS-Spalte im 9:16-Story-Layout.
-const CLUB = "Sparta";
+import { isOurs } from "./club.ts";
 
 function ourName(club: string): string {
   const match = club.match(/Sparta Noris(?:\s+N(?:ü|ue)rnberg)?\s*(.*)$/i);
@@ -22,5 +22,5 @@ function twoLines(club: string): string {
 }
 
 export function displayName(club: string): string {
-  return club.includes(CLUB) ? ourName(club) : twoLines(club);
+  return isOurs(club) ? ourName(club) : twoLines(club);
 }

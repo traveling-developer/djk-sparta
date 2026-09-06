@@ -14,17 +14,17 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^5.28.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "sanity": "^5.28.0",
+    "@sanity/vision": "^6.12.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sanity": "^6.12.0",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
-    "@sanity/cli": "^6.6.0",
-    "@sanity/eslint-config-studio": "^6.0.0",
+    "@sanity/cli": "^8.9.1",
+    "@sanity/eslint-config-studio": "^7.0.0",
     "@types/react": "^19.1.13",
-    "eslint": "^9.39.4",
+    "eslint": "^10.10.0",
     "prettier": "^3.0.2",
     "typescript": "^6.0.3"
   },

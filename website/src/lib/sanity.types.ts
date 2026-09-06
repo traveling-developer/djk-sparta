@@ -282,13 +282,16 @@ export type SOCCER_TEAMS_RESULT = Array<{
 }>;
 
 // Query TypeMap
-import "@sanity/client";
-declare module "@sanity/client" {
+declare global {
   interface SanityQueries {
     "*[_type == \"news\"] | order(releaseDate desc) [0...6] {\n  ...,\n  \"imageUrl\": image.asset->url,\n  \"excerpt\": pt::text(content)\n}": LATEST_NEWS_RESULT;
     "*[_type == \"news\" && category == \"table-tennis\"] | order(releaseDate desc) [0...6] {\n  ...,\n  \"imageUrl\": image.asset->url,\n  \"excerpt\": pt::text(content)\n}": LATEST_TABLE_TENNIS_NEWS_RESULT;
     "*[_type == \"news\"] | order(releaseDate desc) {\n  ...,\n  \"imageUrl\": image.asset->url\n}": NEWS_RESULT;
     "*[_type == \"soccerTeam\"]": SOCCER_TEAMS_RESULT;
   }
+}
+// Lets @sanity/client releases that predate the global registry read it too
+declare module "@sanity/client" {
+  interface SanityQueries extends globalThis.SanityQueries {}
 }
 

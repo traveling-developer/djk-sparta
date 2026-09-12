@@ -1,0 +1,87 @@
+---
+import { club } from "../../lib/club";
+import { CLUB_ID } from "./ClubJsonLd.astro";
+
+export interface EventMatch {
+  homeTeam: string;
+  awayTeam: string;
+  startIso: string;
+  venue?: string;
+}
+
+export interface Venue {
+  name: string;
+  street: string;
+  postalCode: string;
+  city: string;
+  latitude?: number;
+  longitude?: number;
+}
+
+interface Props {
+  matches: EventMatch[];
+  sport: string;
+  homeVenue: Venue;
+}
+
+const { matches, sport, homeVenue } = Astro.props;
+
+const place = (venue: Venue) => ({
+  "@type": "Place",
+  name: venue.name,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: venue.street,
+    postalCode: venue.postalCode,
+    addressLocality: venue.city,
+    addressCountry: "DE",
+  },
+  ...(venue.latitude !== undefined && venue.longitude !== undefined
+    ? {
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: venue.latitude,
+          longitude: venue.longitude,
+        },
+      }
+    : {}),
+});
+
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+const events = matches.map((match) => {
+  const isHome = /sparta/i.test(match.homeTeam);
+
+  return {
+    "@type": "SportsEvent",
+    name: `${match.homeTeam} – ${match.awayTeam}`,
+    sport,
+    startDate: match.startIso,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    url: pageUrl,
+    location: isHome
+      ? place(homeVenue)
+      : { "@type": "Place", name: match.venue || match.homeTeam },
+    homeTeam: { "@type": "SportsTeam", name: match.homeTeam },
+    awayTeam: { "@type": "SportsTeam", name: match.awayTeam },
+    organizer: {
+      "@type": "SportsOrganization",
+      "@id": new URL(CLUB_ID, Astro.site).href,
+      name: club.name,
+    },
+  };
+});
+
+const jsonLd = { "@context": "https://schema.org", "@graph": events };
+---
+
+{
+  events.length > 0 && (
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(jsonLd)}
+    />
+  )
+}

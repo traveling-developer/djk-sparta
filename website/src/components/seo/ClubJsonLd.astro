@@ -1,0 +1,46 @@
+---
+import { club } from "../../lib/club";
+
+export const CLUB_ID = "#organization";
+
+const url = new URL("/", Astro.site).href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SportsClub",
+  "@id": new URL(CLUB_ID, Astro.site).href,
+  name: club.name,
+  alternateName: club.shortName,
+  url,
+  logo: new URL("/sparta_rw.svg", Astro.site).href,
+  image: new URL("/og-default.jpg", Astro.site).href,
+  foundingDate: String(club.foundedYear),
+  telephone: club.contact.phone,
+  email: club.contact.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: club.address.street,
+    postalCode: club.address.postalCode,
+    addressLocality: club.address.city,
+    addressCountry: "DE",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: club.coordinates.latitude,
+    longitude: club.coordinates.longitude,
+  },
+  sameAs: [club.social.facebook, club.social.instagram],
+  openingHoursSpecification: club.officeHours.map((hours) => ({
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: `https://schema.org/${hours.dayOfWeek}`,
+    opens: hours.opens,
+    closes: hours.closes,
+  })),
+};
+---
+
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify(jsonLd)}
+/>

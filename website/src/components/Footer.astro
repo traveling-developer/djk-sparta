@@ -1,5 +1,5 @@
 ---
-import { club } from "../lib/club";
+import { club, formatOfficeHours } from "../lib/club";
 
 const verein = [
   { label: "Mitglied werden", href: "/member" },
@@ -61,7 +61,7 @@ const abteilungen = [
       </address>
       <div class="footer-social">
         <a
-          href="https://www.facebook.com/djkspartanoris"
+          href={club.social.facebook}
           target="_blank"
           rel="noopener"
           class="social-btn"
@@ -70,7 +70,7 @@ const abteilungen = [
           <img src="/facebook.svg" alt="" width="16" height="16" />
         </a>
         <a
-          href="https://www.instagram.com/djk_sparta_noris_nbg"
+          href={club.social.instagram}
           target="_blank"
           rel="noopener"
           class="social-btn"
@@ -105,8 +105,12 @@ const abteilungen = [
 
     <div class="footer-link-col">
       <div class="footer-col-title">Geschäftsstelle</div>
-      <p class="footer-hours">Fr · 8 - 12 Uhr</p>
-      <p class="footer-hours">oder nach Vereinbarung</p>
+      {
+        club.officeHours.map((hours) => (
+          <p class="footer-hours">{formatOfficeHours(hours)}</p>
+        ))
+      }
+      <p class="footer-hours">{club.officeHoursNote}</p>
     </div>
   </div>
 

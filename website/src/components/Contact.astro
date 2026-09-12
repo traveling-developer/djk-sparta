@@ -3,7 +3,12 @@ import FirstBoardMember from "./contact/FirstBoardMember.astro";
 import SecondBoardMember from "./contact/SecondBoardMember.astro";
 import Treasurer from "./contact/Treasurer.astro";
 import GoogleMap from "./GoogleMap.astro";
-import { club } from "../lib/club";
+import { club, formatOfficeHours } from "../lib/club";
+
+const officeHoursLine = [
+  ...club.officeHours.map(formatOfficeHours),
+  club.officeHoursNote,
+].join(" · ");
 ---
 
 <section
@@ -31,9 +36,7 @@ import { club } from "../lib/club";
 
       <div class="border-t border-white/12 pt-5">
         <div class="contact-office-label">Geschäftsstelle</div>
-        <div class="contact-office-hours">
-          Fr · 8 - 12 Uhr · oder nach Vereinbarung
-        </div>
+        <div class="contact-office-hours">{officeHoursLine}</div>
       </div>
     </div>
 

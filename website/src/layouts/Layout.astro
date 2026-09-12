@@ -11,6 +11,7 @@ import "@fontsource/oswald/latin-700.css";
 import Footer from "../components/Footer.astro";
 import Navbar from "../components/Navbar.astro";
 import CookieConsent from "../components/cookieConsent/CookieConsent.astro";
+import ClubJsonLd from "../components/seo/ClubJsonLd.astro";
 import { club } from "../lib/club";
 
 interface Props {
@@ -56,6 +57,11 @@ const imageUrl = new URL(image, Astro.site);
     <meta property="og:site_name" content={club.shortName} />
     <meta property="og:locale" content="de_DE" />
     <meta property="og:image" content={imageUrl.href} />
+
+    <ClubJsonLd />
+
+    <!-- Seitenspezifischer Head-Inhalt, v.a. weiteres JSON-LD. -->
+    <slot name="head" />
   </head>
   <body>
     <Navbar />

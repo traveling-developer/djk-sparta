@@ -10,6 +10,8 @@ import { getMatches } from "../lib/soccer/matches";
 import { getTeams } from "../lib/soccer/teams";
 import { germanNumberWord } from "../lib/convenience";
 import Sponsors, { SponsorsCategory } from "../components/Sponsors.astro";
+import SportsEventJsonLd from "../components/seo/SportsEventJsonLd.astro";
+import { club } from "../lib/club";
 
 const rawTeams = await getTeams(false);
 
@@ -47,12 +49,30 @@ const teams = [...dynamicTeams, ...staticTeams];
 
 const teamCountWord = germanNumberWord(teams.length);
 
-const fixtures = (await getMatches()).slice(0, 5).map((m) => ({
+const matches = (await getMatches()).slice(0, 5);
+
+const fixtures = matches.map((m) => ({
   date: m.date,
   time: m.time,
   home: m.homeTeam,
   away: m.guestTeam,
 }));
+
+const events = matches.map((m) => ({
+  homeTeam: m.homeTeam,
+  awayTeam: m.guestTeam,
+  startIso: m.startIso,
+  venue: m.location,
+}));
+
+const sportsGround = {
+  name: "Sportanlage Wacholderweg",
+  street: club.address.street,
+  postalCode: club.address.postalCode,
+  city: club.address.city,
+  latitude: club.coordinates.latitude,
+  longitude: club.coordinates.longitude,
+};
 
 const week = [
   [],
@@ -104,6 +124,13 @@ const referees = [
   title="Fußball Herren in Nürnberg"
   description="Herrenfußball bei DJK Sparta Noris Nürnberg: Herren I, Alt Herren und Walking Football. Trainingszeiten am Wacholderweg, Spielplan und Probetraining."
 >
+  <SportsEventJsonLd
+    slot="head"
+    matches={events}
+    sport="Fußball"
+    homeVenue={sportsGround}
+  />
+
   <main>
     <DepartmentHero
       title="Fußball"

@@ -1,13 +1,15 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { clubScheduleUrl } from "../../../../shared/tableTennis/teams";
+import { berlinIsoFromWallClock } from "../datetime";
 
-interface Match {
+export interface Match {
   date: string;
   time: string;
   homeTeam: string;
   guestTeam: string;
   result: string;
+  startIso: string;
 }
 
 export async function getMatches() {
@@ -31,8 +33,8 @@ export async function getMatches() {
       const homeTeam = $(element).find("td").eq(4).text().trim();
       const guestTeam = $(element).find("td").eq(5).text().trim();
       const result = $(element).find("td").eq(6).text().trim();
-      const { date, time } = formatDateTimeToGerman(rawDate, rawTime);
-      allMatches.push({ date, time, homeTeam, guestTeam, result });
+      const { date, time, startIso } = formatDateTimeToGerman(rawDate, rawTime);
+      allMatches.push({ date, time, homeTeam, guestTeam, result, startIso });
     });
 
     return allMatches.filter((match) => {
@@ -74,7 +76,9 @@ export function formatDateTimeToGerman(date: string, time: string) {
     [, hours, minutes] = timeMatch;
   }
 
-  const dateObj = new Date(2000 + +year, +month - 1, +day, +hours, +minutes);
+  // click-TT schreibt das Jahr mal zwei-, mal vierstellig ("26" bzw. "2026").
+  const fullYear = year.length === 4 ? +year : 2000 + +year;
+  const dateObj = new Date(fullYear, +month - 1, +day, +hours, +minutes);
 
   const weekday = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"][dateObj.getDay()];
   const pad = (n: number) => n.toString().padStart(2, "0");
@@ -82,5 +86,12 @@ export function formatDateTimeToGerman(date: string, time: string) {
   return {
     date: `${weekday}. ${pad(dateObj.getDate())}.${pad(dateObj.getMonth() + 1)}.${dateObj.getFullYear().toString().slice(-2)}`,
     time: `${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}`,
+    startIso: berlinIsoFromWallClock(
+      dateObj.getFullYear(),
+      dateObj.getMonth() + 1,
+      dateObj.getDate(),
+      dateObj.getHours(),
+      dateObj.getMinutes(),
+    ),
   };
 }

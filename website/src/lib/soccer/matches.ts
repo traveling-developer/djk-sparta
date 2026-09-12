@@ -4,13 +4,17 @@ import { scrapeBfvMatches } from "../../../../shared/soccer/bfv";
 import { SOCCER_CLUB_URL } from "../../../../shared/soccer/constants";
 import { headers } from "../../../../shared/http";
 import { formatBerlin } from "../../../../shared/soccer/format";
+import { berlinIso } from "../datetime";
 
-interface Match {
+export interface Match {
   date: string;
   time: string;
   homeTeam: string;
   guestTeam: string;
   start: Date;
+  startIso: string;
+  league: string;
+  location: string;
 }
 
 const config: AxiosRequestConfig = { headers };
@@ -37,6 +41,9 @@ export async function getMatches(): Promise<Match[]> {
         homeTeam: match.home,
         guestTeam: match.guest,
         start: match.start,
+        startIso: berlinIso(match.start),
+        league: match.league,
+        location: match.location,
       };
     });
 }

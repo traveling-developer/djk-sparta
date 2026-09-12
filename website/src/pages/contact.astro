@@ -11,7 +11,12 @@ import ContactHero from "../components/ContactHero.astro";
 import GoogleMap from "../components/GoogleMap.astro";
 import ThirdBoardMember from "../components/contact/ThirdBoardMember.astro";
 import DepartmentSectionHeader from "../components/department/DepartmentSectionHeader.astro";
-import { club } from "../lib/club";
+import { club, formatOfficeHours } from "../lib/club";
+
+const officeHoursLine = [
+  ...club.officeHours.map(formatOfficeHours),
+  club.officeHoursNote,
+].join(" · ");
 ---
 
 <Layout
@@ -66,7 +71,7 @@ import { club } from "../lib/club";
             >
               Geschäftsstelle
             </div>
-            <div class="text-sm">Fr · 8 - 12 Uhr · oder nach Vereinbarung</div>
+            <div class="text-sm">{officeHoursLine}</div>
           </div>
         </div>
 

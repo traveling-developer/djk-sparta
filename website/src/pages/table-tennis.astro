@@ -9,20 +9,37 @@ import TableTennisTeamsGrid from "../components/tableTennis/TableTennisTeamsGrid
 import Location from "../components/department/Location.astro";
 import News from "../components/News.astro";
 import Sponsors, { SponsorsCategory } from "../components/Sponsors.astro";
+import SportsEventJsonLd from "../components/seo/SportsEventJsonLd.astro";
 
 import { getTeams } from "../lib/tableTennis/teams";
 import { getMatches } from "../lib/tableTennis/matches";
 
 const teams = await getTeams();
-const rawMatches = await getMatches();
+const rawMatches = (await getMatches()).slice(0, 5);
 
-const fixtures = rawMatches.slice(0, 5).map((m) => ({
+// Heimspielstätte der Abteilung — Anzeige weiter unten in <Location>.
+const hall = {
+  name: "Schulsporthalle Sperberschule",
+  street: "Sperberstr. 85",
+  postalCode: "90461",
+  city: "Nürnberg",
+  latitude: 49.43233666177542,
+  longitude: 11.088991326381146,
+};
+
+const fixtures = rawMatches.map((m) => ({
   date: m.date,
   time: m.time,
   home: m.homeTeam,
   away: m.guestTeam,
   isHome: /sparta/i.test(m.homeTeam),
   venue: /sparta/i.test(m.homeTeam) ? "Sperberschule" : "—",
+}));
+
+const events = rawMatches.map((m) => ({
+  homeTeam: m.homeTeam,
+  awayTeam: m.guestTeam,
+  startIso: m.startIso,
 }));
 
 const week = [
@@ -64,6 +81,13 @@ const coaches = [
   title="Tischtennis in Nürnberg"
   description="Tischtennis in Nürnberg bei DJK Sparta Noris: Training (Di, Mi, Fr). Infos, Termine & Kontakt hier!"
 >
+  <SportsEventJsonLd
+    slot="head"
+    matches={events}
+    sport="Tischtennis"
+    homeVenue={hall}
+  />
+
   <main>
     <DepartmentHero
       title="Tischtennis"
@@ -93,8 +117,8 @@ const coaches = [
     <Location
       titleTop="Sperber"
       titleAccent="Halle."
-      latitude={49.43233666177542}
-      longitude={11.088991326381146}
+      latitude={hall.latitude}
+      longitude={hall.longitude}
       mapTitle="DJK Sparta Noris TT"
       infoWindowContent='<h1 class="text-xl">DJK Sparta Tischtennis</h1><p>Eingang über den Pausenhof der Sperberschule.<br/>Zugang über die Langobardenstraße.</p>'
     >

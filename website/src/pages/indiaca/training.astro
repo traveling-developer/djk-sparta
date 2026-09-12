@@ -6,10 +6,13 @@ import Menu from "../../components/indiaca/Menu.astro";
 import Layout from "../../layouts/Layout.astro";
 ---
 
-<Layout title="Indiaca">
-    <main>
-        <Header title="Indiaca" imageMetadata={indiacaImage} />
+<Layout
+  title="Indiaca"
+  description="Indiaca-Training bei DJK Sparta Noris Nürnberg: Hallentraining montags ab 20 Uhr, Outdoor-Training ab April am Wacholderweg und der laufende Spielbetrieb."
+>
+  <main>
+    <Header title="Indiaca" imageMetadata={indiacaImage} />
 
-        <Menu path="training" />
-    </main>
+    <Menu path="training" />
+  </main>
 </Layout>

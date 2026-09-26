@@ -31,7 +31,9 @@ const abteilungen = [
     </div>
     <p class="wordmark-tagline text-white">
       Traditionsverein im Nürnberger Süden.<br />
-      {club.departmentCount} Abteilungen, {club.memberCountDisplay} Mitglieder, seit
+      {club.departmentCount} Abteilungen, {club.memberCountDisplay} Mitglieder, seit{
+        " "
+      }
       {club.foundedYear}.
     </p>
   </div>
@@ -54,7 +56,7 @@ const abteilungen = [
       </div>
       <address class="footer-address">
         {club.address.street}<br />
-        {club.address.postalCode}
+        {club.address.postalCode}{" "}
         {club.address.city} · {club.address.district}<br />
         <a href={club.contact.phoneTel}>{club.contact.phone}</a><br />
         <a href={club.contact.emailMailto}>{club.contact.email}</a>

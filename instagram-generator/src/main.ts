@@ -38,8 +38,20 @@ async function collectJobs(): Promise<PostJob[]> {
   return jobs;
 }
 
+// Exit-Code, wenn das Einsammeln scheitert. Bis dahin ist nichts
+// veröffentlicht, ein kompletter Neustart kann also keine Doppel-Posts
+// erzeugen — der Workflow startet dann einen zweiten Versuch auf einem neuen
+// Runner, verzögert, falls mytischtennis die IP vorübergehend per Captcha sperrt.
+const EXIT_COLLECT_FAILED = 2;
+
+class CollectError extends Error {}
+
 async function main() {
-  const jobs = await collectJobs();
+  const jobs = await collectJobs().catch((error) => {
+    throw new CollectError("Sammeln der Inhalte fehlgeschlagen", {
+      cause: error,
+    });
+  });
 
   if (jobs.length === 0) {
     console.log("Nothing to post today.");
@@ -98,5 +110,5 @@ async function main() {
 // klare Meldung + Exit-Code 1, damit der GitHub-Actions-Lauf rot wird.
 main().catch((error) => {
   console.error(error);
-  process.exitCode = 1;
+  process.exitCode = error instanceof CollectError ? EXIT_COLLECT_FAILED : 1;
 });

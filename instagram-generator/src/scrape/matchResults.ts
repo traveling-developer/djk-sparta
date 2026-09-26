@@ -45,14 +45,40 @@ function label(ours: number, theirs: number): string {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// mytischtennis sperrt IPs mit auffälligem Zugriffsmuster sporadisch per
+// Captcha: Umleitung auf /verify, ausgeliefert als 429 — trotz freiem
+// Rate-Limit-Kontingent. Beobachtet: trifft auch private IPs, die Sperre löst
+// sich nach ca. 4 Minuten. Das Backoff hier ist dafür zu kurz, deshalb sofort
+// abbrechen; der Retry-Job im Workflow versucht es verzögert auf einem neuen
+// Runner erneut.
+export class CaptchaError extends Error {}
+
+function isCaptcha(error: unknown): boolean {
+  if (!axios.isAxiosError(error)) return false;
+  const finalUrl: string = error.request?.res?.responseUrl ?? "";
+  return (
+    new URL(finalUrl, "https://www.mytischtennis.de").pathname === "/verify"
+  );
+}
+
 // Alle Spielplan-Zeilen einer Team-Seite (ohne die Bilanz-Tabellen darunter).
 async function fetchSchedule(
   url: string,
 ): Promise<Omit<MatchRow, "league" | "label">[]> {
-  const { data } = await axios.get<string>(url, {
-    headers,
-    timeout: REQUEST_TIMEOUT_MS,
-  });
+  let data: string;
+  try {
+    ({ data } = await axios.get<string>(url, {
+      headers,
+      timeout: REQUEST_TIMEOUT_MS,
+    }));
+  } catch (error) {
+    if (isCaptcha(error)) {
+      throw new CaptchaError(
+        "mytischtennis verlangt ein Captcha (IP vorübergehend gesperrt)",
+      );
+    }
+    throw error;
+  }
   const $ = cheerio.load(data);
 
   const rows: Omit<MatchRow, "league" | "label">[] = [];
@@ -121,6 +147,7 @@ async function scrapeRows(filterDate: string): Promise<MatchRow[]> {
         () => fetchSchedule(team.url),
         RETRIES,
         RETRY_BASE_MS,
+        (error) => !(error instanceof CaptchaError),
       );
       console.log(`${teamLabel}: ${schedule.length} Spielplan-Zeilen`);
       warnIfStale(teamLabel, schedule);
@@ -141,6 +168,8 @@ async function scrapeRows(filterDate: string): Promise<MatchRow[]> {
         rows.push({ ...row, league: team.league, label: teamLabel });
       }
     } catch (error) {
+      // Gesperrte IP betrifft jede weitere Seite genauso — sofort abbrechen.
+      if (error instanceof CaptchaError) throw error;
       failed++;
       console.error(`Error scraping team page ${team.url}:`, error);
     }

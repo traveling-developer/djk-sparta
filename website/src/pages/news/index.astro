@@ -1,0 +1,11 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import NewsList from "../../components/news/NewsList.astro";
+---
+
+<Layout
+  title="News"
+  description="Alle Meldungen der DJK Sparta Noris Nürnberg: Spielberichte, Vereinsnachrichten und Neuigkeiten aus allen Abteilungen."
+>
+  <NewsList page={1} />
+</Layout>

@@ -1,0 +1,21 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import NewsList from "../../../components/news/NewsList.astro";
+import { newsPageCount } from "../../../lib/news";
+
+// Seite 1 liegt unter /news, hier nur ab Seite 2
+export function getStaticPaths() {
+  return Array.from({ length: newsPageCount - 1 }, (_, i) => ({
+    params: { page: String(i + 2) },
+  }));
+}
+
+const page = Number(Astro.params.page);
+---
+
+<Layout
+  title={`News – Seite ${page}`}
+  description={`Ältere Meldungen der DJK Sparta Noris Nürnberg, Seite ${page}: Spielberichte, Vereinsnachrichten und Neuigkeiten aus allen Abteilungen.`}
+>
+  <NewsList page={page} />
+</Layout>

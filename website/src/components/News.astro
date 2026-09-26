@@ -1,5 +1,10 @@
 ---
-import { latestNews, latestTableTennisNews } from "../lib/news";
+import {
+  categoryLabel,
+  formatDate,
+  latestNews,
+  latestTableTennisNews,
+} from "../lib/news";
 import { createSlug } from "../lib/convenience";
 
 type Category = "table-tennis";
@@ -15,21 +20,6 @@ const {
   eyebrow = "Aus dem Verein",
   title = "Aktuelles",
 } = Astro.props;
-
-const categoryLabel: Record<string, string> = {
-  "general": "Allgemein",
-  "soccer": "Fußball",
-  "health-sport": "Gesundheitssport",
-  "indiaca": "Indiaca",
-  "tennis": "Tennis",
-  "table-tennis": "Tischtennis",
-};
-
-function formatDate(iso: string | undefined): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  return d.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
-}
 
 const source = category === "table-tennis" ? latestTableTennisNews : latestNews;
 type NewsWithImage = (typeof source)[number] & { imageUrl?: string };
@@ -57,10 +47,10 @@ const third = news.slice(3, 5);
           {title}
         </h2>
       </div>
-      <!-- <a
+      <a
         href="/news"
         class="font-semibold hover:text-sparta-red whitespace-nowrap text-[13px] no-underline hover:opacity-100"
-        >Alle Meldungen →</a> -->
+        >Alle Meldungen →</a>
     </div>
 
     <div class="news-grid">

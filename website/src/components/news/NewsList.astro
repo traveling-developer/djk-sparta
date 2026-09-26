@@ -1,0 +1,60 @@
+---
+import { NEWS_PAGE_SIZE, news, newsPageCount } from "../../lib/news";
+import NewsCard from "./NewsCard.astro";
+import Pagination from "./Pagination.astro";
+
+interface Props {
+  page: number;
+}
+
+const { page } = Astro.props;
+
+const articles = news.slice((page - 1) * NEWS_PAGE_SIZE, page * NEWS_PAGE_SIZE);
+---
+
+<main class="bg-sparta-paper px-6 py-14 md:px-14 md:py-10">
+  <div
+    class="border-sparta-ink mb-10 flex items-end justify-between border-b-2 pb-4.5"
+  >
+    <div>
+      <div class="section-label">Aus dem Verein</div>
+      <h1
+        class="font-display text-sparta-ink m-0 text-[clamp(48px,6vw,72px)] leading-none font-bold tracking-[-0.02em] uppercase"
+      >
+        Alle Meldungen
+      </h1>
+    </div>
+    {
+      newsPageCount > 1 && (
+        <div class="text-sparta-mute text-[13px] font-semibold whitespace-nowrap">
+          Seite {page} von {newsPageCount}
+        </div>
+      )
+    }
+  </div>
+
+  {
+    articles.length > 0 ? (
+      <div class="grid grid-cols-1 gap-x-9 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+        {articles.map((article) => (
+          <NewsCard article={article} />
+        ))}
+      </div>
+    ) : (
+      <p class="text-sparta-mute">Aktuell gibt es keine Meldungen.</p>
+    )
+  }
+
+  <Pagination current={page} total={newsPageCount} />
+</main>
+
+<style>
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #d81e28;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+</style>

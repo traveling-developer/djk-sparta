@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { news } from "../../lib/news";
+import { categoryLabel, formatDate, news } from "../../lib/news";
 import { createSlug } from "../../lib/convenience";
 import { Picture } from "astro:assets";
 import { PortableText } from "astro-portabletext";
@@ -19,25 +19,6 @@ type Article = (typeof news)[number] & { imageUrl?: string };
 
 const article = Astro.props as Article;
 
-const categoryLabel: Record<string, string> = {
-  general: "Allgemein",
-  soccer: "Fußball",
-  "health-sport": "Gesundheitssport",
-  indiaca: "Indiaca",
-  tennis: "Tennis",
-  "table-tennis": "Tischtennis",
-};
-
-function formatDate(iso: string | undefined): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  return d.toLocaleDateString("de-DE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-}
-
 const category = categoryLabel[article.category ?? ""] ?? article.category;
 ---
 
@@ -46,7 +27,7 @@ const category = categoryLabel[article.category ?? ""] ?? article.category;
     <!-- Article -->
     <article class="mx-auto max-w-180">
       <a
-        href="/#news"
+        href="/news"
         class="font-display text-sparta-mute hover:text-sparta-red mb-8 inline-flex items-center gap-2 text-[11px] font-bold tracking-[2px] uppercase no-underline hover:opacity-100"
       >
         <span aria-hidden="true">←</span> Zurück zu den Meldungen
@@ -88,7 +69,7 @@ const category = categoryLabel[article.category ?? ""] ?? article.category;
 
       <div class="border-sparta-line mt-12 border-t pt-8">
         <a
-          href="/#news"
+          href="/news"
           class="font-display text-sparta-mute hover:text-sparta-red inline-flex items-center gap-2 text-[11px] font-bold tracking-[2px] uppercase no-underline hover:opacity-100"
         >
           <span aria-hidden="true">←</span> Zurück zu den Meldungen

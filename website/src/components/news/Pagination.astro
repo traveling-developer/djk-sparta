@@ -1,0 +1,73 @@
+---
+import { newsPageUrl } from "../../lib/news";
+
+interface Props {
+  current: number;
+  total: number;
+}
+
+const { current, total } = Astro.props;
+
+// Erste, letzte und die Nachbarn der aktuellen Seite; Lücken werden zu "…"
+const pages: (number | "gap")[] = [];
+for (let p = 1; p <= total; p++) {
+  if (p === 1 || p === total || Math.abs(p - current) <= 1) {
+    pages.push(p);
+  } else if (pages.at(-1) !== "gap") {
+    pages.push("gap");
+  }
+}
+
+const linkClass =
+  "font-display inline-flex h-10 min-w-10 items-center justify-center px-3 text-[11px] font-bold tracking-[2px] uppercase no-underline";
+---
+
+{
+  total > 1 && (
+    <nav
+      aria-label="Seitennavigation"
+      class="border-sparta-ink mt-14 flex flex-wrap items-center justify-center gap-1 border-t-2 pt-6"
+    >
+      {current > 1 && (
+        <a
+          href={newsPageUrl(current - 1)}
+          class={`${linkClass} text-sparta-mute hover:text-sparta-red hover:opacity-100`}
+        >
+          <span aria-hidden="true">←</span>&nbsp;Neuer
+        </a>
+      )}
+
+      {pages.map((p) =>
+        p === "gap" ? (
+          <span class={`${linkClass} text-sparta-mute`} aria-hidden="true">
+            …
+          </span>
+        ) : p === current ? (
+          <span
+            aria-current="page"
+            class={`${linkClass} bg-sparta-ink text-white`}
+          >
+            {p}
+          </span>
+        ) : (
+          <a
+            href={newsPageUrl(p)}
+            aria-label={`Seite ${p}`}
+            class={`${linkClass} text-sparta-ink hover:text-sparta-red hover:opacity-100`}
+          >
+            {p}
+          </a>
+        ),
+      )}
+
+      {current < total && (
+        <a
+          href={newsPageUrl(current + 1)}
+          class={`${linkClass} text-sparta-mute hover:text-sparta-red hover:opacity-100`}
+        >
+          Älter&nbsp;<span aria-hidden="true">→</span>
+        </a>
+      )}
+    </nav>
+  )
+}

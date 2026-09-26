@@ -244,7 +244,7 @@ export type LATEST_TABLE_TENNIS_NEWS_RESULT = Array<{
 
 // Source: ../website/src/lib/news.ts
 // Variable: NEWS
-// Query: *[_type == "news"] | order(releaseDate desc) {  ...,  "imageUrl": image.asset->url}
+// Query: *[_type == "news"] | order(releaseDate desc) {  ...,  "imageUrl": image.asset->url,  "excerpt": pt::text(content)}
 export type NEWS_RESULT = Array<{
   _id: string;
   _type: "news";
@@ -263,6 +263,7 @@ export type NEWS_RESULT = Array<{
   category?: "general" | "health-sport" | "indiaca" | "soccer" | "table-tennis" | "tennis";
   releaseDate?: string;
   imageUrl: string | null;
+  excerpt: string;
 }>;
 
 // Source: ../website/src/lib/soccer.ts
@@ -286,7 +287,7 @@ declare global {
   interface SanityQueries {
     "*[_type == \"news\"] | order(releaseDate desc) [0...6] {\n  ...,\n  \"imageUrl\": image.asset->url,\n  \"excerpt\": pt::text(content)\n}": LATEST_NEWS_RESULT;
     "*[_type == \"news\" && category == \"table-tennis\"] | order(releaseDate desc) [0...6] {\n  ...,\n  \"imageUrl\": image.asset->url,\n  \"excerpt\": pt::text(content)\n}": LATEST_TABLE_TENNIS_NEWS_RESULT;
-    "*[_type == \"news\"] | order(releaseDate desc) {\n  ...,\n  \"imageUrl\": image.asset->url\n}": NEWS_RESULT;
+    "*[_type == \"news\"] | order(releaseDate desc) {\n  ...,\n  \"imageUrl\": image.asset->url,\n  \"excerpt\": pt::text(content)\n}": NEWS_RESULT;
     "*[_type == \"soccerTeam\"]": SOCCER_TEAMS_RESULT;
   }
 }

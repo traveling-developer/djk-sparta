@@ -1,0 +1,77 @@
+---
+import { categoryLabel, excerptWords, formatDate } from "../../lib/news";
+import type { NEWS_RESULT } from "../../lib/sanity.types";
+import { createSlug } from "../../lib/convenience";
+
+interface Props {
+  article: NEWS_RESULT[number];
+}
+
+const { article } = Astro.props;
+---
+
+<article class="news-card">
+  <div class="news-meta">
+    <span class="news-cat">
+      {categoryLabel[article.category ?? ""] ?? article.category}
+    </span>
+    <span class="news-date">· {formatDate(article.releaseDate)}</span>
+  </div>
+  <h2 class="news-card-title">
+    <a href={`/news/${createSlug(article.title!)}`}>{article.title}</a>
+  </h2>
+  <p class="news-card-body">{excerptWords(article.excerpt, 25)}</p>
+</article>
+
+<style>
+  .news-card {
+    position: relative;
+    border-top: 1px solid #e4e2dd;
+    padding-top: 20px;
+  }
+
+  .news-meta {
+    display: flex;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .news-cat {
+    color: #d81e28;
+  }
+  .news-date {
+    color: #6a6a70;
+  }
+
+  .news-card-title {
+    font-family: "Oswald", "Arial Narrow", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 8px;
+    color: #0c0c0e;
+  }
+  .news-card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  /* Stretched Link: macht die ganze Karte klickbar */
+  .news-card-title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .news-card-title a:hover {
+    color: #d81e28;
+    opacity: 1;
+  }
+
+  .news-card-body {
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>

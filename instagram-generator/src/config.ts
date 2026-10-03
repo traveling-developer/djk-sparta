@@ -17,6 +17,27 @@ export const DRAFT =
 // Rendert die Beispieldaten aus samples.ts statt zu scrapen (impliziert Dry-Run)
 export const SAMPLES = process.argv.includes("--samples");
 
+// Welche Inhalte dieser Lauf einsammelt: "results" (Ergebnisse von gestern),
+// "announcements" (Spielankündigungen in zwei Tagen) oder "all". Jeder
+// Tischtennis-Collector ruft alle Team-Seiten ab — beide in einem Lauf
+// verdoppeln die mytischtennis-Abrufe und lösen das Captcha aus. Der Workflow
+// startet deshalb zwei getrennte Läufe mit Stunden Abstand.
+// `--only=results` oder ONLY=results; ohne Angabe "all" (lokal bequem).
+export type RunMode = "results" | "announcements" | "all";
+
+export const ONLY: RunMode = (() => {
+  const value =
+    process.argv.find((arg) => arg.startsWith("--only="))?.slice(7) ||
+    process.env.ONLY ||
+    "all";
+  if (value !== "results" && value !== "announcements" && value !== "all") {
+    throw new Error(
+      `Ungültiger Wert für --only/ONLY: "${value}" (erlaubt: results, announcements, all)`,
+    );
+  }
+  return value;
+})();
+
 // Veröffentlichungen staffeln (Zernio scheduledFor), damit nicht alle Jobs
 // gleichzeitig posten: erster Post nach LEAD Sekunden, danach je STAGGER
 // Sekunden Abstand. Frei anpassbar (z.B. 300 = 5 Minuten Abstand).

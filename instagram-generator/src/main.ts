@@ -4,6 +4,7 @@ import {
   DRY_RUN,
   SAMPLES,
   DRAFT,
+  ONLY,
   SCHEDULE_LEAD_SECONDS,
   SCHEDULE_STAGGER_SECONDS,
 } from "./config.ts";
@@ -23,16 +24,20 @@ async function collectJobs(): Promise<PostJob[]> {
 
   const jobs: PostJob[] = [];
 
-  for (const result of await getYesterdayResults()) {
-    jobs.push({ kind: "result", data: result, placement: "story" });
+  if (ONLY !== "announcements") {
+    for (const result of await getYesterdayResults()) {
+      jobs.push({ kind: "result", data: result, placement: "story" });
+    }
+
+    for (const result of await getYesterdaySoccerResults()) {
+      jobs.push({ kind: "result", data: result, placement: "story" });
+    }
   }
 
-  for (const result of await getYesterdaySoccerResults()) {
-    jobs.push({ kind: "result", data: result, placement: "story" });
-  }
-
-  for (const matchDay of await getUpcomingAnnouncements()) {
-    jobs.push({ kind: "matchday", data: matchDay, placement: "story" });
+  if (ONLY !== "results") {
+    for (const matchDay of await getUpcomingAnnouncements()) {
+      jobs.push({ kind: "matchday", data: matchDay, placement: "story" });
+    }
   }
 
   return jobs;

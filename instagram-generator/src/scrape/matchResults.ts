@@ -1,12 +1,15 @@
-// Tischtennis-Spiele von den mytischtennis.de-Team-Seiten.
-// Die Spielplan-Tabelle der Team-Seite enthält bereits alles:
-// td(0)=Datum "Sa., 20.09.2025", td(1)=Uhrzeit, td(3)=Heim, td(4)=Gast, td(5)=Ergebnis "6:4".
+// Tischtennis-Spiele vom click-TT-Vereins-Spielplan (alle Mannschaften in
+// einem Request, Parser in shared/tableTennis/clubSchedule.ts).
 // Zeilen mit Ergebnis → Ergebnis-Post; künftige ohne Ergebnis → Spielankündigung.
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { TEAM_PAGES, type TeamPage } from "../config.ts";
+import {
+  parseDeDate,
+  scrapeClubSchedule,
+  type ClubMatch,
+} from "../../../shared/tableTennis/clubSchedule.ts";
 import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
-import { deInDays, todayDe, yesterdayDe } from "../dates.ts";
+import { deInDays, yesterdayDe } from "../dates.ts";
 import { withRetry } from "../retry.ts";
 import { isOurs, venueOf } from "./club.ts";
 import { displayName } from "./names.ts";
@@ -14,22 +17,10 @@ import type { MatchDayData, ResultData } from "../types.ts";
 
 // mytischtennis rate-limitet (HTTP 429) bei Abrufen in schneller Folge; der
 // beobachtete Cooldown liegt bei 15–20 s. Daher träges Backoff (5/10/20/40 s)
-// und eine Pause zwischen den Team-Seiten, damit die Abrufe kein Burst sind.
+// und eine Pause zwischen Mannschaftsübersicht und Spielplan.
 const RETRIES = 5;
 const RETRY_BASE_MS = 5000;
 const PAGE_PAUSE_MS = 2000;
-
-const DATE_PATTERN = /\d{2}\.\d{2}\.\d{4}/;
-
-interface MatchRow {
-  date: string; // "Sa., 20.09.2025"
-  time: string; // "14:00" (ggf. mit Zusatz wie "v" für verlegt)
-  home: string;
-  guest: string;
-  score: string; // "6:4" oder leer/Platzhalter, solange nicht gespielt
-  league: string; // "Landesliga Ostnordost"
-  label: string; // Kicker-Label: Altersklasse bei Jugend, sonst Liga
-}
 
 function label(ours: number, theirs: number): string {
   if (ours === theirs) return "Hart umkämpftes Remis";
@@ -42,8 +33,6 @@ function label(ours: number, theirs: number): string {
   if (diff <= 2) return "Knappe Niederlage";
   return "Niederlage";
 }
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // mytischtennis sperrt IPs mit auffälligem Zugriffsmuster sporadisch per
 // Captcha: Umleitung auf /verify, ausgeliefert als 429 — trotz freiem
@@ -61,16 +50,13 @@ function isCaptcha(error: unknown): boolean {
   );
 }
 
-// Alle Spielplan-Zeilen einer Team-Seite (ohne die Bilanz-Tabellen darunter).
-async function fetchSchedule(
-  url: string,
-): Promise<Omit<MatchRow, "league" | "label">[]> {
-  let data: string;
+async function get(url: string): Promise<string> {
   try {
-    ({ data } = await axios.get<string>(url, {
+    const { data } = await axios.get<string>(url, {
       headers,
       timeout: REQUEST_TIMEOUT_MS,
-    }));
+    });
+    return data;
   } catch (error) {
     if (isCaptcha(error)) {
       throw new CaptchaError(
@@ -79,119 +65,46 @@ async function fetchSchedule(
     }
     throw error;
   }
-  const $ = cheerio.load(data);
-
-  const rows: Omit<MatchRow, "league" | "label">[] = [];
-  $("tbody tr").each((_, element) => {
-    const tds = $(element).find("td");
-    const date = tds.eq(0).text().trim();
-    if (!DATE_PATTERN.test(date)) return; // Einzel-/Doppel-/Gesamt-Bilanz
-
-    rows.push({
-      date,
-      time: tds.eq(1).text().trim(),
-      home: tds.eq(3).text().trim(),
-      guest: tds.eq(4).text().trim(),
-      score: tds.eq(5).text().trim(),
-    });
-  });
-
-  // Keine einzige Spielplan-Zeile heißt Rate-Limit-Interstitial oder veralteter
-  // Link — werfen, damit withRetry es erneut versucht, statt still nichts zu posten.
-  if (rows.length === 0) {
-    throw new Error("keine Spielplan-Zeilen gefunden");
-  }
-
-  return rows;
 }
 
-// "Sa., 20.09.2026" → "20260920" (vergleichbar); "" wenn kein Datum drin.
-function sortKey(date: string): string {
-  const match = date.match(DATE_PATTERN)?.[0];
-  return match ? match.split(".").reverse().join("") : "";
-}
-
-// Enthält eine Team-Seite nur noch Vergangenheit, ist der saisonale Link
-// veraltet — bei der Jugend wechseln die Gruppen-/Mannschafts-IDs schon zur
-// Rückrunde (ca. Januar). Ohne diese Warnung verschwände die Mannschaft
-// lautlos aus den Posts: die Seite antwortet ja weiter mit Spielplan-Zeilen,
-// der 0-Zeilen-Guard in `fetchSchedule` greift also nie.
-function warnIfStale(
-  teamLabel: string,
-  schedule: Omit<MatchRow, "league" | "label">[],
-): void {
-  const latest = schedule.reduce((a, b) =>
-    sortKey(a.date) >= sortKey(b.date) ? a : b,
+// Ligaspiele des Vereins an einem Tag ("DD.MM.YYYY"). Pokalspiele werden
+// (noch) nicht gepostet. Schlägt der Abruf fehl — auch wenn die Seite keine
+// Spielplan-Tabelle enthält (Rate-Limit-Interstitial) —, wird das gesamte
+// Paar aus Mannschaftsübersicht + Spielplan erneut versucht; ein Fehler nach
+// allen Versuchen macht den Lauf rot statt still "Nothing to post today.".
+async function scrapeRows(date: string): Promise<ClubMatch[]> {
+  const day = parseDeDate(date);
+  const matches = await withRetry(
+    () =>
+      scrapeClubSchedule(
+        { get, load: cheerio.load },
+        { from: day, to: day, pauseMs: PAGE_PAUSE_MS },
+      ),
+    RETRIES,
+    RETRY_BASE_MS,
+    (error) => !(error instanceof CaptchaError),
   );
-  if (sortKey(latest.date) >= sortKey(todayDe())) return;
+  console.log(`Vereins-Spielplan ${date}: ${matches.length} Spiele`);
 
-  console.warn(
-    `${teamLabel}: letztes Spiel am ${latest.date} — Link vermutlich veraltet ` +
-      `(Saison-/Rückrunden-IDs in shared/tableTennis/teams.ts prüfen)`,
-  );
-}
-
-// Spielplan-Zeilen aller Team-Seiten für ein Datum (dedupliziert — Vereinsduelle
-// tauchen auf zwei Team-Seiten derselben Liga auf).
-async function scrapeRows(filterDate: string): Promise<MatchRow[]> {
-  const rows: MatchRow[] = [];
+  const rows: ClubMatch[] = [];
   const seen = new Set<string>();
-  let failed = 0;
-
-  for (const [index, team] of TEAM_PAGES.entries()) {
-    if (index > 0) await sleep(PAGE_PAUSE_MS);
-    const teamLabel = labelFor(team);
-
-    try {
-      const schedule = await withRetry(
-        () => fetchSchedule(team.url),
-        RETRIES,
-        RETRY_BASE_MS,
-        (error) => !(error instanceof CaptchaError),
-      );
-      console.log(`${teamLabel}: ${schedule.length} Spielplan-Zeilen`);
-      warnIfStale(teamLabel, schedule);
-
-      for (const row of schedule) {
-        if (!row.date.includes(filterDate)) continue;
-        // spielfrei/Freilose und versehentlich mitgelesene Fremdzeilen
-        if (!row.home || !row.guest) continue;
-        if (!isOurs(row.home) && !isOurs(row.guest)) continue;
-
-        // Mannschaft I und die Jugend heißen beide "DJK Sparta Noris Nürnberg",
-        // deshalb steckt das Label im Key — sonst könnten sich zwei Spiele
-        // verschiedener Mannschaften gegenseitig verschlucken.
-        const key = `${teamLabel}|${row.date}|${row.home}|${row.guest}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
-
-        rows.push({ ...row, league: team.league, label: teamLabel });
-      }
-    } catch (error) {
-      // Gesperrte IP betrifft jede weitere Seite genauso — sofort abbrechen.
-      if (error instanceof CaptchaError) throw error;
-      failed++;
-      console.error(`Error scraping team page ${team.url}:`, error);
-    }
+  for (const match of matches) {
+    if (match.isCup) continue;
+    // spielfrei/Freilose und versehentlich mitgelesene Fremdzeilen
+    if (!match.home || !match.guest) continue;
+    if (!isOurs(match.home) && !isOurs(match.guest)) continue;
+    // Gruppe + Mannschafts-IDs: eindeutig auch dort, wo Mannschaft I und die
+    // Jugend beide "DJK Sparta Noris Nürnberg" heißen.
+    if (seen.has(match.key)) continue;
+    seen.add(match.key);
+    rows.push(match);
   }
-
-  // Einzelne Ausfälle werden übersprungen (die übrigen Mannschaften sollen
-  // trotzdem posten) — fällt aber *jede* Seite aus, ist das kein spielfreier
-  // Tag, sondern ein Fehler: werfen, damit der Lauf rot wird statt still
-  // "Nothing to post today." zu melden.
-  if (failed > 0 && failed === TEAM_PAGES.length) {
-    throw new Error(
-      `Keine einzige der ${failed} Tischtennis-Team-Seiten abrufbar ` +
-        `(mytischtennis nicht erreichbar oder Rate-Limit).`,
-    );
-  }
-
   return rows;
 }
 
 // Erwachsene: Liga als Kicker; Jugend: Altersklasse.
-function labelFor(team: TeamPage): string {
-  return team.ageClass ?? team.league;
+function labelFor(match: ClubMatch): string {
+  return match.ageClass ?? match.league;
 }
 
 export async function getYesterdayResults(
@@ -246,17 +159,16 @@ export async function getUpcomingAnnouncements(
     if (/^\d+:\d+$/.test(row.score)) continue; // schon gespielt
 
     const venue = venueOf(row.home, row.guest);
-    const time = row.time.match(/\d{1,2}:\d{2}/)?.[0];
     const shortDate = row.date.replace(/(\d{2}\.\d{2})\.\d{4}/, "$1."); // "Sa., 20.09."
 
     announcements.push({
       sport: "Tischtennis",
-      kicker: `${venue} · ${row.label}`,
+      kicker: `${venue} · ${labelFor(row)}`,
       home: displayName(row.home),
       guest: displayName(row.guest),
       details: [
         ["Datum", shortDate],
-        ["Beginn", time ? `${time} Uhr` : "–"],
+        ["Beginn", row.time ? `${row.time} Uhr` : "–"],
       ],
       cta: isOurs(row.home)
         ? "Kommt vorbei & feuert uns an!"

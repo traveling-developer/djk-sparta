@@ -1,5 +1,5 @@
-// Tischtennis-Mannschaften: shared/tableTennis/teams.ts ist die einzige Quelle
-// der Wahrheit (gemeinsam mit website und news-generator genutzt).
+// Tischtennis: Spiele kommen vom Vereins-Spielplan (shared/tableTennis/
+// clubSchedule.ts). TEAM_PAGES nutzt nur noch das tote leagueTable.ts.
 export { TEAM_PAGES } from "../../shared/tableTennis/teams.ts";
 export type { TeamPage } from "../../shared/tableTennis/teams.ts";
 
@@ -19,9 +19,9 @@ export const SAMPLES = process.argv.includes("--samples");
 
 // Welche Inhalte dieser Lauf einsammelt: "results" (Ergebnisse von gestern),
 // "announcements" (Spielankündigungen in zwei Tagen) oder "all". Jeder
-// Tischtennis-Collector ruft alle Team-Seiten ab — beide in einem Lauf
-// verdoppeln die mytischtennis-Abrufe und lösen das Captcha aus. Der Workflow
-// startet deshalb zwei getrennte Läufe mit Stunden Abstand.
+// Tischtennis-Collector ruft Mannschaftsübersicht + Vereins-Spielplan ab;
+// früher (5 Team-Seiten je Collector) löste beides in einem Lauf das Captcha
+// aus. Der Workflow startet deshalb weiterhin zwei getrennte Läufe.
 // `--only=results` oder ONLY=results; ohne Angabe "all" (lokal bequem).
 export type RunMode = "results" | "announcements" | "all";
 

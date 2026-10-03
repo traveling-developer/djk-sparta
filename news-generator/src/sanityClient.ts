@@ -32,7 +32,8 @@ function textToPortableText(text: string) {
     }));
 }
 
-export async function publishReport(report: MatchReport) {
+// Gibt die ID des angelegten news-Dokuments zurück.
+export async function publishReport(report: MatchReport): Promise<string> {
   const exampleNewsObject = {
     _id: randomUUID().toString(),
     _type: "news",
@@ -43,4 +44,5 @@ export async function publishReport(report: MatchReport) {
   };
 
   await client.createIfNotExists(exampleNewsObject);
+  return exampleNewsObject._id;
 }

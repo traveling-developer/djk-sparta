@@ -8,6 +8,7 @@ import {
   scrapeClubSchedule,
 } from "../../shared/tableTennis/clubSchedule";
 import { headers, REQUEST_TIMEOUT_MS } from "../../shared/http";
+import { summary } from "./summary";
 
 const cfg = { headers, timeout: REQUEST_TIMEOUT_MS };
 
@@ -22,6 +23,7 @@ export async function downloadMatchReports(): Promise<MatchReport[]> {
     month: "2-digit",
     year: "numeric",
   }).format(new Date(Date.now() - 24 * 60 * 60 * 1000));
+  summary.setDay(yesterday);
 
   // Alle Mannschaften inkl. Jugend in einem Request — Vereins-Spielplan,
   // Parser in shared/tableTennis/clubSchedule.ts. Schlägt der Abruf fehl,
@@ -37,12 +39,35 @@ export async function downloadMatchReports(): Promise<MatchReport[]> {
   // Pokalspiele bekommen (noch) keinen Bericht; ohne Spielbericht-Link ist
   // das Spiel noch nicht eingetragen.
   for (const match of matches) {
-    if (match.isCup || !match.reportUrl) continue;
+    const entry = {
+      match: `${match.home} - ${match.guest}`,
+      league: match.ageClass
+        ? `${match.league} (${match.ageClass})`
+        : match.league,
+    };
+
+    if (match.isCup) {
+      summary.add({ ...entry, status: "übersprungen", detail: "Pokalspiel" });
+      continue;
+    }
+    if (!match.reportUrl) {
+      summary.add({
+        ...entry,
+        status: "übersprungen",
+        detail: "noch kein Spielbericht eingetragen",
+      });
+      continue;
+    }
 
     try {
       matchReports.push(await downloadMatchReport(match.reportUrl));
-    } catch {
+    } catch (error) {
       // bereits in downloadMatchReport geloggt — übrige Spiele trotzdem
+      summary.add({
+        ...entry,
+        status: "fehler",
+        detail: `PDF-Download: ${errorMessage(error)}`,
+      });
     }
   }
 
@@ -91,4 +116,8 @@ async function downloadMatchReport(
     );
     throw error;
   }
+}
+
+export function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }

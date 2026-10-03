@@ -15,12 +15,3 @@ export function deInDays(days: number): string {
 export function yesterdayDe(): string {
   return deInDays(-1);
 }
-
-export function todayDe(): string {
-  return deInDays(0);
-}
-
-// "YYYY-MM-DD" für Sanity releaseDate
-export function todayIso(): string {
-  return new Date().toISOString().split("T")[0];
-}

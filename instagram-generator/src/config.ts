@@ -1,7 +1,5 @@
 // Tischtennis: Spiele kommen vom Vereins-Spielplan (shared/tableTennis/
-// clubSchedule.ts). TEAM_PAGES nutzt nur noch das tote leagueTable.ts.
-export { TEAM_PAGES } from "../../shared/tableTennis/teams.ts";
-export type { TeamPage } from "../../shared/tableTennis/teams.ts";
+// clubSchedule.ts).
 
 // Fußball: BFV-Vereinsseite liegt in shared/soccer/constants.ts, die HTTP-Header
 // in shared/http.ts (gemeinsam mit website genutzt).

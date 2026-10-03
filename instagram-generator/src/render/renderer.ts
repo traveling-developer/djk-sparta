@@ -10,7 +10,7 @@ import { igAnnYouth } from "../templates/igAnnYouth.ts";
 import { FMT } from "../templates/shared.ts";
 import type { Fmt, PostJob } from "../types.ts";
 
-function jobToMarkup(job: PostJob, fmt: Fmt): string {
+export function jobToMarkup(job: PostJob, fmt: Fmt): string {
   switch (job.kind) {
     case "matchday":
       return igMatchDay(job.data, fmt);

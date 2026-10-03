@@ -47,17 +47,6 @@ export const STYLES = `
     text-transform: uppercase;
     color: #fff;
   }
-  .ig-sigma {
-    position: absolute;
-    right: -160px;
-    bottom: -240px;
-    font-family: "Oswald", sans-serif;
-    font-weight: 700;
-    font-size: calc(820px * var(--s));
-    line-height: 0.8;
-    z-index: 0;
-    pointer-events: none;
-  }
   .ig-stripes {
     position: absolute;
     top: 60px;

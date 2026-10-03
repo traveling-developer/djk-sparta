@@ -40,11 +40,6 @@ export function igDiagonal({
   return `<div class="ig-diagonal" style="top: ${top}px; height: calc(${h}px * var(--s)); opacity: ${opacity};${bgStyle}">${inner}</div>`;
 }
 
-// Big watermark Σ
-export function igSigma(color = "rgba(255,255,255,0.06)"): string {
-  return `<div class="ig-sigma" style="color: ${color};">Σ</div>`;
-}
-
 // Corner stripes (top-right ticks)
 export function igStripes(): string {
   const bars = [120, 180, 90, 150]

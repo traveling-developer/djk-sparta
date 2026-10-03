@@ -436,7 +436,6 @@ export async function scrapeBfvResults(
         league: clean($el.find(".bfv-spieltag-eintrag__region").text()),
         homeScore: { raw: raw0, fontUrl: g0.attr("data-font-url") ?? "" },
         guestScore: { raw: raw1, fontUrl: g1.attr("data-font-url") ?? "" },
-        matchUrl: $el.find(".bfv-spieltag-eintrag__match-link").attr("href") ?? "",
       });
     }
 

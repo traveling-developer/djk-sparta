@@ -84,4 +84,4 @@ Requires Node ≥ 24 (runs TypeScript natively, no build step) and a one-time `n
 
 Environment variables (in `.env.local` for local runs, repository secrets in CI): `ZERNIO_API_KEY`, `ZERNIO_INSTAGRAM_ACCOUNT_ID`, `SANITY_STUDIO_PROJECT_ID`, `SANITY_STUDIO_DATASET`.
 
-Note: the table-tennis team URLs (`TEAM_PAGES` in `src/config.ts`) are season-specific and must be updated each season (together with `news-generator/src/matchReports.ts`). The soccer `SOCCER_CLUB_URL` is the stable BFV club ID and does not need seasonal updates.
+Note: no seasonal maintenance needed — the mytischtennis URLs are computed from the stable club id and the current season (`shared/tableTennis/teams.ts`), and the soccer `SOCCER_CLUB_URL` is the stable BFV club ID.

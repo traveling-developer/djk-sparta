@@ -64,11 +64,9 @@ Scrapes club ranking / teams / matches data from external sites.
 
 ### Instagram generator
 
-Collects the day's content (today's table-tennis match announcements, yesterday's table-tennis results scraped from [mytischtennis.de](https://www.mytischtennis.de/), soccer fixtures two days out scraped from [bfv.de](https://www.bfv.de/) (via the shared scraper in `shared/soccer/`), today's news from Sanity, and league tables on result days), renders each item through the typed HTML/CSS templates in `src/templates/` with headless Playwright (1080×1350 PNG for feed posts, 1080×1920 for stories), and publishes the images to Instagram via the Zernio API.
+Collects yesterday's results (table tennis from [mytischtennis.de](https://www.mytischtennis.de/), soccer from [bfv.de](https://www.bfv.de/), both via the shared scrapers in `shared/`) and table-tennis match announcements two days ahead, renders each item through the typed HTML/CSS templates in `src/templates/` with headless Playwright (1080×1920 PNG), and publishes the images as Instagram **Stories** via the Zernio API.
 
-Soccer fixtures are announced two days before the match and posted as 9:16 **Stories** (table-tennis stays a same-day feed post). The kicker shows the team's Liga for adults and the Altersklasse for juniors; "SPIELFREI" bye entries are filtered out.
-
-Runs daily at 16:30 UTC (18:30 Berlin time) via GitHub Actions (`.github/workflows/instagram-generator.yml`), well after the news-generator so its news already exist in Sanity.
+Runs twice daily via GitHub Actions (`.github/workflows/instagram-generator.yml`): 14:30 UTC results, 16:30 UTC announcements (`--only=results|announcements`).
 
 Requires Node ≥ 24 (runs TypeScript natively, no build step) and a one-time `npx playwright install chromium`.
 
@@ -82,6 +80,6 @@ Requires Node ≥ 24 (runs TypeScript natively, no build step) and a one-time `n
 | `npm run preview`           | Live template preview at `localhost:4322`                       |
 | `npm run generate`          | CI entry point (env already set)                                |
 
-Environment variables (in `.env.local` for local runs, repository secrets in CI): `ZERNIO_API_KEY`, `ZERNIO_INSTAGRAM_ACCOUNT_ID`, `SANITY_STUDIO_PROJECT_ID`, `SANITY_STUDIO_DATASET`.
+Environment variables (in `.env.local` for local runs, repository secrets in CI): `ZERNIO_API_KEY`, `ZERNIO_INSTAGRAM_ACCOUNT_ID`.
 
 Note: no seasonal maintenance needed — the mytischtennis URLs are computed from the stable club id and the current season (`shared/tableTennis/teams.ts`), and the soccer `SOCCER_CLUB_URL` is the stable BFV club ID.

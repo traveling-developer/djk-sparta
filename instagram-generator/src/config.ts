@@ -16,21 +16,28 @@ export const DRAFT =
 export const SAMPLES = process.argv.includes("--samples");
 
 // Welche Inhalte dieser Lauf einsammelt: "results" (Ergebnisse von gestern),
-// "announcements" (Spielankündigungen in zwei Tagen) oder "all". Jeder
+// "announcements" (Spielankündigungen in zwei Tagen), "weekend" (Feed-Post mit
+// allen Tischtennis-Ergebnissen Fr–So, montags) oder "all" (= results +
+// announcements; weekend läuft nur explizit, sonst ein drittes Abruf-Paar). Jeder
 // Tischtennis-Collector ruft Mannschaftsübersicht + Vereins-Spielplan ab;
 // früher (5 Team-Seiten je Collector) löste beides in einem Lauf das Captcha
-// aus. Der Workflow startet deshalb weiterhin zwei getrennte Läufe.
+// aus. Der Workflow startet deshalb weiterhin getrennte Läufe.
 // `--only=results` oder ONLY=results; ohne Angabe "all" (lokal bequem).
-export type RunMode = "results" | "announcements" | "all";
+export type RunMode = "results" | "announcements" | "weekend" | "all";
 
 export const ONLY: RunMode = (() => {
   const value =
     process.argv.find((arg) => arg.startsWith("--only="))?.slice(7) ||
     process.env.ONLY ||
     "all";
-  if (value !== "results" && value !== "announcements" && value !== "all") {
+  if (
+    value !== "results" &&
+    value !== "announcements" &&
+    value !== "weekend" &&
+    value !== "all"
+  ) {
     throw new Error(
-      `Ungültiger Wert für --only/ONLY: "${value}" (erlaubt: results, announcements, all)`,
+      `Ungültiger Wert für --only/ONLY: "${value}" (erlaubt: results, announcements, weekend, all)`,
     );
   }
   return value;

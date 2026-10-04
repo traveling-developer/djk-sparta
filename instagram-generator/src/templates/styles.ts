@@ -609,4 +609,143 @@ export const STYLES = `
     font-size: calc(40px * var(--s));
     text-align: right;
   }
+
+  /* --- Template: Wochenend-Rückblick (alle Spiele Fr–So) --- */
+  /* --k: Verdichtung bei vielen Spielen — der Renderer senkt es, bis der
+     Inhalt passt. min-height: 0, damit Überlauf messbar ist statt den
+     Footer aus dem Rahmen zu schieben. */
+  .wk-main {
+    --k: 1;
+    min-height: 0;
+    /* wenige Spiele: Block mittig statt Leere unten; "safe" hält ihn bei
+       Überlauf oben (bis der Renderer --k angepasst hat) */
+    justify-content: safe center;
+    /* nicht mit --k skalieren: der Kicker muss unter der Diagonale bleiben */
+    padding-top: calc(120px * var(--s));
+  }
+  .wk-kicker {
+    font-size: calc(22px * var(--s) * var(--k));
+    letter-spacing: 4px;
+    margin-bottom: calc(6px * var(--s) * var(--k));
+  }
+  .wk-title {
+    font-family: "Oswald", sans-serif;
+    font-weight: 700;
+    font-size: calc(76px * var(--s) * var(--k));
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: -1px;
+    margin-bottom: calc(28px * var(--s) * var(--k));
+  }
+  .wk-title .accent { color: var(--red); font-style: italic; }
+  .wk-list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(12px * var(--s) * var(--k));
+  }
+  .wk-row {
+    display: grid;
+    grid-template-columns: calc(104px * var(--s) * var(--k)) minmax(0, 1fr) calc(84px * var(--s) * var(--k));
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .wk-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid rgba(255, 255, 255, 0.1);
+  }
+  .wk-day-name {
+    font-family: "Oswald", sans-serif;
+    font-weight: 700;
+    font-size: calc(40px * var(--s) * var(--k));
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .wk-day-date {
+    font-size: calc(18px * var(--s) * var(--k));
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: calc(6px * var(--s) * var(--k));
+    letter-spacing: 1px;
+  }
+  .wk-body {
+    min-width: 0;
+    padding: calc(14px * var(--s) * var(--k)) calc(24px * var(--s) * var(--k)) calc(14px * var(--s) * var(--k)) calc(22px * var(--s) * var(--k));
+  }
+  .wk-league {
+    font-size: calc(17px * var(--s) * var(--k));
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: calc(4px * var(--s) * var(--k));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wk-line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: calc(16px * var(--s) * var(--k));
+    font-family: "Oswald", sans-serif;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .wk-name {
+    font-weight: 500;
+    font-size: calc(32px * var(--s) * var(--k));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wk-line.us .wk-name { font-weight: 700; color: #fff; }
+  .wk-score {
+    font-weight: 700;
+    font-size: calc(36px * var(--s) * var(--k));
+    min-width: calc(30px * var(--s) * var(--k));
+    text-align: right;
+  }
+  .wk-line.won .wk-score { color: #fff; }
+  .wk-outcome {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Oswald", sans-serif;
+    font-weight: 700;
+    font-size: calc(48px * var(--s) * var(--k));
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .wk-row.win .wk-outcome { background: var(--red); color: #fff; }
+  .wk-row.draw .wk-outcome { background: #fff; color: var(--ink); }
+  .wk-tally {
+    display: flex;
+    margin-top: calc(28px * var(--s) * var(--k));
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  .wk-tally-cell {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: calc(12px * var(--s) * var(--k));
+    padding: calc(14px * var(--s) * var(--k)) 0;
+  }
+  .wk-tally-cell + .wk-tally-cell { border-left: 2px solid rgba(255, 255, 255, 0.2); }
+  .wk-tally-num {
+    font-family: "Oswald", sans-serif;
+    font-weight: 700;
+    font-size: calc(48px * var(--s) * var(--k));
+    line-height: 1;
+  }
+  .wk-tally-cell:first-child .wk-tally-num { color: var(--red); }
+  .wk-tally-label {
+    font-size: calc(18px * var(--s) * var(--k));
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+  }
 `;

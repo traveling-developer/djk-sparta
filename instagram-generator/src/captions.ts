@@ -77,5 +77,19 @@ Einfach vorbeikommen — wir freuen uns auf dich!
 
 ${HASHTAGS}`;
     }
+    case "weekend": {
+      const d = job.data;
+      const lines = d.matches
+        .map(
+          (m) =>
+            `${m.day}: ${m.home} ${m.homeScore}:${m.guestScore} ${m.guest} (${m.league})`,
+        )
+        .join("\n");
+      return `Das war unser Spielwochenende (${d.range}) 🏓
+
+${lines}
+
+${hashtagsFor(d.sport)}`;
+    }
   }
 }

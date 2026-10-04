@@ -2,20 +2,20 @@
 
 Monorepo for the **DJK Sparta Noris Nürnberg e.V.** website. Every package is a standalone npm project — **run commands inside the package dir**, never at the root.
 
-| Package                | What it is                                                                           |
-| :--------------------- | :----------------------------------------------------------------------------------- |
-| `website/`             | Public site — Astro, Tailwind 4 + daisyUI, static build                              |
-| `sanity/`              | Sanity Studio (`news`, `soccerTeam`)                                                 |
-| `news-generator/`      | mytischtennis PDFs → Gemini → German match report → Sanity `news` (`tsx`)            |
-| `instagram-generator/` | HTML templates → Playwright PNG → Instagram Story via Zernio (plain `node`, no build) |
-| `shared/`              | Scrapers (BFV soccer, mytischtennis) + HTTP headers, used by all of the above        |
+| Package                | What it is                                                                                 |
+| :--------------------- | :----------------------------------------------------------------------------------------- |
+| `website/`             | Public site — Astro, Tailwind 4 + daisyUI, static build                                    |
+| `sanity/`              | Sanity Studio (`news`, `soccerTeam`)                                                       |
+| `news-generator/`      | mytischtennis PDFs → Gemini → German match report → Sanity `news` (`tsx`)                  |
+| `instagram-generator/` | HTML templates → Playwright PNG → Instagram Story/Post via Zernio (plain `node`, no build) |
+| `shared/`              | Scrapers (BFV soccer, mytischtennis) + HTTP headers, used by all of the above              |
 
 ## Commands
 
 - `website/` — `npm run dev` (:4321) · `npm run build`
 - `sanity/` — `npm run dev` · `npm run deploy`
 - `news-generator/` — `npm run dev` (loads `.env.local`)
-- `instagram-generator/` — `node src/main.ts --samples` (no env/network) · `npm run dry-run` (real data → `./out/`, no posting) · `npm run draft` · `npm run preview` (:4322) · all accept `--only=results|announcements` · first run: `npx playwright install chromium`
+- `instagram-generator/` — `node src/main.ts --samples` (no env/network) · `npm run dry-run` (real data → `./out/`, no posting) · `npm run draft` · `npm run preview` (:4322) · all accept `--only=results|announcements|weekend` · first run: `npx playwright install chromium`
 - No tests, no linter — verify with `npm run build` (website) or a `dry-run` (IG). Prettier only.
 
 ## Rules
@@ -35,7 +35,7 @@ Monorepo for the **DJK Sparta Noris Nürnberg e.V.** website. Every package is a
 - mytischtennis: rate-limits bursts (HTTP 429) and redirects to a captcha (`/verify`) → exit code 2 → workflow retry job. Scrapers must throw on unexpected page structure so a broken scrape never looks like a match-free day.
 - BFV obfuscates score digits via a per-response font; `instagram-generator/src/scrape/bfvFontDecode.ts` decodes them by glyph name.
 - IG generator has deliberately **no** date flag — to test another day, pass a date to the collector (e.g. `getYesterdayResults("20.09.2026")`).
-- IG cron strings in the workflow must match the `ONLY` mapping (14:30 UTC results, 16:30 UTC announcements).
+- IG cron strings in the workflow must match the `ONLY` mapping (14:30 UTC results, 16:30 UTC announcements, Mon 08:00 UTC weekend). `weekend` is a 4:5 feed post with all TT results Fri–Sun; not part of `all`.
 
 ## Deployment & env
 

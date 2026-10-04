@@ -70,6 +70,26 @@ export interface YouthData {
   sessions?: YouthSession[]; // Trainingstag-Karten (z.B. Di / Do)
 }
 
+// Daten für den Wochenend-Rückblick (IGWeekend): alle Spiele Fr–So auf einem Post.
+export type Outcome = "win" | "loss" | "draw" | "derby";
+export interface WeekendMatch {
+  day: string; // "Fr"
+  date: string; // "02.10."
+  league: string; // "Landesliga Ostnordost" bzw. "Jugend 19 · Bezirksklasse D"
+  home: string; // einzeilig, z.B. "Sparta Noris II"
+  guest: string;
+  homeScore: number;
+  guestScore: number;
+  homeIsUs: boolean;
+  guestIsUs: boolean;
+  outcome: Outcome; // aus Sparta-Sicht
+}
+export interface WeekendData {
+  sport: string; // "Tischtennis"
+  range: string; // "02.–04. Oktober"
+  matches: WeekendMatch[]; // chronologisch
+}
+
 // Zielplatzierung auf Instagram: Feed-Post (4:5, Default) oder Story (9:16).
 // Steuert sowohl das Render-Format (Fmt) als auch Zernios contentType.
 export type Placement = "post" | "story";
@@ -81,4 +101,5 @@ export type PostJob = (
   | { kind: "table"; data: TableData }
   | { kind: "website"; data: WebsiteData }
   | { kind: "youth"; data: YouthData }
+  | { kind: "weekend"; data: WeekendData }
 ) & { placement?: Placement };

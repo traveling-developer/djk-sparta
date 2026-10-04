@@ -9,11 +9,17 @@ import {
   type ClubMatch,
 } from "../../../shared/tableTennis/clubSchedule.ts";
 import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
-import { deInDays, yesterdayDe } from "../dates.ts";
+import { deInDays, lastWeekendDe, yesterdayDe } from "../dates.ts";
 import { withRetry } from "../retry.ts";
 import { isOurs, venueOf } from "./club.ts";
 import { displayName } from "./names.ts";
-import type { MatchDayData, ResultData } from "../types.ts";
+import type {
+  MatchDayData,
+  Outcome,
+  ResultData,
+  WeekendData,
+  WeekendMatch,
+} from "../types.ts";
 
 // mytischtennis rate-limitet (HTTP 429) bei Abrufen in schneller Folge; der
 // beobachtete Cooldown liegt bei 15–20 s. Daher träges Backoff (5/10/20/40 s)
@@ -67,24 +73,28 @@ async function get(url: string): Promise<string> {
   }
 }
 
-// Ligaspiele des Vereins an einem Tag ("DD.MM.YYYY"). Pokalspiele werden
+// Ligaspiele des Vereins von `from` bis `to` ("DD.MM.YYYY", inklusiv). Pokalspiele werden
 // (noch) nicht gepostet. Schlägt der Abruf fehl — auch wenn die Seite keine
 // Spielplan-Tabelle enthält (Rate-Limit-Interstitial) —, wird das gesamte
 // Paar aus Mannschaftsübersicht + Spielplan erneut versucht; ein Fehler nach
 // allen Versuchen macht den Lauf rot statt still "Nothing to post today.".
-async function scrapeRows(date: string): Promise<ClubMatch[]> {
-  const day = parseDeDate(date);
+async function scrapeRows(from: string, to = from): Promise<ClubMatch[]> {
   const matches = await withRetry(
     () =>
       scrapeClubSchedule(
         { get, load: cheerio.load },
-        { from: day, to: day, pauseMs: PAGE_PAUSE_MS },
+        {
+          from: parseDeDate(from),
+          to: parseDeDate(to),
+          pauseMs: PAGE_PAUSE_MS,
+        },
       ),
     RETRIES,
     RETRY_BASE_MS,
     (error) => !(error instanceof CaptchaError),
   );
-  console.log(`Vereins-Spielplan ${date}: ${matches.length} Spiele`);
+  const range = from === to ? from : `${from}–${to}`;
+  console.log(`Vereins-Spielplan ${range}: ${matches.length} Spiele`);
 
   const rows: ClubMatch[] = [];
   const seen = new Set<string>();
@@ -177,4 +187,83 @@ export async function getUpcomingAnnouncements(
   }
 
   return announcements;
+}
+
+// "02.10.2026" + "04.10.2026" → "02.–04. Oktober", über den Monatswechsel
+// "30.09.–02. Oktober".
+function rangeLabel(from: string, to: string): string {
+  const [fromDay, fromMonth] = from.split(".");
+  const [toDay, toMonth] = to.split(".");
+  const month = new Intl.DateTimeFormat("de-DE", { month: "long" }).format(
+    parseDeDate(to),
+  );
+  const start =
+    fromMonth === toMonth ? `${fromDay}.` : `${fromDay}.${fromMonth}.`;
+  return `${start}–${toDay}. ${month}`;
+}
+
+// Jugend: "Jugend 19 · Bezirksklasse D" (Altersklasse vorn, ohne Gruppen-Nr.).
+function weekendLeague(match: ClubMatch): string {
+  if (!match.ageClass) return match.league;
+  const league = match.league
+    .replace(match.ageClass, "")
+    .replace(/\s+Gruppe\s+\d+$/, "")
+    .trim();
+  return league ? `${match.ageClass} · ${league}` : match.ageClass;
+}
+
+function outcomeOf(ours: number, theirs: number): Outcome {
+  if (ours > theirs) return "win";
+  if (ours < theirs) return "loss";
+  return "draw";
+}
+
+// Alle Ligaspiele des letzten Wochenendes (Fr–So) für den Feed-Post.
+export async function getWeekendResults(
+  { from, to } = lastWeekendDe(),
+): Promise<WeekendData> {
+  // Chronologisch: Datum, dann Uhrzeit ("20261002" + "17:30")
+  const sortKey = (m: ClubMatch) =>
+    m.dateDe.split(".").reverse().join("") + m.time;
+  const rows = (await scrapeRows(from, to)).sort((a, b) =>
+    sortKey(a).localeCompare(sortKey(b)),
+  );
+  const matches: WeekendMatch[] = [];
+
+  for (const row of rows) {
+    if (!/^\d+:\d+$/.test(row.score)) {
+      // Anders als beim Tages-Post ist das Wochenende vorbei: auch ein leeres
+      // Ergebnis heißt hier "fehlt", nicht "kommt noch".
+      console.warn(
+        `${row.date} ${row.home} – ${row.guest}: Ergebnis "${row.score}" ` +
+          `fehlt oder nicht auswertbar, nicht im Wochenend-Post`,
+      );
+      continue;
+    }
+
+    const [homeScore, guestScore] = row.score.split(":").map(Number);
+    const homeIsUs = isOurs(row.home);
+    const guestIsUs = isOurs(row.guest);
+    const outcome: Outcome =
+      homeIsUs && guestIsUs
+        ? "derby"
+        : homeIsUs
+          ? outcomeOf(homeScore, guestScore)
+          : outcomeOf(guestScore, homeScore);
+
+    matches.push({
+      day: row.date.slice(0, 2), // "Fr., 02.10.2026" → "Fr"
+      date: row.dateDe.slice(0, 6), // "02.10."
+      league: weekendLeague(row),
+      home: displayName(row.home).replace("\n", " "),
+      guest: displayName(row.guest).replace("\n", " "),
+      homeScore,
+      guestScore,
+      homeIsUs,
+      guestIsUs,
+      outcome,
+    });
+  }
+
+  return { sport: "Tischtennis", range: rangeLabel(from, to), matches };
 }

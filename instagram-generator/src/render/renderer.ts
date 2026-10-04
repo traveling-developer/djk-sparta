@@ -7,6 +7,7 @@ import { igReport } from "../templates/igReport.ts";
 import { igTable } from "../templates/igTable.ts";
 import { igAnnWebsite } from "../templates/igAnnWebsite.ts";
 import { igAnnYouth } from "../templates/igAnnYouth.ts";
+import { igWeekend } from "../templates/igWeekend.ts";
 import { FMT } from "../templates/shared.ts";
 import type { Fmt, PostJob } from "../types.ts";
 
@@ -24,6 +25,8 @@ export function jobToMarkup(job: PostJob, fmt: Fmt): string {
       return igAnnWebsite(job.data, fmt);
     case "youth":
       return igAnnYouth(job.data, fmt);
+    case "weekend":
+      return igWeekend(job.data, fmt);
   }
 }
 
@@ -52,10 +55,25 @@ export async function renderJob(
         while (el.scrollWidth > el.clientWidth && guard++ < 40) {
           const cur = parseFloat(getComputedStyle(el).fontSize);
           if (cur <= MIN) break;
-          const next = Math.max(cur * (el.clientWidth / el.scrollWidth) * 0.98, MIN);
+          const next = Math.max(
+            cur * (el.clientWidth / el.scrollWidth) * 0.98,
+            MIN,
+          );
           el.style.fontSize = `${next}px`;
         }
       });
+    });
+    // Wochenend-Post: bei vielen Spielen alle Maße über --k verkleinern, bis
+    // die Liste in den Rahmen passt.
+    await page.evaluate(() => {
+      const MIN_K = 0.5;
+      const main = document.querySelector<HTMLElement>(".wk-main");
+      if (!main) return;
+      let k = 1;
+      while (main.scrollHeight > main.clientHeight && k > MIN_K) {
+        k = Math.max(k - 0.02, MIN_K);
+        main.style.setProperty("--k", String(k));
+      }
     });
     const frame = page.locator("#root > *").first();
     return await frame.screenshot({ type: "png" });

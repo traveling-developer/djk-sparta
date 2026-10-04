@@ -15,3 +15,17 @@ export function deInDays(days: number): string {
 export function yesterdayDe(): string {
   return deInDays(-1);
 }
+
+// Letztes Spielwochenende (Fr–So) als "DD.MM.YYYY" in Europe/Berlin: der
+// jüngste Sonntag bis einschließlich heute — Montag also gestern, sonntags
+// heute (dann evtl. noch unvollständig).
+export function lastWeekendDe(): { from: string; to: string } {
+  const weekday = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Europe/Berlin",
+    weekday: "short",
+  }).format(new Date());
+  const sinceSunday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(
+    weekday,
+  );
+  return { from: deInDays(-sinceSunday - 2), to: deInDays(-sinceSunday) };
+}

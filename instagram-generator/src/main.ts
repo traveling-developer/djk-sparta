@@ -10,6 +10,7 @@ import {
 } from "./config.ts";
 import {
   getUpcomingAnnouncements,
+  getWeekendResults,
   getYesterdayResults,
 } from "./scrape/matchResults.ts";
 import { getYesterdaySoccerResults } from "./scrape/soccerResults.ts";
@@ -23,6 +24,15 @@ async function collectJobs(): Promise<PostJob[]> {
   if (SAMPLES) return sampleJobs;
 
   const jobs: PostJob[] = [];
+
+  // Wochenend-Rückblick als Feed-Post; spielfreies Wochenende → kein Post.
+  if (ONLY === "weekend") {
+    const weekend = await getWeekendResults();
+    if (weekend.matches.length > 0) {
+      jobs.push({ kind: "weekend", data: weekend, placement: "post" });
+    }
+    return jobs;
+  }
 
   if (ONLY !== "announcements") {
     for (const result of await getYesterdayResults()) {

@@ -1,19 +1,20 @@
 name: Generating Instagram Posts
 
 on:
-  # Ergebnisse und Ankündigungen laufen getrennt: jeder Lauf ruft alle
-  # mytischtennis-Team-Seiten ab, beides zusammen löst das Captcha aus.
+  # Ergebnisse, Ankündigungen und Wochenend-Rückblick laufen getrennt: jeder
+  # Lauf ruft mytischtennis ab, alles zusammen löst das Captcha aus.
   # Die Cron-Strings müssen exakt zu ONLY im Generate-Step passen.
   schedule:
     - cron: "30 14 * * *" # Ergebnisse von gestern
     - cron: "30 16 * * *" # Spielankündigungen in zwei Tagen
+    - cron: "0 8 * * 1" # Montag 10:00 MESZ / 09:00 MEZ: Wochenend-Rückblick Tischtennis (Feed-Post)
 
   workflow_dispatch:
     inputs:
       only:
         description: "Welche Inhalte"
         type: choice
-        options: [results, announcements, all]
+        options: [results, announcements, weekend, all]
         default: results
 
 permissions:
@@ -68,7 +69,7 @@ jobs:
         env:
           ZERNIO_API_KEY: ${{ secrets.ZERNIO_API_KEY }}
           ZERNIO_INSTAGRAM_ACCOUNT_ID: ${{ secrets.ZERNIO_INSTAGRAM_ACCOUNT_ID }}
-          ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.only || (github.event.schedule == '30 16 * * *' && 'announcements' || 'results') }}
+          ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.only || (github.event.schedule == '30 16 * * *' && 'announcements' || (github.event.schedule == '0 8 * * 1' && 'weekend' || 'results')) }}
         shell: bash
         # Exit-Code 2 = Inhalte konnten nicht gesammelt werden, noch nichts
         # veröffentlicht (meist Captcha-Sperre der Runner-IP bei mytischtennis).

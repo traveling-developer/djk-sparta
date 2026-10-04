@@ -15,6 +15,7 @@ import { igReport } from "./templates/igReport.ts";
 import { igTable } from "./templates/igTable.ts";
 import { igAnnWebsite } from "./templates/igAnnWebsite.ts";
 import { igAnnYouth } from "./templates/igAnnYouth.ts";
+import { igWeekend } from "./templates/igWeekend.ts";
 import { FMT } from "./templates/shared.ts";
 import type { Fmt, PostJob } from "./types.ts";
 
@@ -26,6 +27,7 @@ const KINDS = [
   "table",
   "website",
   "youth",
+  "weekend",
 ] as const;
 
 function renderMarkup(kind: string, fmt: Fmt): string {
@@ -44,6 +46,8 @@ function renderMarkup(kind: string, fmt: Fmt): string {
       return igAnnWebsite(job.data, fmt);
     case "youth":
       return igAnnYouth(job.data, fmt);
+    case "weekend":
+      return igWeekend(job.data, fmt);
   }
 }
 

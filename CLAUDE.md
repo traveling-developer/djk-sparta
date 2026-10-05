@@ -8,6 +8,7 @@ Monorepo for the **DJK Sparta Noris Nürnberg e.V.** website. Every package is a
 | `sanity/`              | Sanity Studio (`news`, `soccerTeam`)                                                       |
 | `news-generator/`      | mytischtennis PDFs → Gemini → German match report → Sanity `news` (`tsx`)                  |
 | `instagram-generator/` | HTML templates → Playwright PNG → Instagram Story/Post via Zernio (plain `node`, no build) |
+| `scheduler/`           | Cloudflare Worker: Cron Triggers → GitHub `workflow_dispatch` for news + IG workflows     |
 | `shared/`              | Scrapers (BFV soccer, mytischtennis) + HTTP headers, used by all of the above              |
 
 ## Commands
@@ -15,6 +16,7 @@ Monorepo for the **DJK Sparta Noris Nürnberg e.V.** website. Every package is a
 - `website/` — `npm run dev` (:4321) · `npm run build`
 - `sanity/` — `npm run dev` · `npm run deploy`
 - `news-generator/` — `npm run dev` (loads `.env.local`)
+- `scheduler/` — `npm run dev` (then `curl "localhost:8787/__scheduled?cron=30+14+*+*+*"`; `.dev.vars` with `DRY_RUN=1`) · `npm run typecheck`
 - `instagram-generator/` — `node src/main.ts --samples` (no env/network) · `npm run dry-run` (real data → `./out/`, no posting) · `npm run draft` · `npm run preview` (:4322) · all accept `--only=results|announcements|weekend` · first run: `npx playwright install chromium`
 - No tests, no linter — verify with `npm run build` (website) or a `dry-run` (IG). Prettier only.
 
@@ -23,7 +25,7 @@ Monorepo for the **DJK Sparta Noris Nürnberg e.V.** website. Every package is a
 - Comments, logs and all published copy are **German**.
 - **Never hand-edit `website/src/lib/sanity.types.ts`.** After changing a schema or GROQ query, run in `sanity/`: `npx sanity schema extract && npx sanity typegen generate`.
 - Scraping logic lives in `shared/`; consumers are thin adapters. `shared/` stays runtime-dependency-free — cheerio is `import type` only, consumers inject `get` and `cheerio.load`.
-- **Import extensions differ:** `instagram-generator` imports `shared/` with `.ts` extensions (native Node TS); `website` and `news-generator` without.
+- **Import extensions differ:** `instagram-generator` and `scheduler` import `shared/` with `.ts` extensions; `website` and `news-generator` without.
 - Every axios call passes `REQUEST_TIMEOUT_MS` from `shared/http.ts`.
 - Club facts (address, contact, members) only from `website/src/lib/club.ts`; club identity / venue wording for IG only from `instagram-generator/src/scrape/club.ts`.
 - IG templates: scraped text must go through `esc()` (`templates/html.ts`).
@@ -35,9 +37,10 @@ Monorepo for the **DJK Sparta Noris Nürnberg e.V.** website. Every package is a
 - mytischtennis: rate-limits bursts (HTTP 429) and redirects to a captcha (`/verify`) → exit code 2 → workflow retry job. Scrapers must throw on unexpected page structure so a broken scrape never looks like a match-free day.
 - BFV obfuscates score digits via a per-response font; `instagram-generator/src/scrape/bfvFontDecode.ts` decodes them by glyph name.
 - IG generator has deliberately **no** date flag — to test another day, pass a date to the collector (e.g. `getYesterdayResults("20.09.2026")`).
-- IG cron strings in the workflow must match the `ONLY` mapping (14:30 UTC results, 16:30 UTC announcements, Mon 08:00 UTC weekend). `weekend` is a 4:5 feed post with all TT results Fri–Sun; not part of `all`.
+- News + IG workflows have **no** `schedule:` — the `scheduler/` Worker starts them (GitHub's cron is unreliable). Crons (UTC) in `scheduler/wrangler.jsonc` must match `JOBS` in `scheduler/src/index.ts` (14:30 results, 16:30 announcements, Mon 08:00 weekend, 02:00 news). Never re-add `schedule:` → duplicate posts. `weekend` is a 4:5 feed post with all TT results Fri–Sun; not part of `all`.
 
 ## Deployment & env
 
-- Push `dev` → Cloudflare Pages (preview) · push `main` (`website/**`) → GitHub Pages (prod) · push `main` (`sanity/**`) → Studio deploy.
+- Push `dev` → Cloudflare Pages (preview) · push `main` (`website/**`) → GitHub Pages (prod) · push `main` (`sanity/**`) → Studio deploy · push `main` (`scheduler/**`) → Cloudflare Workers Builds.
+- `scheduler/` needs Worker secret `GITHUB_TOKEN` (fine-grained PAT, *Actions: Read and write*, expires — renew yearly).
 - `.env.local` per package. IG generator needs only `ZERNIO_API_KEY`, `ZERNIO_INSTAGRAM_ACCOUNT_ID`. Sanity CLI: a robot token in `sanity/.env.local` blocks dataset export/migrations — use your user login.

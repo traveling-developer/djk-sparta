@@ -12,6 +12,7 @@ The repository is a monorepo of independent npm packages — each has its own `p
 - **news-generator** — scrapes table-tennis match PDFs, generates German match reports via Gemini, and publishes them to Sanity
 - **club-data-generator** — scrapes club ranking / teams / matches data from external sites
 - **instagram-generator** — renders branded Instagram post images (match announcements, results, news teasers, league tables) and publishes them via the [Zernio](https://zernio.com/) API
+- **scheduler** — Cloudflare Worker whose Cron Triggers start the news and Instagram workflows on time via `workflow_dispatch`
 - **shared** — code shared across packages, e.g. the BFV soccer scraper and HTTP headers used by both `website` and `instagram-generator`
 
 ## Developer notes
@@ -43,7 +44,7 @@ npx sanity typegen generate   # regenerates website/src/lib/sanity.types.ts
 
 ### News generator
 
-Scrapes the previous day's table-tennis matches from [mytischtennis.de](https://www.mytischtennis.de/), generates German match reports from the result PDFs via Gemini, and publishes them to Sanity as `news` documents. Designed to run as a daily GitHub Actions cron (02:00 UTC). Requires `.env.local` with `GEMINI_API_KEY` and the `SANITY_*` variables (including a write token, `SANITY_AUTH_TOKEN`).
+Scrapes the previous day's table-tennis matches from [mytischtennis.de](https://www.mytischtennis.de/), generates German match reports from the result PDFs via Gemini, and publishes them to Sanity as `news` documents. Runs daily at 02:00 UTC in GitHub Actions, started by the `scheduler` Worker. Requires `.env.local` with `GEMINI_API_KEY` and the `SANITY_*` variables (including a write token, `SANITY_AUTH_TOKEN`).
 
 | Command            | Action                                                  |
 | :----------------- | :------------------------------------------------------ |
@@ -66,7 +67,7 @@ Scrapes club ranking / teams / matches data from external sites.
 
 Collects yesterday's results (table tennis from [mytischtennis.de](https://www.mytischtennis.de/), soccer from [bfv.de](https://www.bfv.de/), both via the shared scrapers in `shared/`) and table-tennis match announcements two days ahead, renders each item through the typed HTML/CSS templates in `src/templates/` with headless Playwright (1080×1920 PNG), and publishes the images as Instagram **Stories** via the Zernio API.
 
-Runs twice daily via GitHub Actions (`.github/workflows/instagram-generator.yml`): 14:30 UTC results, 16:30 UTC announcements (`--only=results|announcements`).
+Runs in GitHub Actions (`.github/workflows/instagram-generator.yml`), started by the `scheduler` Worker: daily 14:30 UTC results, 16:30 UTC announcements, Mondays 08:00 UTC weekend recap (`--only=results|announcements|weekend`). A manual run can set `dry_run` to render without posting.
 
 Requires Node ≥ 24 (runs TypeScript natively, no build step) and a one-time `npx playwright install chromium`.
 
@@ -83,3 +84,16 @@ Requires Node ≥ 24 (runs TypeScript natively, no build step) and a one-time `n
 Environment variables (in `.env.local` for local runs, repository secrets in CI): `ZERNIO_API_KEY`, `ZERNIO_INSTAGRAM_ACCOUNT_ID`.
 
 Note: no seasonal maintenance needed — the mytischtennis URLs are computed from the stable club id and the current season (`shared/tableTennis/teams.ts`), and the soccer `SOCCER_CLUB_URL` is the stable BFV club ID.
+
+### Scheduler
+
+Cloudflare Worker (`scheduler/`) with Cron Triggers that start the GitHub Actions workflows via `workflow_dispatch`. GitHub's own `schedule` is often 5–30 min late or skipped; the actual work (Playwright, retry on a fresh runner IP) stays in GitHub Actions. Cron strings (UTC) live in `wrangler.jsonc` and must match `JOBS` in `src/index.ts`.
+
+| Command             | Action                                                                        |
+| :------------------ | :---------------------------------------------------------------------------- |
+| `npm install`       | Installs dependencies                                                         |
+| `npm run dev`       | Local Worker; trigger with `curl "localhost:8787/__scheduled?cron=30+14+*+*+*"` |
+| `npm run typecheck` | Type-checks the Worker                                                        |
+| `npm run deploy`    | Manual deploy (normally done by Workers Builds on push to `main`)             |
+
+Secret `GITHUB_TOKEN` (fine-grained PAT, repo `djk-sparta` only, permission *Actions: Read and write*): `npx wrangler secret put GITHUB_TOKEN`. For local runs put `DRY_RUN=1` and a dummy `GITHUB_TOKEN` in `.dev.vars` (gitignored) to log requests instead of sending them.

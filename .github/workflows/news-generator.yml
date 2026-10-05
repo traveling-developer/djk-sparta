@@ -1,9 +1,7 @@
 name: Generating News
 
 on:
-  schedule:
-    - cron: "0 2 * * *"
-
+  # Täglich 02:00 UTC per workflow_dispatch vom Cloudflare-Worker scheduler/
   workflow_dispatch:
 
 permissions:

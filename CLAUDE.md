@@ -37,7 +37,7 @@ Monorepo for the **DJK Sparta Noris Nürnberg e.V.** website. Every package is a
 - mytischtennis: rate-limits bursts (HTTP 429) and redirects to a captcha (`/verify`) → exit code 2 → workflow retry job. Scrapers must throw on unexpected page structure so a broken scrape never looks like a match-free day.
 - BFV obfuscates score digits via a per-response font; `instagram-generator/src/scrape/bfvFontDecode.ts` decodes them by glyph name.
 - IG generator has deliberately **no** date flag — to test another day, pass a date to the collector (e.g. `getYesterdayResults("20.09.2026")`).
-- News + IG workflows have **no** `schedule:` — the `scheduler/` Worker starts them (GitHub's cron is unreliable). Crons (UTC) in `scheduler/wrangler.jsonc` must match `JOBS` in `scheduler/src/index.ts` (14:30 results, 16:30 announcements, Mon 08:00 weekend, 02:00 news). Never re-add `schedule:` → duplicate posts. `weekend` is a 4:5 feed post with all TT results Fri–Sun; not part of `all`.
+- News + IG workflows have **no** `schedule:` — the `scheduler/` Worker starts them (GitHub's cron is unreliable). Crons (UTC) in `scheduler/wrangler.jsonc` must match `JOBS` in `scheduler/src/index.ts` (14:30 results, 16:30 announcements, Mon 08:00 weekend, 02:00 news). Cloudflare counts weekdays `1` = Sunday — always use names (`MON`). Never re-add `schedule:` → duplicate posts. `weekend` is a 4:5 feed post with all TT results Fri–Sun; not part of `all`.
 
 ## Deployment & env
 

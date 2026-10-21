@@ -9,7 +9,8 @@
   "observability": { "enabled": true },
   "triggers": {
     // Cron-Strings (UTC) müssen exakt zu JOBS in src/index.ts passen.
-    "crons": ["30 14 * * *", "30 16 * * *", "0 8 * * 1", "0 2 * * *"],
+    // Wochentag als Name: bei Cloudflare ist 1 = Sonntag (nicht Montag wie bei Unix-cron)!
+    "crons": ["30 14 * * *", "30 16 * * *", "0 8 * * MON", "0 2 * * *"],
   },
   "vars": { "DRY_RUN": "" },
   // Secret GITHUB_TOKEN: npx wrangler secret put GITHUB_TOKEN

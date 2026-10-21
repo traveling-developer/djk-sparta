@@ -28,7 +28,7 @@ const JOBS: Record<
     workflow: "instagram-generator.yml",
     inputs: { only: "announcements" }, // Spielankündigungen in zwei Tagen
   },
-  "0 8 * * 1": {
+  "0 8 * * MON": {
     workflow: "instagram-generator.yml",
     inputs: { only: "weekend" }, // Mo 10:00 MESZ / 09:00 MEZ: Wochenend-Rückblick TT
   },

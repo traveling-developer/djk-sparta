@@ -1,0 +1,1 @@
+- [Sanity CLI auth quirk](sanity-cli-auth-quirk.md) — robot token in sanity/.env.local blocks dataset export/migrations; hide env file + use user login

@@ -16,10 +16,13 @@ export function seasonFor(date: Date): string {
 
 export const SEASON = seasonFor(new Date());
 
+/** Basis-URL von mytischtennis.de (ohne abschließenden Slash). */
+export const MYTISCHTENNIS_URL = "https://www.mytischtennis.de";
+
 const CLUB_ID = "207077";
 const CLUB_SLUG = "DJK_Sparta_Noris_N%C3%BCrnberg";
 const clubBase = (season: string) =>
-  `https://www.mytischtennis.de/click-tt/ByTTV/${season}/verein/${CLUB_ID}/${CLUB_SLUG}`;
+  `${MYTISCHTENNIS_URL}/click-tt/ByTTV/${season}/verein/${CLUB_ID}/${CLUB_SLUG}`;
 
 /** Spielplan aller Vereinsmannschaften (Website). */
 export const CLUB_SCHEDULE_URL = `${clubBase(SEASON)}/spielplan`;

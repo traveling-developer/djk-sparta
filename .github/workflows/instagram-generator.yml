@@ -65,6 +65,7 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
         working-directory: ${{ env.BUILD_PATH }}
+      # Chromium für das Rendern der Posts und die mytischtennis-Captcha-Freischaltung (shared/tableTennis/mytischtennis.ts)
       - name: Install Playwright browser
         run: npx playwright install chromium --with-deps
         working-directory: ${{ env.BUILD_PATH }}
@@ -78,18 +79,18 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
         shell: bash
         # Exit-Code 2 = Inhalte konnten nicht gesammelt werden, noch nichts
-        # veröffentlicht (meist Captcha-Sperre der Runner-IP bei mytischtennis).
-        # Im Retry-Job erst warten: die Captcha-Sperre löst sich nach ca. 4 min.
+        # veröffentlicht (z.B. mytischtennis-Captcha ließ sich in Chromium nicht
+        # lösen, siehe shared/tableTennis/mytischtennis.ts). Der Retry-Job
+        # versucht es dann auf einem neuen Runner (andere IP) erneut.
         run: |
-          if [ "$GITHUB_JOB" = "retry" ]; then sleep 300; fi
           set +e
           npm run generate
           code=$?
           echo "exit-code=$code" >> "$GITHUB_OUTPUT"
           exit $code
 
-  # Zweiter Versuch auf einem frischen Runner (meist andere IP) nach 5 min
-  # Wartezeit. Nur bei Exit-Code 2, sonst drohen doppelte Posts.
+  # Zweiter Versuch auf einem frischen Runner (meist andere IP). Nur bei
+  # Exit-Code 2, sonst drohen doppelte Posts.
   retry:
     name: Retry (neuer Runner)
     needs: build

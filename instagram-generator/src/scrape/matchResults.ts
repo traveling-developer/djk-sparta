@@ -3,12 +3,16 @@
 // Zeilen mit Ergebnis → Ergebnis-Post; künftige ohne Ergebnis → Spielankündigung.
 import axios from "axios";
 import * as cheerio from "cheerio";
+import { chromium } from "playwright";
 import {
   parseDeDate,
   scrapeClubSchedule,
   type ClubMatch,
 } from "../../../shared/tableTennis/clubSchedule.ts";
-import { headers, REQUEST_TIMEOUT_MS } from "../../../shared/http.ts";
+import {
+  CaptchaError,
+  createMytischtennisGet,
+} from "../../../shared/tableTennis/mytischtennis.ts";
 import { deInDays, lastWeekendDe, yesterdayDe } from "../dates.ts";
 import { withRetry } from "../retry.ts";
 import { isOurs, venueOf } from "./club.ts";
@@ -28,6 +32,9 @@ const RETRIES = 5;
 const RETRY_BASE_MS = 5000;
 const PAGE_PAUSE_MS = 2000;
 
+// mytischtennis-Abruf inkl. Captcha-Freischaltung über Chromium.
+const mttGet = createMytischtennisGet({ axios, chromium });
+
 function label(ours: number, theirs: number): string {
   if (ours === theirs) return "Hart umkämpftes Remis";
   const diff = Math.abs(ours - theirs);
@@ -40,39 +47,6 @@ function label(ours: number, theirs: number): string {
   return "Niederlage";
 }
 
-// mytischtennis sperrt IPs mit auffälligem Zugriffsmuster sporadisch per
-// Captcha: Umleitung auf /verify, ausgeliefert als 429 — trotz freiem
-// Rate-Limit-Kontingent. Beobachtet: trifft auch private IPs, die Sperre löst
-// sich nach ca. 4 Minuten. Das Backoff hier ist dafür zu kurz, deshalb sofort
-// abbrechen; der Retry-Job im Workflow versucht es verzögert auf einem neuen
-// Runner erneut.
-export class CaptchaError extends Error {}
-
-function isCaptcha(error: unknown): boolean {
-  if (!axios.isAxiosError(error)) return false;
-  const finalUrl: string = error.request?.res?.responseUrl ?? "";
-  return (
-    new URL(finalUrl, "https://www.mytischtennis.de").pathname === "/verify"
-  );
-}
-
-async function get(url: string): Promise<string> {
-  try {
-    const { data } = await axios.get<string>(url, {
-      headers,
-      timeout: REQUEST_TIMEOUT_MS,
-    });
-    return data;
-  } catch (error) {
-    if (isCaptcha(error)) {
-      throw new CaptchaError(
-        "mytischtennis verlangt ein Captcha (IP vorübergehend gesperrt)",
-      );
-    }
-    throw error;
-  }
-}
-
 // Ligaspiele des Vereins von `from` bis `to` ("DD.MM.YYYY", inklusiv). Pokalspiele werden
 // (noch) nicht gepostet. Schlägt der Abruf fehl — auch wenn die Seite keine
 // Spielplan-Tabelle enthält (Rate-Limit-Interstitial) —, wird das gesamte
@@ -82,7 +56,7 @@ async function scrapeRows(from: string, to = from): Promise<ClubMatch[]> {
   const matches = await withRetry(
     () =>
       scrapeClubSchedule(
-        { get, load: cheerio.load },
+        { get: mttGet, load: cheerio.load },
         {
           from: parseDeDate(from),
           to: parseDeDate(to),

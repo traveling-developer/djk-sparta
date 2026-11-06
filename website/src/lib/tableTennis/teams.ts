@@ -1,6 +1,9 @@
-import axios from "axios";
 import * as cheerio from "cheerio";
-import { CLUB_TEAMS_URL } from "../../../../shared/tableTennis/teams";
+import { CaptchaError, mttGet } from "./mytischtennis";
+import {
+  CLUB_TEAMS_URL,
+  MYTISCHTENNIS_URL,
+} from "../../../../shared/tableTennis/teams";
 
 interface Team {
   name: string;
@@ -12,7 +15,7 @@ interface Team {
 
 export async function getTeams(): Promise<Team[]> {
   try {
-    const { data } = await axios.get(CLUB_TEAMS_URL);
+    const data = await mttGet(CLUB_TEAMS_URL);
     const $ = cheerio.load(data);
 
     const teams: Team[] = [];
@@ -39,7 +42,7 @@ export async function getTeams(): Promise<Team[]> {
         .replace(/\s?\(Bayerischer TTV - Mittelfranken-Nord\)/, "");
 
       const linkHref = leagueElement.find("a").attr("href");
-      const link = linkHref ? "https://www.mytischtennis.de" + linkHref : "";
+      const link = linkHref ? MYTISCHTENNIS_URL + linkHref : "";
 
       const rank = $(element).find("td").eq(3).text().trim();
       const points = $(element).find("td").eq(4).text().trim();
@@ -53,6 +56,8 @@ export async function getTeams(): Promise<Team[]> {
 
     return teams;
   } catch (error) {
+    // Captcha nicht lösbar → Build abbrechen statt leerer Tischtennis-Seite
+    if (error instanceof CaptchaError) throw error;
     console.error("Error downloading teams:", error);
     return [];
   }

@@ -1,5 +1,5 @@
-import axios from "axios";
 import * as cheerio from "cheerio";
+import { CaptchaError, mttGet } from "./mytischtennis";
 import { clubScheduleUrl } from "../../../../shared/tableTennis/teams";
 import { berlinIsoFromWallClock } from "../datetime";
 
@@ -21,7 +21,7 @@ export async function getMatches() {
     const to = new Date(now.getFullYear(), now.getMonth() + 2, 0);
     const url = clubScheduleUrl(from, to);
 
-    const { data } = await axios.get(url);
+    const data = await mttGet(url);
 
     const $ = cheerio.load(data);
 
@@ -41,6 +41,8 @@ export async function getMatches() {
       return convertToDate(match.date, match.time) > new Date();
     });
   } catch (error) {
+    // Captcha nicht lösbar → Build abbrechen statt leerer Tischtennis-Seite
+    if (error instanceof CaptchaError) throw error;
     console.error("Error downloading matches:", error);
     return [];
   }

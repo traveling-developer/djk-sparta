@@ -13,9 +13,13 @@
 // Wie shared/soccer/bfv.ts zur Laufzeit dependency-frei: `get` und
 // `cheerio.load` injiziert der Consumer (eigene Header-/Retry-Policy).
 import type { CheerioAPI } from "cheerio";
-import { clubScheduleUrl, clubTeamsUrl, seasonFor } from "./teams.ts";
+import {
+  clubScheduleUrl,
+  clubTeamsUrl,
+  MYTISCHTENNIS_URL,
+  seasonFor,
+} from "./teams.ts";
 
-const BASE_URL = "https://www.mytischtennis.de";
 const DATE_PATTERN = /\d{2}\.\d{2}\.\d{4}/;
 
 export interface ClubScheduleDeps {
@@ -207,7 +211,7 @@ export async function scrapeClubSchedule(
       guestTeamId: guest?.teamId ?? "",
       score: withoutNote(scoreCell.text(), scoreNote),
       scoreNote,
-      reportUrl: report ? BASE_URL + report : undefined,
+      reportUrl: report ? MYTISCHTENNIS_URL + report : undefined,
       key: `${groupId}|${home?.teamId ?? ""}|${guest?.teamId ?? ""}`,
     });
   });

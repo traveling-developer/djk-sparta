@@ -56,7 +56,7 @@ async function collectJobs(): Promise<PostJob[]> {
 // Exit-Code, wenn das Einsammeln scheitert. Bis dahin ist nichts
 // veröffentlicht, ein kompletter Neustart kann also keine Doppel-Posts
 // erzeugen — der Workflow startet dann einen zweiten Versuch auf einem neuen
-// Runner, verzögert, falls mytischtennis die IP vorübergehend per Captcha sperrt.
+// Runner (z.B. wenn das mytischtennis-Captcha nicht lösbar war).
 const EXIT_COLLECT_FAILED = 2;
 
 class CollectError extends Error {}

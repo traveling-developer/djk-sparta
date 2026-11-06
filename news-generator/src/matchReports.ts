@@ -7,13 +7,14 @@ import {
   parseDeDate,
   scrapeClubSchedule,
 } from "../../shared/tableTennis/clubSchedule";
-import { headers, REQUEST_TIMEOUT_MS } from "../../shared/http";
+import { REQUEST_TIMEOUT_MS } from "../../shared/http";
+import { createMytischtennisGet } from "../../shared/tableTennis/mytischtennis";
+import { chromium } from "playwright";
 import { summary } from "./summary";
 
-const cfg = { headers, timeout: REQUEST_TIMEOUT_MS };
-
-const get = async (url: string): Promise<string> =>
-  (await axios.get<string>(url, cfg)).data;
+// mytischtennis-Abruf inkl. Captcha-Freischaltung über Chromium (GitHub-Runner
+// werden gesperrt); danach ist die IP frei, auch für den PDF-Download unten.
+const get = createMytischtennisGet({ axios, chromium });
 
 export async function downloadMatchReports(): Promise<MatchReport[]> {
   // "DD.MM.YYYY" von gestern in Europe/Berlin (GitHub Actions läuft UTC)
